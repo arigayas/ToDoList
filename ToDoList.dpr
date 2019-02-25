@@ -24,6 +24,7 @@ var
 begin
   CMutexName := 'arigayas_ToDoList';
 {$IFDEF DEBUG}
+  ReportMemoryLeaksOnShutdown := True;
   CMutexName := CMutexName + '_DEBUG';
 {$ENDIF}
   Application.Initialize;

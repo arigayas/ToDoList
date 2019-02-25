@@ -20,5 +20,6 @@ object Form2: TForm2
     Height = 17
     Caption = #12454#12451#12531#12489#12454#12398#24133#12391#25240#12426#36820#12377
     TabOrder = 0
+    OnClick = BR_CheckBox1Click
   end
 end

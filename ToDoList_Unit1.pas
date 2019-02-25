@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.CheckLst,
   System.UITypes, Vcl.Menus, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnPopup,
-  Vcl.ExtCtrls, System.Types;
+  Vcl.ExtCtrls, System.Types, System.IniFiles;
 
 type
   TForm1 = class(TForm)
@@ -66,7 +66,7 @@ var
   FileName: string;
   PrevItemIndex: Integer; // D&D 用の変数
 
-  LInput: TFileStream;
+//  LInput: TFileStream;
 implementation
 
 {$R *.dfm}
@@ -376,12 +376,35 @@ procedure TForm1.FormCreate(Sender: TObject);
 var
   FStream: TStringList;
   I: Integer;
-  LInput: TFileStream;
+  WRect: TRect;
+//  SettingsIniFile : TIniFile;
+  SettingsIniFile : TMemIniFile;
+  SettingsIniFileName : string;
+//  LInput: TFileStream;
 begin
   Memo1.Visible := False;
   DeleteButton.Enabled := False;
   BR_N1.Checked := False;
+  SettingsIniFileName := ExtractFilePath(Application.ExeName) + AppName +'.ini';
+  SettingsIniFile := TMemIniFile.Create(SettingsIniFileName, TEncoding.UTF8);
+//  SettingsIniFile := TIniFile.Create(SettingsIniFileName);
 
+  try
+    Form1.Top := SettingsIniFile.ReadInteger('Form', 'Top', 100);
+    Form1.Left := SettingsIniFile.ReadInteger('Form', 'Left', 100);
+    Form1.Width := SettingsIniFile.ReadInteger('Form', 'WindowWidth', 350);
+    Form1.Height := SettingsIniFile.ReadInteger('Form','WindowHeight', 250);
+
+(*
+      if Left > WRect.Right - 100 then Form1.Left := WRect.Left; // モニタの解像度が変わっても
+      if Left < WRect.Left then Form1.Left := WRect.Left;        // 大丈夫にする処理(4行)
+      if Top < WRect.Top then Form1.Top := WRect.Top;
+      if Top > WRect.Bottom - 100 then Form1.Top := WRect.Top;
+    
+*)  finally
+    SettingsIniFile.Free;
+  end;
+  
 {$IFDEF DEBUG}
   Memo1.Visible := True;
 
@@ -401,16 +424,34 @@ begin
 
     CheckListBox1.Items := FStream;
 
-    FStream.Clear;
+    FStream.Free;
   end;
 
 //  LInput := TFileStream.Create(FileName,  fmOpenWrite or fmShareDenyWrite );
+//  LInput := TFileStream.Create(FileName, fmShareDenyWrite );
   DeleteAllChecked.Enabled := False;
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
+var
+//  SettingsIniFile : TIniFile;
+  SettingsIniFile : TMemIniFile;
+  SettingsIniFileName : string;
 begin
-  LInput.Free;
+//  LInput.Free;
+  SettingsIniFileName := ExtractFilePath(Application.ExeName) + AppName +'.ini';
+  SettingsIniFile := TMemIniFile.Create(SettingsIniFileName, TEncoding.UTF8);
+//  SettingsIniFile := TIniFile.Create(SettingsIniFileName);
+
+  try
+    SettingsIniFile.WriteInteger('Form', 'Top', Form1.Top);
+    SettingsIniFile.WriteInteger('Form', 'Left', Form1.Left);
+    SettingsIniFile.WriteInteger('Form', 'WindowWidth', Width);
+    SettingsIniFile.WriteInteger('Form', 'WindowHeight', Height);
+    SettingsIniFile.UpdateFile;
+  finally
+    SettingsIniFile.Free;
+  end;
   Savefile(Sender);
 
 end;
@@ -495,10 +536,11 @@ var
 begin
   SL := TStringList.Create;
   try
+//  LInput.Create(FileName, fmOpenReadWrite );
     SL.AddStrings(CheckListBox1.Items);
     SL.SaveToFile(FileName, TEncoding.UTF8);
-
-//    LInput.OpenReadWrite
+//  LInput.Handle
+//
   finally
     SL.Free;
   end;
@@ -540,5 +582,7 @@ begin
   FQueryEndSession := true;
   inherited;
 end;
+
+
 
 end.
