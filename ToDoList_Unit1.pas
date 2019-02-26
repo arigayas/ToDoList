@@ -75,6 +75,19 @@ var
   LInput: TFileStream;
   PrevItemIndex: Integer; // D&D 用の変数
 
+procedure LockFile;
+begin
+  if FileExists(FileName) then
+    LInput := TFileStream.Create(FileName, fmOpenWrite or fmShareDenyWrite);
+end;
+
+procedure UnlockFile;
+begin
+  if Assigned(LInput) then
+    FreeAndNil(LInput);
+end;
+
+
 procedure TForm1.AddItemButtonClick(Sender: TObject);
 var
   Ans: Boolean;
@@ -378,16 +391,15 @@ procedure TForm1.FormCreate(Sender: TObject);
 var
   FStream: TStringList;
   I: Integer;
-  WRect: TRect;
+//  WRect: TRect;
 //  SettingsIniFile : TIniFile;
   SettingsIniFile : TMemIniFile;
   SettingsIniFileName : string;
-//  LInput: TFileStream;
 begin
   Memo1.Visible := False;
   DeleteButton.Enabled := False;
   BR_N1.Checked := False;
-  SettingsIniFileName := ExtractFilePath(Application.ExeName) + AppName +'.ini';
+  SettingsIniFileName := AppName + '.ini';
   SettingsIniFile := TMemIniFile.Create(SettingsIniFileName, TEncoding.UTF8);
 //  SettingsIniFile := TIniFile.Create(SettingsIniFileName);
 
@@ -413,10 +425,9 @@ begin
   // ファイル[ToDoList.txt]がない場合使われる
   for I := 1 to 10 do
     CheckListBox1.Items.Add(I.ToString);
-
 {$ENDIF}
-//  FileName := ChangeFileExt(Application.ExeName, '.txt');
-  FileName := AppName +'.txt';
+
+  FileName := AppName + '.txt';
   // FileName[ToDoList.txt]があるか？
 
   if FileExists(FileName) then
@@ -429,8 +440,7 @@ begin
     FStream.Free;
   end;
 
-//  LInput := TFileStream.Create(FileName,  fmOpenWrite or fmShareDenyWrite );
-//  LInput := TFileStream.Create(FileName, fmShareDenyWrite );
+  LockFile;
   DeleteAllChecked.Enabled := False;
 end;
 
@@ -440,11 +450,12 @@ var
   SettingsIniFile : TMemIniFile;
   SettingsIniFileName : string;
 begin
-//  LInput.Free;
+
   SettingsIniFileName := ExtractFilePath(Application.ExeName) + AppName +'.ini';
   SettingsIniFile := TMemIniFile.Create(SettingsIniFileName, TEncoding.UTF8);
 //  SettingsIniFile := TIniFile.Create(SettingsIniFileName);
-
+  UnlockFile;
+  LInput.Free;
   try
     SettingsIniFile.WriteInteger('Form', 'Top', Form1.Top);
     SettingsIniFile.WriteInteger('Form', 'Left', Form1.Left);
@@ -453,8 +464,9 @@ begin
     SettingsIniFile.UpdateFile;
   finally
     SettingsIniFile.Free;
+    Savefile(Sender);
+//    LInput.Free;
   end;
-  Savefile(Sender);
 
 end;
 
@@ -538,11 +550,10 @@ var
 begin
   SL := TStringList.Create;
   try
-//  LInput.Create(FileName, fmOpenReadWrite );
+    UnlockFile;
     SL.AddStrings(CheckListBox1.Items);
     SL.SaveToFile(FileName, TEncoding.UTF8);
-//  LInput.Handle
-//
+    LockFile;
   finally
     SL.Free;
   end;
