@@ -44,15 +44,15 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure Setting_N1Click(Sender: TObject);
   private
-    FQueryEndSession : Boolean;
-    procedure WMQueryEndSession(var Msg: TWMQueryEndSession);
-        message WM_QUERYENDSESSION;
-    function ItemsCheckedCount(ItemsCount: Integer): Integer;
-    procedure Savefile(Sender: TObject);
-    procedure DrawMoveLine(CheckListBox1: TCheckListBox; const Index: Integer);
+    FQueryEndSession : Boolean; // Windows終了時(シャットダウン)の処理に使用
     procedure CheckListBox1StartDrag(Sender: TObject;
       var DragObject: TDragObject);
     procedure CheckListCounterFormCaption(Sender: TObject);
+    procedure DrawMoveLine(CheckListBox1: TCheckListBox; const Index: Integer);
+    function ItemsCheckedCount(ItemsCount: Integer): Integer;
+    procedure Savefile(Sender: TObject);
+    procedure WMQueryEndSession(var Msg: TWMQueryEndSession);
+        message WM_QUERYENDSESSION;
     { Private 宣言 }
   public
     { Public 宣言 }
@@ -63,15 +63,17 @@ const
 
 var
   Form1: TForm1;
-  FileName: string;
-  PrevItemIndex: Integer; // D&D 用の変数
 
-//  LInput: TFileStream;
 implementation
 
 {$R *.dfm}
 
 uses Setting_Unit2;
+
+var
+  FileName: string;
+  LInput: TFileStream;
+  PrevItemIndex: Integer; // D&D 用の変数
 
 procedure TForm1.AddItemButtonClick(Sender: TObject);
 var
