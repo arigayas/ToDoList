@@ -50,7 +50,7 @@ type
     procedure CheckListCounterFormCaption(Sender: TObject);
     procedure DrawMoveLine(CheckListBox1: TCheckListBox; const Index: Integer);
     function ItemsCheckedCount(ItemsCount: Integer): Integer;
-    procedure Savefile(Sender: TObject);
+    procedure Savefile(Sender: TObject; EndFlag: Boolean);
     procedure WMQueryEndSession(var Msg: TWMQueryEndSession);
         message WM_QUERYENDSESSION;
     { Private êÈåæ }
@@ -108,7 +108,7 @@ begin
       CheckListBox1.Items.Add(NewString);
       Memo1.Lines := CheckListBox1.Items;
 
-      Savefile(Sender);
+      Savefile(Sender, false);
       CheckListCounterFormCaption(Sender);
     end;
 
@@ -178,7 +178,7 @@ begin
       CheckListBox1.Items[CheckListBox1.ItemIndex] := NewString;
       Memo1.Lines := CheckListBox1.Items;
 
-      Savefile(Sender);
+      Savefile(Sender, false);
     end;
 
   end;
@@ -464,7 +464,7 @@ begin
     SettingsIniFile.UpdateFile;
   finally
     SettingsIniFile.Free;
-    Savefile(Sender);
+    Savefile(Sender, true);
 //    LInput.Free;
   end;
 
@@ -544,7 +544,7 @@ begin
 
 end;
 
-procedure TForm1.Savefile(Sender: TObject);
+procedure TForm1.Savefile(Sender: TObject; EndFlag: Boolean);
 var
   SL: TStringList;
 begin
@@ -553,7 +553,10 @@ begin
     UnlockFile;
     SL.AddStrings(CheckListBox1.Items);
     SL.SaveToFile(FileName, TEncoding.UTF8);
-    LockFile;
+    if not EndFlag then
+    begin
+      LockFile;
+    end;
   finally
     SL.Free;
   end;
