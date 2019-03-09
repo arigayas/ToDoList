@@ -287,6 +287,9 @@ begin
     end;
   end;
 
+  if (Key = VK_ESCAPE) then
+    DeleteAllCheckedClick(Sender);
+
 {$IFDEF DEBUG}
   if (Key = VK_INSERT) then
   begin
@@ -465,7 +468,6 @@ begin
   finally
     SettingsIniFile.Free;
     Savefile(Sender, true);
-//    LInput.Free;
   end;
 
 end;

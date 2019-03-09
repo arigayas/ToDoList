@@ -128,7 +128,7 @@ object Form1: TForm1
       OnClick = BR_N1Click
     end
     object Setting_N1: TMenuItem
-      Caption = #35373#23450
+      Caption = #35373#23450#12454#12451#12531#12489#12454
       OnClick = Setting_N1Click
     end
   end
