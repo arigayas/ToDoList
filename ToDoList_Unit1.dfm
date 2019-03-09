@@ -17,6 +17,7 @@ object Form1: TForm1
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnKeyDown = CheckListBox1KeyDown
   OnPaint = FormPaint
   DesignSize = (
     429
@@ -38,6 +39,7 @@ object Form1: TForm1
     ParentFont = False
     TabOrder = 0
     OnClick = AddItemButtonClick
+    OnKeyDown = CheckListBox1KeyDown
   end
   object DeleteButton: TButton
     Left = 346

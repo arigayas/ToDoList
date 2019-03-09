@@ -287,8 +287,11 @@ begin
     end;
   end;
 
-  if (Key = VK_ESCAPE) then
-    DeleteAllCheckedClick(Sender);
+  if (Key = VK_ESCAPE) then         // Escキーで
+    DeleteAllCheckedClick(Sender);  // チェックを全部外す
+
+  if (Key = 78) then                // Nキーで
+    AddItemButtonClick(Sender);     // 項目追加する
 
 {$IFDEF DEBUG}
   if (Key = VK_INSERT) then
