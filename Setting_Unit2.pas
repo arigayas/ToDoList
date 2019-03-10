@@ -1,4 +1,4 @@
-unit Setting_Unit2;
+ï»¿unit Setting_Unit2;
 
 interface
 
@@ -30,9 +30,9 @@ type
 
   private
     procedure AddItemButtonClick(Sender: TObject);
-    { Private éŒ¾ }
+    { Private å®£è¨€ }
   public
-    { Public éŒ¾ }
+    { Public å®£è¨€ }
   end;
 
 var
@@ -50,18 +50,18 @@ var
   NewString: string;
   // i: Integer;
 begin
-  Ans := InputQuery(AppName + ' Input', '’Ç‰Á‚µ‚½‚¢î•ñ‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B', NewString);
+  Ans := InputQuery(AppName + ' Input', 'è¿½åŠ ã—ãŸã„æƒ…å ±ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚', NewString);
 
   if Ans = True then
   begin
     if NewString = '' then
     begin
-      MessageDlg('‰½‚©“ü—Í‚µ‚Ä‚­‚¾‚³‚¢', mtInformation, [mbOk], 0);
+      MessageDlg('ä½•ã‹å…¥åŠ›ã—ã¦ãã ã•ã„', mtInformation, [mbOk], 0);
       AddItemButtonClick(Sender);
     end
     else
     begin
-      NewString := Trim(NewString); // •¶š—ñ‚Ì‘OŒã‚Ì‹ó”’‚ğœ‹
+      NewString := Trim(NewString); // æ–‡å­—åˆ—ã®å‰å¾Œã®ç©ºç™½ã‚’é™¤å»
       LoopCheckListBox.Items.Add(NewString);
       ListView1.Items.Add.Caption := NewString;
       // for i := 1 to 20 do
@@ -80,7 +80,7 @@ begin
   Form2.Caption := Form1.Top.ToString;
 end;
 
-procedure TForm2.fontBiggerCheckBoxClick(Sender: TObject); // ƒtƒHƒ“ƒgƒTƒCƒY‚ğ”{‰»
+procedure TForm2.fontBiggerCheckBoxClick(Sender: TObject); // ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚ºã‚’å€åŒ–
 begin
   Form1.Repaint;
   if fontBiggerCheckBox.Checked then
@@ -99,7 +99,7 @@ end;
 
 procedure TForm2.ColorListBox1Click(Sender: TObject);
 begin
-  // ShowMessage( ColorListBox1.ColorNames[ColorListBox1.Selected] ); // ‚µ‚Éƒ_ƒuƒ‹ƒNƒŠƒbƒN‚µ‚½F‚ğ•\¦‚·‚éB
+  // ShowMessage( ColorListBox1.ColorNames[ColorListBox1.Selected] ); // è©¦ã—ã«ãƒ€ãƒ–ãƒ«ã‚¯ãƒªãƒƒã‚¯ã—ãŸè‰²ã‚’è¡¨ç¤ºã™ã‚‹ã€‚
 end;
 
 procedure TForm2.LoopAddButtonClick(Sender: TObject);
@@ -109,7 +109,7 @@ end;
 
 procedure TForm2.LoopCheckListBoxClickCheck(Sender: TObject);
 begin
-  // 1‚ÂˆÈã‚È‚çLoopDeleteButton‚ğ—LŒø‚É‚·‚éˆ—‚ğ‘‚­
+  // 1ã¤ä»¥ä¸Šãªã‚‰LoopDeleteButtonã‚’æœ‰åŠ¹ã«ã™ã‚‹å‡¦ç†ã‚’æ›¸ã
 end;
 
 end.
