@@ -35,7 +35,6 @@ type
       State: TDragState; var Accept: Boolean);
     procedure CheckListBox1DragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure DeleteAllCheckedClick(Sender: TObject);
-    procedure FormPaint(Sender: TObject);
     procedure SwitchTaskTrayClick(Sender: TObject);
     procedure CheckListBox1DrawItem(Control: TWinControl; Index: Integer;
       Rect: TRect; State: TOwnerDrawState);
@@ -47,7 +46,7 @@ type
     FQueryEndSession : Boolean; // Windows終了時(シャットダウン)の処理に使用
     procedure CheckListBox1StartDrag(Sender: TObject;
       var DragObject: TDragObject);
-    procedure CheckListCounterFormCaption(Sender: TObject);
+    procedure CheckListCounterFormCaption(Sender: TObject; ItemsCount: Integer);
     procedure DrawMoveLine(CheckListBox1: TCheckListBox; const Index: Integer);
     function ItemsCheckedCount(ItemsCount: Integer): Integer;
     procedure Savefile(Sender: TObject; EndFlag: Boolean);
@@ -74,6 +73,7 @@ var
   FileName: string;
   LInput: TFileStream;
   PrevItemIndex: Integer; // D&D 用の変数
+//  ItemsCount: Integer;
 
 procedure LockFile;
 begin
@@ -109,7 +109,7 @@ begin
       Memo1.Lines := CheckListBox1.Items;
 
       Savefile(Sender, false);
-      CheckListCounterFormCaption(Sender);
+      CheckListCounterFormCaption(Sender, ItemsCheckedCount(CheckListBox1.Count));
     end;
 
   end;
@@ -140,12 +140,12 @@ begin
   if ItemsCount > 0 then
   begin
     ItemsChecked := ItemsCheckedCount(ItemsCount);
+    CheckListCounterFormCaption(Sender, ItemsChecked);
 
     if ItemsChecked > 0 then
     begin
       DeleteButton.Enabled := True;
       DeleteAllChecked.Enabled := True;
-
       // チェックボックスにチェックマークが2つあったらReplaceButtonを有効にする
       if ItemsChecked = 2 then
         ReplaceButton.Enabled := True
@@ -303,14 +303,25 @@ begin
 {$ENDIF}
 end;
 
-procedure TForm1.CheckListCounterFormCaption(Sender: TObject);
+procedure TForm1.CheckListCounterFormCaption(Sender: TObject; ItemsCount: Integer);
 begin
-  Form1.Caption := AppName + '  -  ' + CheckListBox1.Count.ToString + ' 件';
-
+  if ItemsCount > 0 then
+  begin
+    Form1.Caption := AppName + '  -  ' + CheckListBox1.Count.ToString + ' 件中 ' + ItemsCount.ToString + ' 件選択';
+{$IFDEF DEBUG}
+  Form1.Caption := AppName + '  -  ' + CheckListBox1.Count.ToString +
+    ' 件中 ' + ItemsCount.ToString + ' 件選択 ::DEBUG::';
+{$ENDIF}
+  end
+  else
+  begin
+    Form1.Caption := AppName + '  -  ' + CheckListBox1.Count.ToString + ' 件';
 {$IFDEF DEBUG}
   Form1.Caption := AppName + '  -  ' + CheckListBox1.Count.ToString +
     ' 件 ::DEBUG::';
 {$ENDIF}
+  end;
+
 end;
 
 // 移動先を示す罫線を描画する手続き
@@ -373,8 +384,7 @@ begin
     ReplaceButton.Enabled := False;
     DeleteButton.Enabled := False;
     DeleteAllChecked.Enabled := False;
-    CheckListCounterFormCaption(Sender);
-
+    CheckListCounterFormCaption(Sender,  ItemsCheckedCount(CheckListBox1.Count));
   end;
 end;
 
@@ -448,6 +458,7 @@ begin
 
   LockFile;
   DeleteAllChecked.Enabled := False;
+  CheckListCounterFormCaption(Sender,  ItemsCheckedCount(CheckListBox1.Count));
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
@@ -473,11 +484,6 @@ begin
     Savefile(Sender, true);
   end;
 
-end;
-
-procedure TForm1.FormPaint(Sender: TObject);
-begin
-  CheckListCounterFormCaption(Sender);
 end;
 
 function TForm1.ItemsCheckedCount(ItemsCount: Integer): Integer;
@@ -511,6 +517,7 @@ begin
   if ItemsChecked > 0 then
   begin
     CheckListBox1.CheckAll(cbunChecked, True, False);
+    CheckListCounterFormCaption(Sender, ItemsCheckedCount(ItemsCount));
     DeleteAllChecked.Enabled := False;
     DeleteButton.Enabled := False;
     CheckListBox1.Invalidate;

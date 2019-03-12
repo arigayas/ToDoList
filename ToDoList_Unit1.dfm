@@ -18,7 +18,6 @@ object Form1: TForm1
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnKeyDown = CheckListBox1KeyDown
-  OnPaint = FormPaint
   DesignSize = (
     429
     311)
