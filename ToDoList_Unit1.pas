@@ -20,7 +20,6 @@ type
     DeleteAllChecked: TMenuItem;
     SwitchTaskTray: TMenuItem;
     TrayIcon1: TTrayIcon;
-    BR_N1: TMenuItem;
     Setting_N1: TMenuItem;
     procedure AddItemButtonClick(Sender: TObject);
     procedure DeleteButtonClick(Sender: TObject);

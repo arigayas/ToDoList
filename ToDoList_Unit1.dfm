@@ -123,11 +123,6 @@ object Form1: TForm1
       Caption = #12479#12473#12463#12488#12524#12452#12395#26684#32013#12377#12427
       OnClick = SwitchTaskTrayClick
     end
-    object BR_N1: TMenuItem
-      AutoCheck = True
-      Caption = #12454#12451#12531#12489#12454#12398#24133#12391#25240#12426#36820#12377
-      OnClick = BR_N1Click
-    end
     object Setting_N1: TMenuItem
       Caption = #35373#23450#12454#12451#12531#12489#12454
       OnClick = Setting_N1Click
