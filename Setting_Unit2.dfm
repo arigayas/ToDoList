@@ -52,6 +52,15 @@ object Form2: TForm2
         41
         146)
     end
+    object frontmostCheckBox: TCheckBox
+      Left = 16
+      Top = 70
+      Width = 129
+      Height = 17
+      Caption = #26368#21069#38754#12391#24120#12395#34920#31034#12377#12427
+      TabOrder = 3
+      OnClick = frontmostCheckBoxClick
+    end
   end
   object LoopGroupBox: TGroupBox
     Left = 248

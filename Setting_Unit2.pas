@@ -22,11 +22,13 @@ type
     fontBiggerCheckBox: TCheckBox;
     ValueListEditor1: TValueListEditor;
     ListView1: TListView;
+    frontmostCheckBox: TCheckBox;
     procedure BR_CheckBox1Click(Sender: TObject);
     procedure LoopAddButtonClick(Sender: TObject);
     procedure LoopCheckListBoxClickCheck(Sender: TObject);
     procedure ColorListBox1Click(Sender: TObject);
     procedure fontBiggerCheckBoxClick(Sender: TObject);
+    procedure frontmostCheckBoxClick(Sender: TObject);
 
   private
     procedure AddItemButtonClick(Sender: TObject);
@@ -94,6 +96,26 @@ begin
     Form1.CheckListBox1.ItemHeight := 19;
     Form1.CheckListBox1.Font.Size := 12;
     Form1.CheckListBox1.Font.Height := -16;
+  end;
+end;
+
+procedure TForm2.frontmostCheckBoxClick(Sender: TObject); // 最前面にする
+// 参照したサイト
+// http://kwikwi.cocolog-nifty.com/blog/2005/12/delphi_90fd.html
+// https://oshiete.goo.ne.jp/qa/8745468.html
+begin
+  if frontmostCheckBox.Checked then
+  begin
+    // 最前面に表示する
+//  SetWindowPos(Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE)
+    SetWindowPos(Form1.Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE or
+    SWP_NOMOVE or SWP_NOSIZE or SWP_NOSENDCHANGING or SWP_SHOWWINDOW);
+  end
+  else
+  begin
+    // 普通に戻す
+//  SetWindowPos(Handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE);
+    SetWindowPos(Form1.Handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE);
   end;
 end;
 
