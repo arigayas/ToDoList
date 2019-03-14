@@ -37,7 +37,6 @@ type
     procedure SwitchTaskTrayClick(Sender: TObject);
     procedure CheckListBox1DrawItem(Control: TWinControl; Index: Integer;
       Rect: TRect; State: TOwnerDrawState);
-    procedure BR_N1Click(Sender: TObject);
     procedure TrayIcon1Click(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure Setting_N1Click(Sender: TObject);
@@ -115,20 +114,6 @@ begin
 end;
 
 // チェックマークの数でボタンのON/OFFを行う
-procedure TForm1.BR_N1Click(Sender: TObject);
-begin
-  if BR_N1.Checked then
-  begin
-    BR_N1.Caption := 'ウィンドウの幅で折り返す';
-    BR_N1.Checked := True;
-  end
-  else
-  begin
-    BR_N1.Caption := 'ウィンドウの幅で折り返さない';
-    BR_N1.Checked := False;
-  end;
-
-end;
 
 procedure TForm1.CheckListBox1ClickCheck(Sender: TObject);
 var
@@ -413,7 +398,6 @@ var
 begin
   Memo1.Visible := False;
   DeleteButton.Enabled := False;
-  BR_N1.Checked := False;
   SettingsIniFileName := AppName + '.ini';
   SettingsIniFile := TMemIniFile.Create(SettingsIniFileName, TEncoding.UTF8);
 //  SettingsIniFile := TIniFile.Create(SettingsIniFileName);
@@ -429,11 +413,11 @@ begin
       if Left < WRect.Left then Form1.Left := WRect.Left;        // 大丈夫にする処理(4行)
       if Top < WRect.Top then Form1.Top := WRect.Top;
       if Top > WRect.Bottom - 100 then Form1.Top := WRect.Top;
-    
+
 *)  finally
     SettingsIniFile.Free;
   end;
-  
+
 {$IFDEF DEBUG}
   Memo1.Visible := True;
 
