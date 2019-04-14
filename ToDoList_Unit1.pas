@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.CheckLst,
   System.UITypes, Vcl.Menus, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnPopup,
-  Vcl.ExtCtrls, System.Types, System.IniFiles;
+  Vcl.ExtCtrls, System.Types, System.IniFiles, Vcl.Consts;
 
 type
   TForm1 = class(TForm)
@@ -41,7 +41,7 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure Setting_N1Click(Sender: TObject);
   private
-    FQueryEndSession : Boolean; // Windows終了時(シャットダウン)の処理に使用
+    FQueryEndSession: Boolean; // Windows終了時(シャットダウン)の処理に使用
     procedure CheckListBox1StartDrag(Sender: TObject;
       var DragObject: TDragObject);
     procedure CheckListCounterFormCaption(Sender: TObject; ItemsCount: Integer);
@@ -49,7 +49,7 @@ type
     function ItemsCheckedCount(ItemsCount: Integer): Integer;
     procedure Savefile(Sender: TObject; EndFlag: Boolean);
     procedure WMQueryEndSession(var Msg: TWMQueryEndSession);
-        message WM_QUERYENDSESSION;
+      message WM_QUERYENDSESSION;
     { Private 宣言 }
   public
     { Public 宣言 }
@@ -71,7 +71,7 @@ var
   FileName: string;
   LInput: TFileStream;
   PrevItemIndex: Integer; // D&D 用の変数
-//  ItemsCount: Integer;
+  // ItemsCount: Integer;
 
 procedure LockFile;
 begin
@@ -85,13 +85,12 @@ begin
     FreeAndNil(LInput);
 end;
 
-
 procedure TForm1.AddItemButtonClick(Sender: TObject);
 var
   Ans: Boolean;
   NewString: string;
 begin
-  Ans := InputQuery(AppName +' Input', '追加したい情報を入力してください。', NewString);
+  Ans := InputQuery(AppName + ' Input', '追加したい情報を入力してください。', NewString);
 
   if Ans = True then
   begin
@@ -107,7 +106,8 @@ begin
       Memo1.Lines := CheckListBox1.Items;
 
       Savefile(Sender, false);
-      CheckListCounterFormCaption(Sender, ItemsCheckedCount(CheckListBox1.Count));
+      CheckListCounterFormCaption(Sender,
+        ItemsCheckedCount(CheckListBox1.Count));
     end;
 
   end;
@@ -134,12 +134,12 @@ begin
       if ItemsChecked = 2 then
         ReplaceButton.Enabled := True
       else
-        ReplaceButton.Enabled := False;
+        ReplaceButton.Enabled := false;
     end
     else
     begin
-      DeleteButton.Enabled := False;
-      DeleteAllChecked.Enabled := False;
+      DeleteButton.Enabled := false;
+      DeleteAllChecked.Enabled := false;
     end
   end;
 end;
@@ -150,7 +150,7 @@ var
   NewString: string;
 begin
   NewString := CheckListBox1.Items[CheckListBox1.ItemIndex];
-  Ans := InputQuery(AppName +' Input', '編集したい情報を入力してください。', NewString);
+  Ans := InputQuery(AppName + ' Input', '編集したい情報を入力してください。', NewString);
 
   if Ans = True then
   begin
@@ -259,8 +259,7 @@ begin
     if (CheckListBox1.Count > 0) and (CheckListBox1.ItemIndex >= 0) then
     begin
       if MessageDlg('”はい”を選んだ場合は選択項目を編集します。' + sLineBreak +
-        '”いいえ”を選んだ場合は項目を追加します。', mtConfirmation, [mbYes, mbNo], 0) = mrYes
-      then
+        '”いいえ”を選んだ場合は項目を追加します。', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
         CheckListBox1DblClick(Sender)
       else
         AddItemButtonClick(Sender);
@@ -271,11 +270,24 @@ begin
     end;
   end;
 
-  if (Key = VK_ESCAPE) then         // Escキーで
-    DeleteAllCheckedClick(Sender);  // チェックを全部外す
+  if (Key = VK_ESCAPE) then   // Escキーでチェックを全部外す
+    DeleteAllCheckedClick(Sender);
 
-  if (Key = 78) then                // Nキーで
-    AddItemButtonClick(Sender);     // 項目追加する
+  if (Key = 78) then          // Nキーで項目追加する
+    AddItemButtonClick(Sender);
+
+  if (Key = VK_ADD) then      // テンキーの「+」で文字が大きくなる
+  begin
+    Form2.fontBiggerCheckBox.Checked := True;
+
+    Form2.fontBiggerCheckBoxClick(Sender);
+  end;
+
+  if (Key = vkSubtract) then  // テンキーの「-」で文字が小さくなる
+  begin
+    Form2.fontBiggerCheckBox.Checked := false;
+    Form2.fontBiggerCheckBoxClick(Sender);
+  end;
 
 {$IFDEF DEBUG}
   if (Key = VK_INSERT) then
@@ -287,22 +299,24 @@ begin
 {$ENDIF}
 end;
 
-procedure TForm1.CheckListCounterFormCaption(Sender: TObject; ItemsCount: Integer);
+procedure TForm1.CheckListCounterFormCaption(Sender: TObject;
+  ItemsCount: Integer);
 begin
   if ItemsCount > 0 then
   begin
-    Form1.Caption := AppName + '  -  ' + CheckListBox1.Count.ToString + ' 件中 ' + ItemsCount.ToString + ' 件選択';
+    Form1.Caption := AppName + '  -  ' + CheckListBox1.Count.ToString + ' 件中 ' +
+      ItemsCount.ToString + ' 件選択';
 {$IFDEF DEBUG}
-  Form1.Caption := AppName + '  -  ' + CheckListBox1.Count.ToString +
-    ' 件中 ' + ItemsCount.ToString + ' 件選択 ::DEBUG::';
+    Form1.Caption := AppName + '  -  ' + CheckListBox1.Count.ToString + ' 件中 ' +
+      ItemsCount.ToString + ' 件選択 ::DEBUG::';
 {$ENDIF}
   end
   else
   begin
     Form1.Caption := AppName + '  -  ' + CheckListBox1.Count.ToString + ' 件';
 {$IFDEF DEBUG}
-  Form1.Caption := AppName + '  -  ' + CheckListBox1.Count.ToString +
-    ' 件 ::DEBUG::';
+    Form1.Caption := AppName + '  -  ' + CheckListBox1.Count.ToString +
+      ' 件 ::DEBUG::';
 {$ENDIF}
   end;
 
@@ -365,24 +379,25 @@ begin
     ShowMessage(ItemsChecked.ToString + '個 削除しました。');
 {$ENDIF}
     Finalize(iArr);
-    ReplaceButton.Enabled := False;
-    DeleteButton.Enabled := False;
-    DeleteAllChecked.Enabled := False;
-    CheckListCounterFormCaption(Sender,  ItemsCheckedCount(CheckListBox1.Count));
+    ReplaceButton.Enabled := false;
+    DeleteButton.Enabled := false;
+    DeleteAllChecked.Enabled := false;
+    CheckListCounterFormCaption(Sender, ItemsCheckedCount(CheckListBox1.Count));
   end;
 end;
 
 procedure TForm1.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
-  if FQueryEndSession then begin
+  if FQueryEndSession then
+  begin
     FQueryEndSession := false;
-    //ウィンドウズが終了する場合の処理
-      FormDestroy(Sender);
+    // ウィンドウズが終了する場合の処理
+    FormDestroy(Sender);
   end;
 
   if CanClose then
   begin
-    //普通にフォームが閉じられた場合の処理
+    // 普通にフォームが閉じられた場合の処理
     FormDestroy(Sender);
   end;
 end;
@@ -391,30 +406,30 @@ procedure TForm1.FormCreate(Sender: TObject);
 var
   FStream: TStringList;
   I: Integer;
-//  WRect: TRect;
-//  SettingsIniFile : TIniFile;
-  SettingsIniFile : TMemIniFile;
-  SettingsIniFileName : string;
+  // WRect: TRect;
+  // SettingsIniFile : TIniFile;
+  SettingsIniFile: TMemIniFile;
+  SettingsIniFileName: string;
 begin
-  Memo1.Visible := False;
-  DeleteButton.Enabled := False;
+  Memo1.Visible := false;
+  DeleteButton.Enabled := false;
   SettingsIniFileName := AppName + '.ini';
   SettingsIniFile := TMemIniFile.Create(SettingsIniFileName, TEncoding.UTF8);
-//  SettingsIniFile := TIniFile.Create(SettingsIniFileName);
+  // SettingsIniFile := TIniFile.Create(SettingsIniFileName);
 
   try
     Form1.Top := SettingsIniFile.ReadInteger('Form', 'Top', 100);
     Form1.Left := SettingsIniFile.ReadInteger('Form', 'Left', 100);
     Form1.Width := SettingsIniFile.ReadInteger('Form', 'WindowWidth', 350);
-    Form1.Height := SettingsIniFile.ReadInteger('Form','WindowHeight', 250);
+    Form1.Height := SettingsIniFile.ReadInteger('Form', 'WindowHeight', 250);
 
-(*
+    (*
       if Left > WRect.Right - 100 then Form1.Left := WRect.Left; // モニタの解像度が変わっても
       if Left < WRect.Left then Form1.Left := WRect.Left;        // 大丈夫にする処理(4行)
       if Top < WRect.Top then Form1.Top := WRect.Top;
       if Top > WRect.Bottom - 100 then Form1.Top := WRect.Top;
 
-*)  finally
+    *) finally
     SettingsIniFile.Free;
   end;
 
@@ -425,7 +440,6 @@ begin
   for I := 1 to 10 do
     CheckListBox1.Items.Add(I.ToString);
 {$ENDIF}
-
   FileName := AppName + '.txt';
   // FileName[ToDoList.txt]があるか？
 
@@ -440,20 +454,21 @@ begin
   end;
 
   LockFile;
-  DeleteAllChecked.Enabled := False;
-  CheckListCounterFormCaption(Sender,  ItemsCheckedCount(CheckListBox1.Count));
+  DeleteAllChecked.Enabled := false;
+  CheckListCounterFormCaption(Sender, ItemsCheckedCount(CheckListBox1.Count));
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
 var
-//  SettingsIniFile : TIniFile;
-  SettingsIniFile : TMemIniFile;
-  SettingsIniFileName : string;
+  // SettingsIniFile : TIniFile;
+  SettingsIniFile: TMemIniFile;
+  SettingsIniFileName: string;
 begin
 
-  SettingsIniFileName := ExtractFilePath(Application.ExeName) + AppName +'.ini';
+  SettingsIniFileName := ExtractFilePath(Application.ExeName) + AppName
+    + '.ini';
   SettingsIniFile := TMemIniFile.Create(SettingsIniFileName, TEncoding.UTF8);
-//  SettingsIniFile := TIniFile.Create(SettingsIniFileName);
+  // SettingsIniFile := TIniFile.Create(SettingsIniFileName);
   UnlockFile;
   LInput.Free;
   try
@@ -464,7 +479,7 @@ begin
     SettingsIniFile.UpdateFile;
   finally
     SettingsIniFile.Free;
-    Savefile(Sender, true);
+    Savefile(Sender, True);
   end;
 
 end;
@@ -499,12 +514,12 @@ begin
 
   if ItemsChecked > 0 then
   begin
-    CheckListBox1.CheckAll(cbunChecked, True, False);
+    CheckListBox1.CheckAll(cbunChecked, True, false);
     CheckListCounterFormCaption(Sender, ItemsCheckedCount(ItemsCount));
-    DeleteAllChecked.Enabled := False;
-    DeleteButton.Enabled := False;
+    DeleteAllChecked.Enabled := false;
+    DeleteButton.Enabled := false;
     CheckListBox1.Invalidate;
-    ReplaceButton.Enabled := False;
+    ReplaceButton.Enabled := false;
   end;
 end;
 
@@ -564,7 +579,7 @@ end;
 
 procedure TForm1.SwitchTaskTrayClick(Sender: TObject);
 begin
-  if TrayIcon1.Visible = False then
+  if TrayIcon1.Visible = false then
   begin
     TrayIcon1.Visible := True;
     SwitchTaskTray.Caption := 'タスクトレイから出す';
@@ -572,7 +587,7 @@ begin
   end
   else
   begin
-    TrayIcon1.Visible := False;
+    TrayIcon1.Visible := false;
     SwitchTaskTray.Caption := 'タスクトレイに格納する';
     Screen.Forms[0].Show;
     // Formを非表示にしてから表示させると
@@ -584,16 +599,14 @@ end;
 
 procedure TForm1.TrayIcon1Click(Sender: TObject);
 begin
-//  ShowMessage('タスクトレイのアイコンをクリックしたら何をさせようか');
+  // ShowMessage('タスクトレイのアイコンをクリックしたら何をさせようか');
   SwitchTaskTrayClick(Sender);
 end;
 
 procedure TForm1.WMQueryEndSession(var Msg: TWMQueryEndSession);
 begin
-  FQueryEndSession := true;
+  FQueryEndSession := True;
   inherited;
 end;
-
-
 
 end.
