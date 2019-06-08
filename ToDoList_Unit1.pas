@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.CheckLst,
   System.UITypes, Vcl.Menus, Vcl.PlatformDefaultStyleActnCtrls, Vcl.ActnPopup,
-  Vcl.ExtCtrls, System.Types, System.IniFiles, Vcl.Consts;
+  Vcl.ExtCtrls, System.Types, System.IniFiles, Vcl.Consts, Vcl.Clipbrd;
 
 type
   TForm1 = class(TForm)
@@ -21,6 +21,7 @@ type
     SwitchTaskTray: TMenuItem;
     TrayIcon1: TTrayIcon;
     Setting_N1: TMenuItem;
+    Button1: TButton;
     procedure AddItemButtonClick(Sender: TObject);
     procedure DeleteButtonClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -40,6 +41,8 @@ type
     procedure TrayIcon1Click(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure Setting_N1Click(Sender: TObject);
+    // procedure Button1Click(Sender: TObject);
+    procedure PasteFromClipboardText(Sender: TObject);
   private
     FQueryEndSession: Boolean; // Windows終了時(シャットダウン)の処理に使用
     procedure CheckListBox1StartDrag(Sender: TObject;
@@ -50,6 +53,7 @@ type
     procedure Savefile(Sender: TObject; EndFlag: Boolean);
     procedure WMQueryEndSession(var Msg: TWMQueryEndSession);
       message WM_QUERYENDSESSION;
+
     { Private 宣言 }
   public
     { Public 宣言 }
@@ -113,8 +117,55 @@ begin
   end;
 end;
 
-// チェックマークの数でボタンのON/OFFを行う
+procedure TForm1.PasteFromClipboardText(Sender: TObject);
+var
+  clipbrdStrings: TStringList;
+  tempstr: string;
+  I: Integer;
+begin
+  clipbrdStrings := TStringList.Create;
 
+  if Clipboard.AsText = '' then // Clipboard にデータがあるかチェック
+  begin
+    ShowMessage('Clipboard is None');
+  end
+  else
+  begin
+    Memo1.Clear;
+    if Clipboard.HasFormat(CF_TEXT) then // Clipboard にあるデータがテキストかチェック
+    begin
+      clipbrdStrings.Text := Clipboard.AsText;
+
+      for I := 0 to clipbrdStrings.Count - 1 do // Clipboard にあるデータから各行の空白文字除去
+      begin
+        tempstr := clipbrdStrings.Strings[I].Trim;
+        tempstr := tempstr.Replace('　', ' ');  // 全角空白を半角空白に置換
+        clipbrdStrings.Strings[I] := tempstr.Trim; // 全角空白だったの空白文字をtrim
+      end;
+//      ShowMessage(i.ToString);
+      for I := clipbrdStrings.Count - 1 downto 0 do // Clipboard にあるデータから空行除去
+      begin
+        if clipbrdStrings.Strings[I] = '' then
+          begin
+            clipbrdStrings.Delete(i);
+          end;
+      end;
+      Memo1.Text := clipbrdStrings.Text;
+//      ShowMessage('clipbrdStrings の行数:' + clipbrdStrings.Count.ToString);
+      // checkListBox にクリップボードの内容を貼付ける
+      // Update？？関数を作ってそこに投げる
+    end
+    else
+    begin
+      MessageDlg('テキスト以外の物を貼付けようとしました。', mtInformation, [mbOk], 0);
+    end;
+  end;
+
+  clipbrdStrings.Free;
+  // Clipboard.Clear;
+end;
+
+// チェックマークの数でボタンのON/OFFを行う
 procedure TForm1.CheckListBox1ClickCheck(Sender: TObject);
 var
   ItemsChecked, ItemsCount: Integer;
@@ -270,20 +321,20 @@ begin
     end;
   end;
 
-  if (Key = VK_ESCAPE) then   // Escキーでチェックを全部外す
+  if (Key = VK_ESCAPE) then // Escキーでチェックを全部外す
     DeleteAllCheckedClick(Sender);
 
-  if (Key = 78) then          // Nキーで項目追加する
+  if (Key = 78) then // Nキーで項目追加する
     AddItemButtonClick(Sender);
 
-  if (Key = VK_ADD) then      // テンキーの「+」で文字が大きくなる
+  if (Key = VK_ADD) then // テンキーの「+」で文字が大きくなる
   begin
     Form2.fontBiggerCheckBox.Checked := True;
 
     Form2.fontBiggerCheckBoxClick(Sender);
   end;
 
-  if (Key = vkSubtract) then  // テンキーの「-」で文字が小さくなる
+  if (Key = vkSubtract) then // テンキーの「-」で文字が小さくなる
   begin
     Form2.fontBiggerCheckBox.Checked := false;
     Form2.fontBiggerCheckBoxClick(Sender);

@@ -88,7 +88,7 @@ object Form1: TForm1
   object Memo1: TMemo
     Left = 96
     Top = 158
-    Width = 185
+    Width = 249
     Height = 89
     Anchors = [akLeft, akBottom]
     Lines.Strings = (
@@ -111,6 +111,15 @@ object Form1: TForm1
     ParentFont = False
     TabOrder = 4
     OnClick = ReplaceButtonClick
+  end
+  object Button1: TButton
+    Left = 351
+    Top = 222
+    Width = 75
+    Height = 25
+    Caption = 'Clipbrd'
+    TabOrder = 5
+    OnClick = PasteFromClipboardText
   end
   object PopupMenu1: TPopupMenu
     Left = 200
