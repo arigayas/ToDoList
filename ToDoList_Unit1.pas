@@ -51,6 +51,7 @@ type
     procedure DrawMoveLine(CheckListBox1: TCheckListBox; const Index: Integer);
     function ItemsCheckedCount(ItemsCount: Integer): Integer;
     procedure Savefile(Sender: TObject; EndFlag: Boolean);
+    procedure UpdateData(Sender: TObject; Flag:Integer; NewString: string);
     procedure WMQueryEndSession(var Msg: TWMQueryEndSession);
       message WM_QUERYENDSESSION;
 
@@ -88,6 +89,8 @@ begin
   if Assigned(LInput) then
     FreeAndNil(LInput);
 end;
+
+
 
 procedure TForm1.AddItemButtonClick(Sender: TObject);
 var
@@ -142,7 +145,7 @@ begin
         tempstr := tempstr.Replace('　', ' ');  // 全角空白を半角空白に置換
         clipbrdStrings.Strings[I] := tempstr.Trim; // 全角空白だったの空白文字をtrim
       end;
-//      ShowMessage(i.ToString);
+
       for I := clipbrdStrings.Count - 1 downto 0 do // Clipboard にあるデータから空行除去
       begin
         if clipbrdStrings.Strings[I] = '' then
@@ -150,10 +153,9 @@ begin
             clipbrdStrings.Delete(i);
           end;
       end;
-      Memo1.Text := clipbrdStrings.Text;
-//      ShowMessage('clipbrdStrings の行数:' + clipbrdStrings.Count.ToString);
-      // checkListBox にクリップボードの内容を貼付ける
-      // Update？？関数を作ってそこに投げる
+
+      for I := 0 to clipbrdStrings.Count - 1 do
+        UpdateData(Sender, 0, clipbrdStrings.Strings[I]);
     end
     else
     begin
@@ -162,7 +164,6 @@ begin
   end;
 
   clipbrdStrings.Free;
-  // Clipboard.Clear;
 end;
 
 // チェックマークの数でボタンのON/OFFを行う
@@ -652,6 +653,52 @@ procedure TForm1.TrayIcon1Click(Sender: TObject);
 begin
   // ShowMessage('タスクトレイのアイコンをクリックしたら何をさせようか');
   SwitchTaskTrayClick(Sender);
+end;
+
+procedure TForm1.UpdateData(Sender: TObject; Flag:Integer; NewString: string);
+// 追加Flag -> 0
+// 編集Flag -> 1
+var
+  Ans: Boolean;
+  StrArray: array[0..3] of string;
+begin
+  case Flag of
+    0:begin
+      StrArray[0] := '追加したい情報を入力してください。';
+      StrArray[1] := '何か入力してください';
+    end;
+    1:begin
+      StrArray[0] := '編集したい情報を入力してください。';
+      StrArray[1] := '何か入力するか、削除ボタンを押してください';
+      NewString := CheckListBox1.Items[CheckListBox1.ItemIndex];
+    end;
+  end;
+
+  Ans := InputQuery(AppName + ' Input', StrArray[0], NewString);
+
+  if Ans = True then
+  begin
+    if NewString = '' then
+      MessageDlg(StrArray[1], mtInformation, [mbOk], 0)
+    else
+    begin
+      NewString := NewString.Trim; // 文字列の前後の空白を除去
+      case Flag of
+      0:begin
+        CheckListBox1.Items.Add(NewString);
+      end;
+      1:begin
+        CheckListBox1.Items[CheckListBox1.ItemIndex] := NewString;
+      end;
+      end;
+      Memo1.Lines := CheckListBox1.Items;
+
+      Form1.Savefile(Sender, false);
+      if Flag = 0 then
+        CheckListCounterFormCaption(Sender,
+          ItemsCheckedCount(CheckListBox1.Count));
+    end;
+  end;
 end;
 
 procedure TForm1.WMQueryEndSession(var Msg: TWMQueryEndSession);
