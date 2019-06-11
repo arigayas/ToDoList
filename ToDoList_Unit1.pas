@@ -21,7 +21,6 @@ type
     SwitchTaskTray: TMenuItem;
     TrayIcon1: TTrayIcon;
     Setting_N1: TMenuItem;
-    Button1: TButton;
     procedure AddItemButtonClick(Sender: TObject);
     procedure DeleteButtonClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -327,6 +326,9 @@ begin
 
   if (Key = 78) then // Nキーで項目追加する
     AddItemButtonClick(Sender);
+
+  if (Key = 80) then // Nキーで項目追加する
+    PasteFromClipboardText(Sender);
 
   if (Key = VK_ADD) then // テンキーの「+」で文字が大きくなる
   begin

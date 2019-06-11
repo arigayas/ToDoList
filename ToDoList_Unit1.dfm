@@ -112,15 +112,6 @@ object Form1: TForm1
     TabOrder = 4
     OnClick = ReplaceButtonClick
   end
-  object Button1: TButton
-    Left = 351
-    Top = 222
-    Width = 75
-    Height = 25
-    Caption = 'Clipbrd'
-    TabOrder = 5
-    OnClick = PasteFromClipboardText
-  end
   object PopupMenu1: TPopupMenu
     Left = 200
     Top = 272
