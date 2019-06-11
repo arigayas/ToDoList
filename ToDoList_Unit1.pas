@@ -327,7 +327,7 @@ begin
   if (Key = 78) then // Nキーで項目追加する
     AddItemButtonClick(Sender);
 
-  if (Key = 80) then // Nキーで項目追加する
+  if (Key = 80) then // Pキーでクリップボードにはテキストを追加する
     PasteFromClipboardText(Sender);
 
   if (Key = VK_ADD) then // テンキーの「+」で文字が大きくなる
