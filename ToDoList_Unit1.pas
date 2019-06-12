@@ -93,35 +93,10 @@ end;
 
 procedure TForm1.AddItemButtonClick(Sender: TObject);
 var
-  Ans: Boolean;
   NewString: string;
 begin
   NewString := '';
   UpdateData(Sender, 0, NewString);
-
-{
-    Ans := InputQuery(AppName + ' Input', '追加したい情報を入力してください。', NewString);
-
-    if Ans = True then
-    begin
-      if NewString = '' then
-      begin
-        MessageDlg('何か入力してください', mtInformation, [mbOk], 0);
-        AddItemButtonClick(Sender);
-      end
-      else
-      begin
-        NewString := Trim(NewString); // 文字列の前後の空白を除去
-        CheckListBox1.Items.Add(NewString);
-        Memo1.Lines := CheckListBox1.Items;
-
-        Savefile(Sender, false);
-        CheckListCounterFormCaption(Sender,
-          ItemsCheckedCount(CheckListBox1.Count));
-      end;
-
-    end;
-}
 end;
 
 procedure TForm1.PasteFromClipboardText(Sender: TObject);
@@ -202,26 +177,10 @@ end;
 
 procedure TForm1.CheckListBox1DblClick(Sender: TObject);
 var
-  Ans: Boolean;
   NewString: string;
 begin
-  NewString := CheckListBox1.Items[CheckListBox1.ItemIndex];
-  Ans := InputQuery(AppName + ' Input', '編集したい情報を入力してください。', NewString);
-
-  if Ans = True then
-  begin
-    if NewString = '' then
-      MessageDlg('何か入力するか、削除ボタンを押してください', mtInformation, [mbOk], 0)
-    else
-    begin
-      NewString := Trim(NewString); // 文字列の前後の空白を除去
-      CheckListBox1.Items[CheckListBox1.ItemIndex] := NewString;
-      Memo1.Lines := CheckListBox1.Items;
-
-      Savefile(Sender, false);
-    end;
-
-  end;
+  NewString :='';
+  UpdateData(Sender, 1, NewString);
 end;
 
 // ドラッグ&ドロップに関しては以下のブログを参考にした。
