@@ -96,27 +96,32 @@ var
   Ans: Boolean;
   NewString: string;
 begin
-  Ans := InputQuery(AppName + ' Input', '追加したい情報を入力してください。', NewString);
+  NewString := '';
+  UpdateData(Sender, 0, NewString);
 
-  if Ans = True then
-  begin
-    if NewString = '' then
-    begin
-      MessageDlg('何か入力してください', mtInformation, [mbOk], 0);
-      AddItemButtonClick(Sender);
-    end
-    else
-    begin
-      NewString := Trim(NewString); // 文字列の前後の空白を除去
-      CheckListBox1.Items.Add(NewString);
-      Memo1.Lines := CheckListBox1.Items;
+{
+    Ans := InputQuery(AppName + ' Input', '追加したい情報を入力してください。', NewString);
 
-      Savefile(Sender, false);
-      CheckListCounterFormCaption(Sender,
-        ItemsCheckedCount(CheckListBox1.Count));
+    if Ans = True then
+    begin
+      if NewString = '' then
+      begin
+        MessageDlg('何か入力してください', mtInformation, [mbOk], 0);
+        AddItemButtonClick(Sender);
+      end
+      else
+      begin
+        NewString := Trim(NewString); // 文字列の前後の空白を除去
+        CheckListBox1.Items.Add(NewString);
+        Memo1.Lines := CheckListBox1.Items;
+
+        Savefile(Sender, false);
+        CheckListCounterFormCaption(Sender,
+          ItemsCheckedCount(CheckListBox1.Count));
+      end;
+
     end;
-
-  end;
+}
 end;
 
 procedure TForm1.PasteFromClipboardText(Sender: TObject);
@@ -327,7 +332,7 @@ begin
   if (Key = 78) then // Nキーで項目追加する
     AddItemButtonClick(Sender);
 
-  if (Key = 80) then // Pキーでクリップボードにはテキストを追加する
+  if (Key = 80) then // Pキーでクリップボードにあるテキストを追加ボタンを使用せず追加する
     PasteFromClipboardText(Sender);
 
   if (Key = VK_ADD) then // テンキーの「+」で文字が大きくなる
@@ -681,7 +686,13 @@ begin
   if Ans = True then
   begin
     if NewString = '' then
-      MessageDlg(StrArray[1], mtInformation, [mbOk], 0)
+      begin
+        MessageDlg(StrArray[1], mtInformation, [mbOk], 0);
+        if Flag = 0 then
+        begin
+          UpdateData(Sender, Flag, NewString);
+        end
+      end
     else
     begin
       NewString := NewString.Trim; // 文字列の前後の空白を除去
