@@ -624,6 +624,7 @@ end;
 procedure TForm1.UpdateData(Sender: TObject; Flag:Integer; NewString: string);
 // 追加Flag -> 0
 // 編集Flag -> 1
+// NewString はクリップボードのテキストが入る
 var
   Ans: Boolean;
   StrArray: array[0..3] of string;
@@ -637,6 +638,9 @@ begin
       StrArray[0] := '編集したい情報を入力してください。';
       StrArray[1] := '何か入力するか、削除ボタンを押してください';
       NewString := CheckListBox1.Items[CheckListBox1.ItemIndex];
+    end;
+    else begin
+      ShowMessage('UpdateData関数で想定していない引数が呼ばれました。');
     end;
   end;
 
