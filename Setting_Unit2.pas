@@ -23,12 +23,16 @@ type
     ValueListEditor1: TValueListEditor;
     ListView1: TListView;
     frontmostCheckBox: TCheckBox;
+    OKButton: TButton;
+    CancelButton: TButton;
     procedure BR_CheckBox1Click(Sender: TObject);
     procedure LoopAddButtonClick(Sender: TObject);
     procedure LoopCheckListBoxClickCheck(Sender: TObject);
     procedure ColorListBox1Click(Sender: TObject);
     procedure fontBiggerCheckBoxClick(Sender: TObject);
     procedure frontmostCheckBoxClick(Sender: TObject);
+    procedure OKButtonClick(Sender: TObject);
+    procedure CancelButtonClick(Sender: TObject);
 
   private
     procedure AddItemButtonClick(Sender: TObject);
@@ -119,6 +123,11 @@ begin
   end;
 end;
 
+procedure TForm2.CancelButtonClick(Sender: TObject);
+begin
+  Form2.Close;
+end;
+
 procedure TForm2.ColorListBox1Click(Sender: TObject);
 begin
   // ShowMessage( ColorListBox1.ColorNames[ColorListBox1.Selected] ); // 試しにダブルクリックした色を表示する。
@@ -132,6 +141,11 @@ end;
 procedure TForm2.LoopCheckListBoxClickCheck(Sender: TObject);
 begin
   // 1つ以上ならLoopDeleteButtonを有効にする処理を書く
+end;
+
+procedure TForm2.OKButtonClick(Sender: TObject);
+begin
+  Form2.Close;
 end;
 
 end.

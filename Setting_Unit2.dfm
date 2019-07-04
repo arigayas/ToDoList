@@ -2,7 +2,7 @@ object Form2: TForm2
   Left = 0
   Top = 0
   Caption = #35373#23450
-  ClientHeight = 454
+  ClientHeight = 489
   ClientWidth = 584
   Color = clBtnFace
   Constraints.MaxWidth = 600
@@ -19,10 +19,11 @@ object Form2: TForm2
     Left = 0
     Top = 0
     Width = 242
-    Height = 454
+    Height = 489
     Align = alLeft
     Caption = #35373#23450
     TabOrder = 0
+    ExplicitHeight = 468
     object BR_CheckBox1: TCheckBox
       Left = 16
       Top = 24
@@ -170,5 +171,23 @@ object Form2: TForm2
       TabOrder = 1
       ViewStyle = vsReport
     end
+  end
+  object OKButton: TButton
+    Left = 501
+    Top = 456
+    Width = 75
+    Height = 25
+    Caption = 'OK'
+    TabOrder = 3
+    OnClick = OKButtonClick
+  end
+  object CancelButton: TButton
+    Left = 412
+    Top = 456
+    Width = 75
+    Height = 25
+    Caption = 'Cancel'
+    TabOrder = 4
+    OnClick = CancelButtonClick
   end
 end
