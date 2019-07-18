@@ -21,6 +21,7 @@ type
     SwitchTaskTray: TMenuItem;
     TrayIcon1: TTrayIcon;
     Setting_N1: TMenuItem;
+    PopupPasteFromClipboardText: TMenuItem;
     procedure AddItemButtonClick(Sender: TObject);
     procedure DeleteButtonClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);

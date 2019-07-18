@@ -115,6 +115,10 @@ object Form1: TForm1
   object PopupMenu1: TPopupMenu
     Left = 200
     Top = 272
+    object PopupPasteFromClipboardText: TMenuItem
+      Caption = #12463#12522#12483#12503#12508#12540#12489#12363#12425#36028#12426#20184#12369
+      OnClick = PasteFromClipboardText
+    end
     object DeleteAllChecked: TMenuItem
       Caption = #12377#12409#12390#12398#12481#12455#12483#12463#12434#22806#12377
       OnClick = DeleteAllCheckedClick
