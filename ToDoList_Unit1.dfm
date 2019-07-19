@@ -117,6 +117,7 @@ object Form1: TForm1
     Top = 272
     object PopupPasteFromClipboardText: TMenuItem
       Caption = #12463#12522#12483#12503#12508#12540#12489#12363#12425#36028#12426#20184#12369
+      ShortCut = 16464
       OnClick = PasteFromClipboardText
     end
     object DeleteAllChecked: TMenuItem
