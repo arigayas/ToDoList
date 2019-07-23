@@ -42,26 +42,13 @@ object Form2: TForm2
       TabOrder = 1
       OnClick = fontBiggerCheckBoxClick
     end
-    object ValueListEditor1: TValueListEditor
-      Left = 16
-      Top = 231
-      Width = 193
-      Height = 213
-      TabOrder = 2
-      TitleCaptions.Strings = (
-        'ID'
-        #33394)
-      ColWidths = (
-        41
-        146)
-    end
     object frontmostCheckBox: TCheckBox
       Left = 16
       Top = 70
       Width = 129
       Height = 17
       Caption = #26368#21069#38754#12391#24120#12395#34920#31034#12377#12427
-      TabOrder = 3
+      TabOrder = 2
       OnClick = frontmostCheckBoxClick
     end
   end
@@ -87,10 +74,14 @@ object Form2: TForm2
       Height = 236
       Columns = <
         item
+          AutoSize = True
           Caption = 'ID'
+          MinWidth = 50
         end
         item
           Caption = #38917#30446
+          MinWidth = 150
+          Width = 150
         end
         item
           Caption = #23455#34892#26085

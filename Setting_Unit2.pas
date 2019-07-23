@@ -18,7 +18,6 @@ type
     LoopDeleteButton: TButton;
     SettingCheckBoxGroup: TGroupBox;
     fontBiggerCheckBox: TCheckBox;
-    ValueListEditor1: TValueListEditor;
     LoopListView1: TListView;
     frontmostCheckBox: TCheckBox;
     OKButton: TButton;
