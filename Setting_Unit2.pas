@@ -15,13 +15,11 @@ type
     ColorGroupBox: TGroupBox;
     ColorListBox1: TColorListBox;
     LoopAddButton: TButton;
-    LoopCheckListBox: TCheckListBox;
     LoopDeleteButton: TButton;
-    LoopGroupBox: TGroupBox;
     SettingCheckBoxGroup: TGroupBox;
     fontBiggerCheckBox: TCheckBox;
     ValueListEditor1: TValueListEditor;
-    ListView1: TListView;
+    LoopListView1: TListView;
     frontmostCheckBox: TCheckBox;
     OKButton: TButton;
     CancelButton: TButton;
@@ -54,6 +52,8 @@ procedure TForm2.AddItemButtonClick(Sender: TObject);
 var
   Ans: Boolean;
   NewString: string;
+//  Group: TListGroup;
+  Item: TListItem;
   // i: Integer;
 begin
   Ans := InputQuery(AppName + ' Input', '追加したい情報を入力してください。', NewString);
@@ -67,9 +67,18 @@ begin
     end
     else
     begin
+//      ShowMessage(LoopListView1.Items.Count.ToString);
       NewString := Trim(NewString); // 文字列の前後の空白を除去
-      LoopCheckListBox.Items.Add(NewString);
-      ListView1.Items.Add.Caption := NewString;
+//      Group := LoopListView1.Groups.Add;
+//      Group.Header := 'My header';
+      Item := LoopListView1.Items.Add;
+//      LoopCheckListBox.Items.Add(NewString);
+//      LoopListView1.Items.Add := NewString ;
+      Item.Caption := NewString;
+      Item.SubItems.Add('***');
+      Item.SubItems.Add('*** *');
+      Item.SubItems.Add('*** **');
+      Item.SubItems.Add('*** **');
       // for i := 1 to 20 do
       // LoopCheckListBox.Items.Add(i.ToString);
       // Memo1.Lines := CheckListBox1.Items;
