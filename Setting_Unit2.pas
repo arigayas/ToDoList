@@ -13,7 +13,6 @@ type
   TForm2 = class(TForm)
     BR_CheckBox1: TCheckBox;
     ColorGroupBox: TGroupBox;
-    ColorListBox1: TColorListBox;
     LoopAddButton: TButton;
     LoopDeleteButton: TButton;
     SettingCheckBoxGroup: TGroupBox;
@@ -22,6 +21,18 @@ type
     frontmostCheckBox: TCheckBox;
     OKButton: TButton;
     CancelButton: TButton;
+    DateTimePicker1: TDateTimePicker;
+    PageControl1: TPageControl;
+    DailyTabSheet1: TTabSheet;
+    WeeklyTabSheet2: TTabSheet;
+    DayTabSheet1: TTabSheet;
+    CheckListBox1: TCheckListBox;
+    LabeledEdit1: TLabeledEdit;
+    DateTimePicker2: TDateTimePicker;
+    DailyLabel: TLabel;
+    WeeklyLabe: TLabel;
+    Label1: TLabel;
+    DateTimePicker3: TDateTimePicker;
     procedure BR_CheckBox1Click(Sender: TObject);
     procedure LoopAddButtonClick(Sender: TObject);
     procedure LoopCheckListBoxClickCheck(Sender: TObject);
@@ -30,6 +41,7 @@ type
     procedure frontmostCheckBoxClick(Sender: TObject);
     procedure OKButtonClick(Sender: TObject);
     procedure CancelButtonClick(Sender: TObject);
+    procedure LoopDeleteButtonClick(Sender: TObject);
 
   private
     procedure AddItemButtonClick(Sender: TObject);
@@ -50,8 +62,7 @@ uses ToDoList_Unit1;
 procedure TForm2.AddItemButtonClick(Sender: TObject);
 var
   Ans: Boolean;
-  NewString: string;
-//  Group: TListGroup;
+  NewString,SetTime: string;
   Item: TListItem;
   // i: Integer;
 begin
@@ -66,7 +77,6 @@ begin
     end
     else
     begin
-//      ShowMessage(LoopListView1.Items.Count.ToString);
       NewString := Trim(NewString); // 文字列の前後の空白を除去
 //      Group := LoopListView1.Groups.Add;
 //      Group.Header := 'My header';
@@ -75,8 +85,8 @@ begin
 //      LoopListView1.Items.Add := NewString ;
       Item.Caption := NewString;
       Item.SubItems.Add('***');
-      Item.SubItems.Add('*** *');
       Item.SubItems.Add('*** **');
+      Item.SubItems.Add(FormatDateTime('hh:mm',DateTimePicker1.DateTime));
       Item.SubItems.Add('*** **');
       // for i := 1 to 20 do
       // LoopCheckListBox.Items.Add(i.ToString);
@@ -149,6 +159,11 @@ end;
 procedure TForm2.LoopCheckListBoxClickCheck(Sender: TObject);
 begin
   // 1つ以上ならLoopDeleteButtonを有効にする処理を書く
+end;
+
+procedure TForm2.LoopDeleteButtonClick(Sender: TObject);
+begin
+// フォーム表示時にListViewの項目が0の場合に削除ボタンを押せなくする処理を書く
 end;
 
 procedure TForm2.OKButtonClick(Sender: TObject);
