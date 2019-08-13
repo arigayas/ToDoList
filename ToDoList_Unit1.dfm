@@ -55,6 +55,7 @@ object Form1: TForm1
     ParentFont = False
     TabOrder = 2
     OnClick = DeleteButtonClick
+    OnKeyDown = CheckListBox1KeyDown
   end
   object CheckListBox1: TCheckListBox
     Left = 0
@@ -94,6 +95,7 @@ object Form1: TForm1
     Lines.Strings = (
       'Debug '#34920#31034)
     TabOrder = 3
+    OnKeyDown = CheckListBox1KeyDown
   end
   object ReplaceButton: TButton
     Left = 95
@@ -111,6 +113,7 @@ object Form1: TForm1
     ParentFont = False
     TabOrder = 4
     OnClick = ReplaceButtonClick
+    OnKeyDown = CheckListBox1KeyDown
   end
   object PopupMenu1: TPopupMenu
     Left = 200
