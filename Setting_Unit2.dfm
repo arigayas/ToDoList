@@ -2,11 +2,12 @@ object Form2: TForm2
   Left = 0
   Top = 0
   Caption = #35373#23450
-  ClientHeight = 584
+  ClientHeight = 439
   ClientWidth = 584
   Color = clBtnFace
   Constraints.MaxHeight = 750
   Constraints.MaxWidth = 600
+  Constraints.MinHeight = 400
   Constraints.MinWidth = 600
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,7 +17,7 @@ object Form2: TForm2
   OldCreateOrder = False
   DesignSize = (
     584
-    584)
+    439)
   PixelsPerInch = 96
   TextHeight = 13
   object SettingCheckBoxGroup: TGroupBox
@@ -27,7 +28,6 @@ object Form2: TForm2
     Align = alTop
     Caption = #35373#23450
     TabOrder = 0
-    ExplicitWidth = 242
     object BR_CheckBox1: TCheckBox
       Left = 16
       Top = 24
@@ -61,20 +61,19 @@ object Form2: TForm2
     Left = 0
     Top = 113
     Width = 584
-    Height = 417
+    Height = 279
     Align = alTop
+    Anchors = [akLeft, akTop, akRight, akBottom]
     Caption = #21608#26399'Todo'#12522#12473#12488
     TabOrder = 1
-    ExplicitLeft = 8
-    ExplicitTop = 119
-    ExplicitWidth = 568
-    ExplicitHeight = 418
+    ExplicitHeight = 392
     object LoopListView1: TListView
       Left = 2
-      Top = 179
+      Top = 150
       Width = 580
-      Height = 236
+      Height = 127
       Align = alBottom
+      Anchors = [akLeft, akTop, akRight, akBottom]
       Columns = <
         item
           Caption = 'ID'
@@ -99,6 +98,7 @@ object Form2: TForm2
           Caption = #32972#26223#33394
           MinWidth = 50
         end>
+      Constraints.MinHeight = 50
       GridLines = True
       Items.ItemData = {
         05F8000000030000000000000000000000FFFFFFFF04000000FFFFFFFF000000
@@ -112,9 +112,8 @@ object Form2: TForm2
       RowSelect = True
       TabOrder = 0
       ViewStyle = vsReport
-      ExplicitLeft = 3
-      ExplicitTop = 21
-      ExplicitWidth = 322
+      ExplicitTop = 151
+      ExplicitHeight = 99
     end
     object LoopAddButton: TButton
       Left = 493
@@ -178,8 +177,6 @@ object Form2: TForm2
       object WeeklyTabSheet2: TTabSheet
         Caption = #26332#26085
         ImageIndex = 1
-        ExplicitLeft = 5
-        ExplicitTop = 40
         object WeeklyLabe: TLabel
           Left = 3
           Top = 35
@@ -285,24 +282,24 @@ object Form2: TForm2
   end
   object OKButton: TButton
     Left = 501
-    Top = 547
+    Top = 402
     Width = 75
     Height = 29
     Anchors = [akRight, akBottom]
     Caption = 'OK'
     TabOrder = 2
     OnClick = OKButtonClick
-    ExplicitTop = 543
+    ExplicitTop = 547
   end
   object CancelButton: TButton
     Left = 412
-    Top = 548
+    Top = 403
     Width = 75
     Height = 28
     Anchors = [akRight, akBottom]
     Caption = 'Cancel'
     TabOrder = 3
     OnClick = CancelButtonClick
-    ExplicitTop = 543
+    ExplicitTop = 548
   end
 end
