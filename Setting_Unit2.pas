@@ -113,10 +113,11 @@ var
   ListItem: TListItem;
   GroupIdNum: Integer;
   Ans: Boolean;
-  NewString: string;
+  ListItemID, NewString: string;
 begin
   GroupIdNum := PageControl1.ActivePageIndex;
   ListItem := LoopListView1.Items.Add;
+  ListItemID := Format('%.3d', [LoopListView1.Items.Count]);
 
   Ans := InputQuery(AppName + ' Input', '追加したい情報を入力してください。', NewString);
 
@@ -132,28 +133,28 @@ begin
       NewString := Trim(NewString); // 文字列の前後の空白を除去
 
       case GroupIdNum of
-        0:
+        0: // 毎日
           begin
             ListItem.GroupID := GroupIdNum;
-            ListItem.Caption := 'A' + GroupIdNum.ToString;
+            ListItem.Caption := 'D' + ListItemID;
             ListItem.SubItems.Add(NewString);
             ListItem.SubItems.Add('毎日');
             ListItem.SubItems.Add(FormatDateTime('hh:mm', DailyDateTimePicker.DateTime));
             ListItem.SubItems.Add('レッド');
           end;
-        1:
+        1: // 毎週
           begin
             ListItem.GroupID := GroupIdNum;
-            ListItem.Caption := 'A' + GroupIdNum.ToString;
+            ListItem.Caption := 'W' + ListItemID;
             ListItem.SubItems.Add(NewString);
             ListItem.SubItems.Add('付き');
             ListItem.SubItems.Add(FormatDateTime('hh:mm', WeeklyDateTimePicker.DateTime));
             ListItem.SubItems.Add('Blue');
           end;
-        2:
+        2: // 毎月
           begin
             ListItem.GroupID := GroupIdNum;
-            ListItem.Caption := 'A' + GroupIdNum.ToString;
+            ListItem.Caption := 'M' + ListItemID;
             ListItem.SubItems.Add(NewString);
             ListItem.SubItems.Add('10日');
             ListItem.SubItems.Add(FormatDateTime('hh:mm', MonthlyDateTimePicker.DateTime));
