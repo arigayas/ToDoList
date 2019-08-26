@@ -2,7 +2,7 @@ object Form2: TForm2
   Left = 0
   Top = 0
   Caption = #35373#23450
-  ClientHeight = 439
+  ClientHeight = 493
   ClientWidth = 584
   Color = clBtnFace
   Constraints.MaxHeight = 750
@@ -17,7 +17,7 @@ object Form2: TForm2
   OldCreateOrder = False
   DesignSize = (
     584
-    439)
+    493)
   PixelsPerInch = 96
   TextHeight = 13
   object SettingCheckBoxGroup: TGroupBox
@@ -61,17 +61,17 @@ object Form2: TForm2
     Left = 0
     Top = 113
     Width = 584
-    Height = 279
+    Height = 333
     Align = alTop
     Anchors = [akLeft, akTop, akRight, akBottom]
     Caption = #21608#26399'Todo'#12522#12473#12488
     TabOrder = 1
-    ExplicitHeight = 392
+    ExplicitHeight = 279
     object LoopListView1: TListView
       Left = 2
       Top = 150
       Width = 580
-      Height = 127
+      Height = 181
       Align = alBottom
       Anchors = [akLeft, akTop, akRight, akBottom]
       Columns = <
@@ -100,20 +100,45 @@ object Form2: TForm2
         end>
       Constraints.MinHeight = 50
       GridLines = True
+      Groups = <
+        item
+          Header = #27598#26085
+          GroupID = 0
+          State = [lgsNormal]
+          HeaderAlign = taLeftJustify
+          FooterAlign = taCenter
+          TitleImage = -1
+        end
+        item
+          Header = #27598#36913
+          GroupID = 1
+          State = [lgsNormal]
+          HeaderAlign = taLeftJustify
+          FooterAlign = taCenter
+          TitleImage = -1
+        end
+        item
+          Header = #27598#26376
+          GroupID = 2
+          State = [lgsNormal]
+          HeaderAlign = taLeftJustify
+          FooterAlign = taRightJustify
+          TitleImage = -1
+        end>
       Items.ItemData = {
-        05F8000000030000000000000000000000FFFFFFFF04000000FFFFFFFF000000
-        000330003000310007AC726E30A830B5306E3042669395A8ABF92B02CE6BE565
-        60FEBA2D05300032001AFF30003000201CBB2D037200650064008802BB2D0000
-        000001000000FFFFFFFF03000000FFFFFFFF000000000330003000320007AC72
-        6E306365696B6E30426693950001BB2D030867346CD1911817BB2D0531003800
-        1AFF300030000829BB2D0000000002000000FFFFFFFF03000000FFFFFFFF0000
-        00000330003000330003E930B830AA30A003BB2D01E565382BBB2D0531003500
-        1AFF300030000845BB2DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+        05F8000000030000000000000000000000FFFFFFFF0400000000000000000000
+        000330003000310007AC726E30A830B5306E3042669395D082DE2C02CE6BE565
+        8886DE2C05300032001AFF30003000F886DE2C037200650064005086DE2C0000
+        000001000000FFFFFFFF0300000001000000000000000330003000320007AC72
+        6E306365696B6E30426693959882DE2C030867346CD191C086DE2C0531003800
+        1AFF300030003087DE2C0000000002000000FFFFFFFF03000000020000000000
+        00000330003000330003E930B830AA303080DE2C01E5654881DE2C0531003500
+        1AFF300030001081DE2CFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+      GroupView = True
       RowSelect = True
       TabOrder = 0
       ViewStyle = vsReport
-      ExplicitTop = 151
-      ExplicitHeight = 99
+      ExplicitHeight = 127
     end
     object LoopAddButton: TButton
       Left = 493
@@ -282,24 +307,24 @@ object Form2: TForm2
   end
   object OKButton: TButton
     Left = 501
-    Top = 402
+    Top = 456
     Width = 75
     Height = 29
     Anchors = [akRight, akBottom]
     Caption = 'OK'
     TabOrder = 2
     OnClick = OKButtonClick
-    ExplicitTop = 547
+    ExplicitTop = 402
   end
   object CancelButton: TButton
     Left = 412
-    Top = 403
+    Top = 457
     Width = 75
     Height = 28
     Anchors = [akRight, akBottom]
     Caption = 'Cancel'
     TabOrder = 3
     OnClick = CancelButtonClick
-    ExplicitTop = 548
+    ExplicitTop = 403
   end
 end
