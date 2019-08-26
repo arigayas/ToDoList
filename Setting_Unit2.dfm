@@ -15,6 +15,7 @@ object Form2: TForm2
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnCreate = FormCreate
   DesignSize = (
     584
     493)
@@ -105,24 +106,24 @@ object Form2: TForm2
           Header = #27598#26085
           GroupID = 0
           State = [lgsNormal]
-          HeaderAlign = taLeftJustify
-          FooterAlign = taCenter
+          HeaderAlign = taCenter
+          FooterAlign = taLeftJustify
           TitleImage = -1
         end
         item
           Header = #27598#36913
           GroupID = 1
           State = [lgsNormal]
-          HeaderAlign = taLeftJustify
-          FooterAlign = taCenter
+          HeaderAlign = taCenter
+          FooterAlign = taLeftJustify
           TitleImage = -1
         end
         item
           Header = #27598#26376
           GroupID = 2
           State = [lgsNormal]
-          HeaderAlign = taLeftJustify
-          FooterAlign = taRightJustify
+          HeaderAlign = taCenter
+          FooterAlign = taLeftJustify
           TitleImage = -1
         end>
       Items.ItemData = {

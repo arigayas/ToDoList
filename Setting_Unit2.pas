@@ -42,6 +42,7 @@ type
     procedure OKButtonClick(Sender: TObject);
     procedure CancelButtonClick(Sender: TObject);
     procedure LoopDeleteButtonClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
 
   private
     procedure AddItemButtonClick(Sender: TObject);
@@ -121,6 +122,12 @@ begin
   end;
 end;
 
+procedure TForm2.FormCreate(Sender: TObject);
+begin
+  LoopListView1.ViewStyle:= vsIcon;    // 起動時に1つ目のグループのヘッダー(毎日)が
+  LoopListView1.ViewStyle := vsReport; // 表示されない為の対策の2行。
+end;
+
 procedure TForm2.frontmostCheckBoxClick(Sender: TObject); // 最前面にする
 // 参照したサイト
 // http://kwikwi.cocolog-nifty.com/blog/2005/12/delphi_90fd.html
@@ -153,7 +160,8 @@ end;
 
 procedure TForm2.LoopAddButtonClick(Sender: TObject);
 begin
-  AddItemButtonClick(Sender);
+//  AddItemButtonClick(Sender);
+  ShowMessage( PageControl1.ActivePageIndex.ToString );
 end;
 
 procedure TForm2.LoopCheckListBoxClickCheck(Sender: TObject);
