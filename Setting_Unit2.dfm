@@ -319,15 +319,4 @@ object Form2: TForm2
     OnClick = OKButtonClick
     ExplicitTop = 402
   end
-  object CancelButton: TButton
-    Left = 412
-    Top = 457
-    Width = 75
-    Height = 28
-    Anchors = [akRight, akBottom]
-    Caption = 'Cancel'
-    TabOrder = 3
-    OnClick = CancelButtonClick
-    ExplicitTop = 403
-  end
 end

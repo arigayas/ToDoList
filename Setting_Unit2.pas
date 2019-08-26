@@ -20,7 +20,6 @@ type
     LoopListView1: TListView;
     frontmostCheckBox: TCheckBox;
     OKButton: TButton;
-    CancelButton: TButton;
     DateTimePicker1: TDateTimePicker;
     PageControl1: TPageControl;
     DailyTabSheet1: TTabSheet;
@@ -35,12 +34,10 @@ type
     DateTimePicker3: TDateTimePicker;
     procedure BR_CheckBox1Click(Sender: TObject);
     procedure LoopAddButtonClick(Sender: TObject);
-    procedure LoopCheckListBoxClickCheck(Sender: TObject);
     procedure ColorListBox1Click(Sender: TObject);
     procedure fontBiggerCheckBoxClick(Sender: TObject);
     procedure frontmostCheckBoxClick(Sender: TObject);
     procedure OKButtonClick(Sender: TObject);
-    procedure CancelButtonClick(Sender: TObject);
     procedure LoopDeleteButtonClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure LoopListView1SelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
@@ -149,11 +146,6 @@ begin
   end;
 end;
 
-procedure TForm2.CancelButtonClick(Sender: TObject);
-begin
-  Form2.Close;
-end;
-
 procedure TForm2.ColorListBox1Click(Sender: TObject);
 begin
   // ShowMessage( ColorListBox1.ColorNames[ColorListBox1.Selected] ); // 試しにダブルクリックした色を表示する。
@@ -165,16 +157,10 @@ begin
   ShowMessage( PageControl1.ActivePageIndex.ToString );
 end;
 
-procedure TForm2.LoopCheckListBoxClickCheck(Sender: TObject);
-begin
-  // 1つ以上ならLoopDeleteButtonを有効にする処理を書く
-end;
-
 procedure TForm2.LoopDeleteButtonClick(Sender: TObject);
 var
   ComfirmString : string;
 begin
-// フォーム表示時にListViewの項目が0の場合に削除ボタンを押せなくする処理を書く
   if Assigned(LoopListView1.Selected) then
   begin
     ComfirmString := 'ID: ' + LoopListView1.Selected.Caption + sLineBreak +
