@@ -20,18 +20,18 @@ type
     LoopListView1: TListView;
     frontmostCheckBox: TCheckBox;
     OKButton: TButton;
-    DateTimePicker1: TDateTimePicker;
+    WeeklyDateTimePicker: TDateTimePicker;
     PageControl1: TPageControl;
     DailyTabSheet1: TTabSheet;
     WeeklyTabSheet2: TTabSheet;
     DayTabSheet1: TTabSheet;
     CheckListBox1: TCheckListBox;
     LabeledEdit1: TLabeledEdit;
-    DateTimePicker2: TDateTimePicker;
+    DailyDateTimePicker: TDateTimePicker;
     DailyLabel: TLabel;
     WeeklyLabe: TLabel;
     Label1: TLabel;
-    DateTimePicker3: TDateTimePicker;
+    MonthlyDateTimePicker: TDateTimePicker;
     procedure BR_CheckBox1Click(Sender: TObject);
     procedure LoopAddButtonClick(Sender: TObject);
     procedure ColorListBox1Click(Sender: TObject);
@@ -41,9 +41,6 @@ type
     procedure LoopDeleteButtonClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure LoopListView1SelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
-
-  private
-    procedure AddItemButtonClick(Sender: TObject);
     { Private 宣言 }
   public
     { Public 宣言 }
@@ -57,46 +54,6 @@ implementation
 {$R *.dfm}
 
 uses ToDoList_Unit1;
-
-procedure TForm2.AddItemButtonClick(Sender: TObject);
-var
-  Ans: Boolean;
-  NewString,SetTime: string;
-  Item: TListItem;
-  // i: Integer;
-begin
-  Ans := InputQuery(AppName + ' Input', '追加したい情報を入力してください。', NewString);
-
-  if Ans = True then
-  begin
-    if NewString = '' then
-    begin
-      MessageDlg('何か入力してください', mtInformation, [mbOk], 0);
-      AddItemButtonClick(Sender);
-    end
-    else
-    begin
-      NewString := Trim(NewString); // 文字列の前後の空白を除去
-//      Group := LoopListView1.Groups.Add;
-//      Group.Header := 'My header';
-      Item := LoopListView1.Items.Add;
-//      LoopCheckListBox.Items.Add(NewString);
-//      LoopListView1.Items.Add := NewString ;
-      Item.Caption := NewString;
-      Item.SubItems.Add('***');
-      Item.SubItems.Add('*** **');
-      Item.SubItems.Add(FormatDateTime('hh:mm',DateTimePicker1.DateTime));
-      Item.SubItems.Add('*** **');
-      // for i := 1 to 20 do
-      // LoopCheckListBox.Items.Add(i.ToString);
-      // Memo1.Lines := CheckListBox1.Items;
-
-      // Savefile(Sender, false);
-      // CheckListCounterFormCaption(Sender);
-    end;
-
-  end;
-end;
 
 procedure TForm2.BR_CheckBox1Click(Sender: TObject);
 begin
@@ -122,7 +79,7 @@ end;
 
 procedure TForm2.FormCreate(Sender: TObject);
 begin
-  LoopListView1.ViewStyle:= vsIcon;    // 起動時に1つ目のグループのヘッダー(毎日)が
+  LoopListView1.ViewStyle := vsIcon; // 起動時に1つ目のグループのヘッダー(毎日)が
   LoopListView1.ViewStyle := vsReport; // 表示されない為の対策の2行。
 end;
 
@@ -134,14 +91,14 @@ begin
   if frontmostCheckBox.Checked then
   begin
     // 最前面に表示する
-//  SetWindowPos(Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE)
-    SetWindowPos(Form1.Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE or
-    SWP_NOMOVE or SWP_NOSIZE or SWP_NOSENDCHANGING or SWP_SHOWWINDOW);
+    // SetWindowPos(Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE)
+    SetWindowPos(Form1.Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE or SWP_NOMOVE or
+      SWP_NOSIZE or SWP_NOSENDCHANGING or SWP_SHOWWINDOW);
   end
   else
   begin
     // 普通に戻す
-//  SetWindowPos(Handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE);
+    // SetWindowPos(Handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE);
     SetWindowPos(Form1.Handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE);
   end;
 end;
@@ -152,19 +109,73 @@ begin
 end;
 
 procedure TForm2.LoopAddButtonClick(Sender: TObject);
+var
+  ListItem: TListItem;
+  GroupIdNum: Integer;
+  Ans: Boolean;
+  NewString: string;
 begin
-//  AddItemButtonClick(Sender);
-  ShowMessage( PageControl1.ActivePageIndex.ToString );
+  GroupIdNum := PageControl1.ActivePageIndex;
+  ListItem := LoopListView1.Items.Add;
+
+  Ans := InputQuery(AppName + ' Input', '追加したい情報を入力してください。', NewString);
+
+  if Ans = True then
+  begin
+    if NewString = '' then
+    begin
+      MessageDlg('何か入力してください', mtInformation, [mbOk], 0);
+      LoopAddButtonClick(Sender);
+    end
+    else
+    begin
+      NewString := Trim(NewString); // 文字列の前後の空白を除去
+
+      case GroupIdNum of
+        0:
+          begin
+            ListItem.GroupID := GroupIdNum;
+            ListItem.Caption := 'A' + GroupIdNum.ToString;
+            ListItem.SubItems.Add(NewString);
+            ListItem.SubItems.Add('毎日');
+            ListItem.SubItems.Add(FormatDateTime('hh:mm', DailyDateTimePicker.DateTime));
+            ListItem.SubItems.Add('レッド');
+          end;
+        1:
+          begin
+            ListItem.GroupID := GroupIdNum;
+            ListItem.Caption := 'A' + GroupIdNum.ToString;
+            ListItem.SubItems.Add(NewString);
+            ListItem.SubItems.Add('付き');
+            ListItem.SubItems.Add(FormatDateTime('hh:mm', WeeklyDateTimePicker.DateTime));
+            ListItem.SubItems.Add('Blue');
+          end;
+        2:
+          begin
+            ListItem.GroupID := GroupIdNum;
+            ListItem.Caption := 'A' + GroupIdNum.ToString;
+            ListItem.SubItems.Add(NewString);
+            ListItem.SubItems.Add('10日');
+            ListItem.SubItems.Add(FormatDateTime('hh:mm', MonthlyDateTimePicker.DateTime));
+            ListItem.SubItems.Add('yellow');
+          end;
+      else
+        begin
+          ShowMessage('想定外です');
+        end;
+      end;
+    end;
+  end;
 end;
 
 procedure TForm2.LoopDeleteButtonClick(Sender: TObject);
 var
-  ComfirmString : string;
+  ComfirmString: string;
 begin
   if Assigned(LoopListView1.Selected) then
   begin
     ComfirmString := 'ID: ' + LoopListView1.Selected.Caption + sLineBreak +
-                      LoopListView1.Selected.SubItems.Text + ' を削除しますか？';
+      LoopListView1.Selected.SubItems.Text + ' を削除しますか？';
 
     if MessageDlg(ComfirmString, mtConfirmation, [mbYes, mbNo], 0) = mrYes then
     begin
@@ -177,7 +188,7 @@ end;
 procedure TForm2.LoopListView1SelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
 begin
   if Assigned(LoopListView1.Selected) then
-    LoopDeleteButton.Enabled := true
+    LoopDeleteButton.Enabled := True
   else
     LoopDeleteButton.Enabled := False;
 end;

@@ -183,7 +183,7 @@ object Form2: TForm2
           Font.Style = []
           ParentFont = False
         end
-        object DateTimePicker2: TDateTimePicker
+        object DailyDateTimePicker: TDateTimePicker
           Left = 142
           Top = 11
           Width = 65
@@ -235,7 +235,7 @@ object Form2: TForm2
             #22303)
           TabOrder = 0
         end
-        object DateTimePicker1: TDateTimePicker
+        object WeeklyDateTimePicker: TDateTimePicker
           Left = 142
           Top = 31
           Width = 65
@@ -287,7 +287,7 @@ object Form2: TForm2
           LabelPosition = lpLeft
           TabOrder = 0
         end
-        object DateTimePicker3: TDateTimePicker
+        object MonthlyDateTimePicker: TDateTimePicker
           Left = 148
           Top = 30
           Width = 65
