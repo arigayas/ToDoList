@@ -43,6 +43,7 @@ type
     procedure CancelButtonClick(Sender: TObject);
     procedure LoopDeleteButtonClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure LoopListView1SelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
 
   private
     procedure AddItemButtonClick(Sender: TObject);
@@ -170,8 +171,29 @@ begin
 end;
 
 procedure TForm2.LoopDeleteButtonClick(Sender: TObject);
+var
+  ComfirmString : string;
 begin
 // フォーム表示時にListViewの項目が0の場合に削除ボタンを押せなくする処理を書く
+  if Assigned(LoopListView1.Selected) then
+  begin
+    ComfirmString := 'ID: ' + LoopListView1.Selected.Caption + sLineBreak +
+                      LoopListView1.Selected.SubItems.Text + ' を削除しますか？';
+
+    if MessageDlg(ComfirmString, mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+    begin
+      LoopListView1.Selected.Delete;
+      LoopDeleteButton.Enabled := False;
+    end;
+  end;
+end;
+
+procedure TForm2.LoopListView1SelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
+begin
+  if Assigned(LoopListView1.Selected) then
+    LoopDeleteButton.Enabled := true
+  else
+    LoopDeleteButton.Enabled := False;
 end;
 
 procedure TForm2.OKButtonClick(Sender: TObject);

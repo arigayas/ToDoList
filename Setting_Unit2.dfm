@@ -139,6 +139,7 @@ object Form2: TForm2
       RowSelect = True
       TabOrder = 0
       ViewStyle = vsReport
+      OnSelectItem = LoopListView1SelectItem
       ExplicitHeight = 127
     end
     object LoopAddButton: TButton
@@ -156,6 +157,7 @@ object Form2: TForm2
       Width = 75
       Height = 25
       Caption = #21066#38500
+      Enabled = False
       TabOrder = 2
       OnClick = LoopDeleteButtonClick
     end
