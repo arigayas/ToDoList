@@ -167,7 +167,7 @@ object Form2: TForm2
       Top = 23
       Width = 466
       Height = 124
-      ActivePage = DayTabSheet1
+      ActivePage = DailyTabSheet1
       TabOrder = 3
       OnChange = PageControl1Change
       object DailyTabSheet1: TTabSheet
@@ -261,7 +261,7 @@ object Form2: TForm2
         Caption = #25351#23450#26085
         ImageIndex = 2
         object Label1: TLabel
-          Left = 9
+          Left = 3
           Top = 35
           Width = 133
           Height = 16
@@ -274,7 +274,7 @@ object Form2: TForm2
           ParentFont = False
         end
         object LabeledEdit1: TLabeledEdit
-          Left = 132
+          Left = 126
           Top = 3
           Width = 121
           Height = 21
