@@ -289,6 +289,7 @@ object Form2: TForm2
           EditLabel.ParentFont = False
           LabelPosition = lpLeft
           TabOrder = 0
+          OnChange = LabeledEdit1Change
         end
         object MonthlyDateTimePicker: TDateTimePicker
           Left = 148

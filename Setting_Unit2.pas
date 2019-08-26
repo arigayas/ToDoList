@@ -44,6 +44,7 @@ type
     procedure PageControl1Change(Sender: TObject);
     procedure WeekdayCheckListBoxClick(Sender: TObject);
     function  WeekdayCheckedCount(ItemsCount: Integer): Integer;
+    procedure LabeledEdit1Change(Sender: TObject);
     { Private 宣言 }
   public
     { Public 宣言 }
@@ -139,6 +140,18 @@ end;
 procedure TForm2.ColorListBox1Click(Sender: TObject);
 begin
   // ShowMessage( ColorListBox1.ColorNames[ColorListBox1.Selected] ); // 試しにダブルクリックした色を表示する。
+end;
+
+procedure TForm2.LabeledEdit1Change(Sender: TObject);
+begin
+  if LabeledEdit1.Text = '' then
+  begin
+    LoopAddButton.Enabled := false;
+  end
+  else
+  begin
+    LoopAddButton.Enabled := True;
+  end;
 end;
 
 procedure TForm2.LoopAddButtonClick(Sender: TObject);
@@ -246,7 +259,8 @@ begin
       end;
     2: // 毎月
       begin
-        LoopAddButton.Enabled := false;
+//        LoopAddButton.Enabled := false;
+        LabeledEdit1Change(Sender);
       end;
   else
     begin
