@@ -25,7 +25,7 @@ type
     DailyTabSheet1: TTabSheet;
     WeeklyTabSheet2: TTabSheet;
     DayTabSheet1: TTabSheet;
-    CheckListBox1: TCheckListBox;
+    WeekdayCheckListBox: TCheckListBox;
     LabeledEdit1: TLabeledEdit;
     DailyDateTimePicker: TDateTimePicker;
     DailyLabel: TLabel;
@@ -41,6 +41,9 @@ type
     procedure LoopDeleteButtonClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure LoopListView1SelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
+    procedure PageControl1Change(Sender: TObject);
+    procedure WeekdayCheckListBoxClick(Sender: TObject);
+    function  WeekdayCheckedCount(ItemsCount: Integer): Integer;
     { Private 宣言 }
   public
     { Public 宣言 }
@@ -81,6 +84,9 @@ procedure TForm2.FormCreate(Sender: TObject);
 begin
   LoopListView1.ViewStyle := vsIcon; // 起動時に1つ目のグループのヘッダー(毎日)が
   LoopListView1.ViewStyle := vsReport; // 表示されない為の対策の2行。
+
+  PageControl1.ActivePageIndex := 0;
+  LoopAddButton.Enabled := True;
 end;
 
 procedure TForm2.frontmostCheckBoxClick(Sender: TObject); // 最前面にする
@@ -100,6 +106,33 @@ begin
     // 普通に戻す
     // SetWindowPos(Handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE);
     SetWindowPos(Form1.Handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE);
+  end;
+end;
+
+function TForm2.WeekdayCheckedCount(ItemsCount: Integer): Integer;
+var
+  ItemsChecked, I: Integer;
+begin
+  ItemsChecked := 0;
+  // チェックボックスにチェックがある数を調べる
+  for I := 0 to ItemsCount - 1 do
+    if WeekdayCheckListBox.Checked[I] = True then
+    begin
+      Inc(ItemsChecked);
+    end;
+  Result := ItemsChecked;
+end;
+
+
+procedure TForm2.WeekdayCheckListBoxClick(Sender: TObject);
+begin
+  if (WeekdayCheckedCount(7) = 0) or (WeekdayCheckedCount(7) = 7) then
+  begin
+    LoopAddButton.Enabled := false;
+  end
+  else
+  begin
+    LoopAddButton.Enabled := True;
   end;
 end;
 
@@ -181,7 +214,7 @@ begin
     if MessageDlg(ComfirmString, mtConfirmation, [mbYes, mbNo], 0) = mrYes then
     begin
       LoopListView1.Selected.Delete;
-      LoopDeleteButton.Enabled := False;
+      LoopDeleteButton.Enabled := false;
     end;
   end;
 end;
@@ -191,12 +224,36 @@ begin
   if Assigned(LoopListView1.Selected) then
     LoopDeleteButton.Enabled := True
   else
-    LoopDeleteButton.Enabled := False;
+    LoopDeleteButton.Enabled := false;
 end;
 
 procedure TForm2.OKButtonClick(Sender: TObject);
 begin
   Form2.Close;
+end;
+
+procedure TForm2.PageControl1Change(Sender: TObject);
+begin
+  case PageControl1.ActivePageIndex of
+    0: // 毎日
+      begin
+        LoopAddButton.Enabled := True;
+      end;
+    1: // 毎週
+      begin
+//        LoopAddButton.Enabled := false;
+        WeekdayCheckListBoxClick(Sender);
+      end;
+    2: // 毎月
+      begin
+        LoopAddButton.Enabled := false;
+      end;
+  else
+    begin
+      ShowMessage('想定外です');
+    end;
+  end;
+
 end;
 
 end.

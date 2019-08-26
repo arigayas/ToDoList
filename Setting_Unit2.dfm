@@ -148,6 +148,7 @@ object Form2: TForm2
       Width = 75
       Height = 25
       Caption = #36861#21152
+      Enabled = False
       TabOrder = 1
       OnClick = LoopAddButtonClick
     end
@@ -166,8 +167,9 @@ object Form2: TForm2
       Top = 23
       Width = 466
       Height = 124
-      ActivePage = DailyTabSheet1
+      ActivePage = DayTabSheet1
       TabOrder = 3
+      OnChange = PageControl1Change
       object DailyTabSheet1: TTabSheet
         Caption = #27598#26085
         object DailyLabel: TLabel
@@ -218,7 +220,7 @@ object Form2: TForm2
           Font.Style = []
           ParentFont = False
         end
-        object CheckListBox1: TCheckListBox
+        object WeekdayCheckListBox: TCheckListBox
           Left = 3
           Top = 3
           Width = 281
@@ -234,6 +236,7 @@ object Form2: TForm2
             #37329
             #22303)
           TabOrder = 0
+          OnClick = WeekdayCheckListBoxClick
         end
         object WeeklyDateTimePicker: TDateTimePicker
           Left = 142
