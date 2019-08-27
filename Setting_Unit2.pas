@@ -22,16 +22,22 @@ type
     OKButton: TButton;
     WeeklyDateTimePicker: TDateTimePicker;
     PageControl1: TPageControl;
-    DailyTabSheet1: TTabSheet;
-    WeeklyTabSheet2: TTabSheet;
-    DayTabSheet1: TTabSheet;
+    DailyTabSheet: TTabSheet;
+    WeeklyTabSheet: TTabSheet;
+    MonthlyTabSheet: TTabSheet;
     WeekdayCheckListBox: TCheckListBox;
-    LabeledEdit1: TLabeledEdit;
+    MonthlyLabeledEdit: TLabeledEdit;
     DailyDateTimePicker: TDateTimePicker;
-    DailyLabel: TLabel;
-    WeeklyLabe: TLabel;
-    Label1: TLabel;
+    DailyTimeLabel: TLabel;
+    WeeklyTimeLabel: TLabel;
+    MonthlyTimeLabel: TLabel;
     MonthlyDateTimePicker: TDateTimePicker;
+    DailyColorBox: TColorBox;
+    DailyColorLabel: TLabel;
+    WeeklyColorBox: TColorBox;
+    WeeklyColorLabel: TLabel;
+    MonthlyColorBox: TColorBox;
+    MonthlyColorLabel: TLabel;
     procedure BR_CheckBox1Click(Sender: TObject);
     procedure LoopAddButtonClick(Sender: TObject);
     procedure ColorListBox1Click(Sender: TObject);
@@ -44,7 +50,7 @@ type
     procedure PageControl1Change(Sender: TObject);
     procedure WeekdayCheckListBoxClick(Sender: TObject);
     function  WeekdayCheckedCount(ItemsCount: Integer): Integer;
-    procedure LabeledEdit1Change(Sender: TObject);
+    procedure MonthlyLabeledEditChange(Sender: TObject);
     { Private 宣言 }
   public
     { Public 宣言 }
@@ -142,9 +148,9 @@ begin
   // ShowMessage( ColorListBox1.ColorNames[ColorListBox1.Selected] ); // 試しにダブルクリックした色を表示する。
 end;
 
-procedure TForm2.LabeledEdit1Change(Sender: TObject);
+procedure TForm2.MonthlyLabeledEditChange(Sender: TObject);
 begin
-  if LabeledEdit1.Text = '' then
+  if MonthlyLabeledEdit.Text = '' then
   begin
     LoopAddButton.Enabled := false;
   end
@@ -260,7 +266,7 @@ begin
     2: // 毎月
       begin
 //        LoopAddButton.Enabled := false;
-        LabeledEdit1Change(Sender);
+        MonthlyLabeledEditChange(Sender);
       end;
   else
     begin

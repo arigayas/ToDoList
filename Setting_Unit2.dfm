@@ -167,17 +167,30 @@ object Form2: TForm2
       Top = 23
       Width = 466
       Height = 124
-      ActivePage = DailyTabSheet1
+      ActivePage = MonthlyTabSheet
       TabOrder = 3
       OnChange = PageControl1Change
-      object DailyTabSheet1: TTabSheet
+      object DailyTabSheet: TTabSheet
         Caption = #27598#26085
-        object DailyLabel: TLabel
+        object DailyTimeLabel: TLabel
           Left = 3
           Top = 16
           Width = 133
           Height = 16
           Caption = #36861#21152#12434#23455#34892#12377#12427#26178#21051#65306
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object DailyColorLabel: TLabel
+          Left = 4
+          Top = 47
+          Width = 53
+          Height = 16
+          Caption = #32972#26223#33394#65306
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -13
@@ -203,16 +216,39 @@ object Form2: TForm2
           ParentFont = False
           TabOrder = 0
         end
+        object DailyColorBox: TColorBox
+          Left = 96
+          Top = 45
+          Width = 111
+          Height = 22
+          DefaultColorColor = clWhite
+          NoneColorColor = clWhite
+          Selected = clWhite
+          TabOrder = 1
+        end
       end
-      object WeeklyTabSheet2: TTabSheet
+      object WeeklyTabSheet: TTabSheet
         Caption = #26332#26085
         ImageIndex = 1
-        object WeeklyLabe: TLabel
+        object WeeklyTimeLabel: TLabel
           Left = 3
           Top = 35
           Width = 133
           Height = 16
           Caption = #36861#21152#12434#23455#34892#12377#12427#26178#21051#65306
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object WeeklyColorLabel: TLabel
+          Left = 3
+          Top = 62
+          Width = 53
+          Height = 16
+          Caption = #32972#26223#33394#65306
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -13
@@ -256,11 +292,23 @@ object Form2: TForm2
           ParentFont = False
           TabOrder = 1
         end
+        object WeeklyColorBox: TColorBox
+          Left = 96
+          Top = 60
+          Width = 111
+          Height = 22
+          DefaultColorColor = clWhite
+          NoneColorColor = clWhite
+          Selected = clWhite
+          TabOrder = 2
+        end
       end
-      object DayTabSheet1: TTabSheet
+      object MonthlyTabSheet: TTabSheet
         Caption = #25351#23450#26085
         ImageIndex = 2
-        object Label1: TLabel
+        ExplicitLeft = 0
+        ExplicitTop = 25
+        object MonthlyTimeLabel: TLabel
           Left = 3
           Top = 35
           Width = 133
@@ -273,7 +321,20 @@ object Form2: TForm2
           Font.Style = []
           ParentFont = False
         end
-        object LabeledEdit1: TLabeledEdit
+        object MonthlyColorLabel: TLabel
+          Left = 3
+          Top = 62
+          Width = 53
+          Height = 16
+          Caption = #32972#26223#33394#65306
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+        end
+        object MonthlyLabeledEdit: TLabeledEdit
           Left = 126
           Top = 3
           Width = 121
@@ -289,10 +350,10 @@ object Form2: TForm2
           EditLabel.ParentFont = False
           LabelPosition = lpLeft
           TabOrder = 0
-          OnChange = LabeledEdit1Change
+          OnChange = MonthlyLabeledEditChange
         end
         object MonthlyDateTimePicker: TDateTimePicker
-          Left = 148
+          Left = 142
           Top = 30
           Width = 65
           Height = 24
@@ -308,6 +369,16 @@ object Form2: TForm2
           Kind = dtkTime
           ParentFont = False
           TabOrder = 1
+        end
+        object MonthlyColorBox: TColorBox
+          Left = 96
+          Top = 60
+          Width = 111
+          Height = 22
+          DefaultColorColor = clWhite
+          NoneColorColor = clWhite
+          Selected = clWhite
+          TabOrder = 2
         end
       end
     end
