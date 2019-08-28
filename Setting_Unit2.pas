@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls,
   Vcl.CheckLst,
-  Vcl.Grids, Vcl.ValEdit, Vcl.ComCtrls, System.UITypes;
+  Vcl.Grids, Vcl.ValEdit, Vcl.ComCtrls, System.UITypes, VCLTee.TeCanvas;
 
 type
   TForm2 = class(TForm)
@@ -48,8 +48,8 @@ type
     procedure FormCreate(Sender: TObject);
     procedure LoopListView1SelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
     procedure PageControl1Change(Sender: TObject);
-    procedure WeekdayCheckListBoxClick(Sender: TObject);
-    function  WeekdayCheckedCount(ItemsCount: Integer): Integer;
+    procedure WeekdayCheckListBoxClickCheck(Sender: TObject);
+    function WeekdayCheckedCount(ItemsCount: Integer; WeekdayFlag:Integer): Integer;
     procedure MonthlyLabeledEditChange(Sender: TObject);
     { Private 宣言 }
   public
@@ -58,6 +58,7 @@ type
 
 var
   Form2: TForm2;
+  CheckedWeekDay: array [0 .. 7] of string;
 
 implementation
 
@@ -116,7 +117,9 @@ begin
   end;
 end;
 
-function TForm2.WeekdayCheckedCount(ItemsCount: Integer): Integer;
+function TForm2.WeekdayCheckedCount(ItemsCount: Integer; WeekdayFlag:Integer): Integer;
+// WeekdayFlag -> 0; 数えるだけ
+// WeekdayFlag -> 1; チェックした項目のテキスト取得
 var
   ItemsChecked, I: Integer;
 begin
@@ -125,15 +128,24 @@ begin
   for I := 0 to ItemsCount - 1 do
     if WeekdayCheckListBox.Checked[I] = True then
     begin
-      Inc(ItemsChecked);
+      case WeekdayFlag of
+      0:Inc(ItemsChecked);
+      1:
+      begin
+        CheckedWeekDay[ItemsChecked] := WeekdayCheckListBox.Items[I];
+        Inc(ItemsChecked);
+      end;
+      end;
     end;
   Result := ItemsChecked;
 end;
 
-
-procedure TForm2.WeekdayCheckListBoxClick(Sender: TObject);
+procedure TForm2.WeekdayCheckListBoxClickCheck(Sender: TObject);
+var
+  WeekdayItems : Int8;
 begin
-  if (WeekdayCheckedCount(7) = 0) or (WeekdayCheckedCount(7) = 7) then
+  WeekdayItems := 7;
+  if (WeekdayCheckedCount(WeekdayItems, 0) = 0) or (WeekdayCheckedCount(WeekdayItems, 0) = 7) then
   begin
     LoopAddButton.Enabled := false;
   end
@@ -149,6 +161,8 @@ begin
 end;
 
 procedure TForm2.MonthlyLabeledEditChange(Sender: TObject);
+var
+  everyMonth: Int8;
 begin
   if MonthlyLabeledEdit.Text = '' then
   begin
@@ -157,6 +171,18 @@ begin
   else
   begin
     LoopAddButton.Enabled := True;
+    everyMonth := StrToInt(MonthlyLabeledEdit.Text);
+
+    (*
+      if (everyMonth > 0) or (everyMonth < 32) then
+      begin
+      ShowMessage('1以上');
+      end
+      else
+      begin
+      ShowMessage('0');
+      end;
+    *)
   end;
 end;
 
@@ -165,7 +191,7 @@ var
   ListItem: TListItem;
   GroupIdNum: Integer;
   Ans: Boolean;
-  ListItemID, NewString: string;
+  ListItemID, NewString, TempStr, Weekstring: string;
 begin
   GroupIdNum := PageControl1.ActivePageIndex;
   ListItem := LoopListView1.Items.Add;
@@ -199,16 +225,28 @@ begin
             ListItem.GroupID := GroupIdNum;
             ListItem.Caption := 'W' + ListItemID;
             ListItem.SubItems.Add(NewString);
-            ListItem.SubItems.Add('付き');
+
+//            Finalize(CheckedWeekDay);
+            WeekdayCheckedCount(7, 1);
+
+            for TempStr in CheckedWeekDay do
+            begin
+              Weekstring := Weekstring + TempStr;
+            end;
+
+            ListItem.SubItems.Add(Weekstring);
             ListItem.SubItems.Add(FormatDateTime('hh:mm', WeeklyDateTimePicker.DateTime));
             ListItem.SubItems.Add('Blue');
+            Finalize(CheckedWeekDay);
+            WeekdayCheckListBox.CheckAll(cbUnchecked ,false,false);
+            WeekdayCheckListBoxClickCheck(Sender);
           end;
         2: // 毎月
           begin
             ListItem.GroupID := GroupIdNum;
             ListItem.Caption := 'M' + ListItemID;
             ListItem.SubItems.Add(NewString);
-            ListItem.SubItems.Add('10日');
+            ListItem.SubItems.Add(MonthlyLabeledEdit.Text + '日');
             ListItem.SubItems.Add(FormatDateTime('hh:mm', MonthlyDateTimePicker.DateTime));
             ListItem.SubItems.Add('yellow');
           end;
@@ -260,12 +298,12 @@ begin
       end;
     1: // 毎週
       begin
-//        LoopAddButton.Enabled := false;
-        WeekdayCheckListBoxClick(Sender);
+        // LoopAddButton.Enabled := false;
+        WeekdayCheckListBoxClickCheck(Sender);
       end;
     2: // 毎月
       begin
-//        LoopAddButton.Enabled := false;
+        // LoopAddButton.Enabled := false;
         MonthlyLabeledEditChange(Sender);
       end;
   else

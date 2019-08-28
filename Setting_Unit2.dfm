@@ -167,7 +167,7 @@ object Form2: TForm2
       Top = 23
       Width = 466
       Height = 124
-      ActivePage = MonthlyTabSheet
+      ActivePage = WeeklyTabSheet
       TabOrder = 3
       OnChange = PageControl1Change
       object DailyTabSheet: TTabSheet
@@ -261,6 +261,7 @@ object Form2: TForm2
           Top = 3
           Width = 281
           Height = 22
+          OnClickCheck = WeekdayCheckListBoxClickCheck
           Columns = 7
           ItemHeight = 13
           Items.Strings = (
@@ -272,7 +273,6 @@ object Form2: TForm2
             #37329
             #22303)
           TabOrder = 0
-          OnClick = WeekdayCheckListBoxClick
         end
         object WeeklyDateTimePicker: TDateTimePicker
           Left = 142
@@ -348,7 +348,10 @@ object Form2: TForm2
           EditLabel.Font.Name = 'Tahoma'
           EditLabel.Font.Style = []
           EditLabel.ParentFont = False
+          ImeMode = imAlpha
           LabelPosition = lpLeft
+          MaxLength = 2
+          NumbersOnly = True
           TabOrder = 0
           OnChange = MonthlyLabeledEditChange
         end
