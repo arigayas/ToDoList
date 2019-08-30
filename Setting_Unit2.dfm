@@ -67,7 +67,6 @@ object Form2: TForm2
     Anchors = [akLeft, akTop, akRight, akBottom]
     Caption = #21608#26399'Todo'#12522#12473#12488
     TabOrder = 1
-    ExplicitHeight = 279
     object LoopListView1: TListView
       Left = 2
       Top = 150
@@ -167,7 +166,7 @@ object Form2: TForm2
       Top = 23
       Width = 466
       Height = 124
-      ActivePage = WeeklyTabSheet
+      ActivePage = DailyTabSheet
       TabOrder = 3
       OnChange = PageControl1Change
       object DailyTabSheet: TTabSheet
@@ -224,6 +223,7 @@ object Form2: TForm2
           DefaultColorColor = clWhite
           NoneColorColor = clWhite
           Selected = clWhite
+          Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
           TabOrder = 1
         end
       end
@@ -306,8 +306,6 @@ object Form2: TForm2
       object MonthlyTabSheet: TTabSheet
         Caption = #25351#23450#26085
         ImageIndex = 2
-        ExplicitLeft = 0
-        ExplicitTop = 25
         object MonthlyTimeLabel: TLabel
           Left = 3
           Top = 35
@@ -395,6 +393,5 @@ object Form2: TForm2
     Caption = 'OK'
     TabOrder = 2
     OnClick = OKButtonClick
-    ExplicitTop = 402
   end
 end

@@ -95,6 +95,10 @@ begin
 
   PageControl1.ActivePageIndex := 0;
   LoopAddButton.Enabled := True;
+
+  DailyColorBox.Style  :=[cbStandardColors, cbPrettyNames];
+  WeeklyColorBox.Style :=[cbStandardColors, cbPrettyNames];
+  MonthlyColorBox.Style:=[cbStandardColors, cbPrettyNames];
 end;
 
 procedure TForm2.frontmostCheckBoxClick(Sender: TObject); // 最前面にする
