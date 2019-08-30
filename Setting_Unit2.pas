@@ -51,6 +51,8 @@ type
     procedure WeekdayCheckListBoxClickCheck(Sender: TObject);
     function WeekdayCheckedCount(ItemsCount: Integer; WeekdayFlag:Integer): Integer;
     procedure MonthlyLabeledEditChange(Sender: TObject);
+  private
+    function SetColorName(GroupIdNum: Integer ): String;
     { Private 宣言 }
   public
     { Public 宣言 }
@@ -195,7 +197,7 @@ var
   ListItem: TListItem;
   GroupIdNum: Integer;
   Ans: Boolean;
-  ListItemID, NewString, TempStr, Weekstring: string;
+  ListItemID, NewString, TempStr, WeekString, ColorName: string;
 begin
   GroupIdNum := PageControl1.ActivePageIndex;
   ListItem := LoopListView1.Items.Add;
@@ -222,7 +224,10 @@ begin
             ListItem.SubItems.Add(NewString);
             ListItem.SubItems.Add('毎日');
             ListItem.SubItems.Add(FormatDateTime('hh:mm', DailyDateTimePicker.DateTime));
-            ListItem.SubItems.Add('レッド');
+
+            ColorName := SetColorName(GroupIdNum);
+            ListItem.SubItems.Add(ColorName);
+            DailyColorBox.Selected := clWhite;
           end;
         1: // 毎週
           begin
@@ -230,17 +235,20 @@ begin
             ListItem.Caption := 'W' + ListItemID;
             ListItem.SubItems.Add(NewString);
 
-//            Finalize(CheckedWeekDay);
             WeekdayCheckedCount(7, 1);
 
             for TempStr in CheckedWeekDay do
             begin
-              Weekstring := Weekstring + TempStr;
+              WeekString := WeekString + TempStr;
             end;
 
             ListItem.SubItems.Add(Weekstring);
             ListItem.SubItems.Add(FormatDateTime('hh:mm', WeeklyDateTimePicker.DateTime));
-            ListItem.SubItems.Add('Blue');
+
+            ColorName := SetColorName(GroupIdNum);
+            ListItem.SubItems.Add(ColorName);
+            WeeklyColorBox.Selected := clWhite;
+
             Finalize(CheckedWeekDay);
             WeekdayCheckListBox.CheckAll(cbUnchecked ,false,false);
             WeekdayCheckListBoxClickCheck(Sender);
@@ -252,11 +260,14 @@ begin
             ListItem.SubItems.Add(NewString);
             ListItem.SubItems.Add(MonthlyLabeledEdit.Text + '日');
             ListItem.SubItems.Add(FormatDateTime('hh:mm', MonthlyDateTimePicker.DateTime));
-            ListItem.SubItems.Add('yellow');
+
+            ColorName := SetColorName(GroupIdNum);
+            ListItem.SubItems.Add(ColorName);
+            MonthlyColorBox.Selected := clWhite;
           end;
       else
         begin
-          ShowMessage('想定外です');
+          ShowMessage('LoopAddButtonClick:想定外です');
         end;
       end;
     end;
@@ -312,10 +323,40 @@ begin
       end;
   else
     begin
-      ShowMessage('想定外です');
+      ShowMessage('LoopListView1SelectItem:想定外です');
     end;
   end;
 
+end;
+
+function TForm2.SetColorName(GroupIdNum: Integer): String;
+var
+  i: Int8;
+begin
+  case GroupIdNum of
+    0: // 毎日
+      begin
+        i := DailyColorBox.ItemIndex ;
+        if (i >= 0) then
+          Result := DailyColorBox.ColorNames[i];
+      end;
+    1: // 毎週
+      begin
+        i := WeeklyColorBox.ItemIndex ;
+        if (i >= 0) then
+          Result := WeeklyColorBox.ColorNames[i];
+      end;
+    2: // 毎月
+      begin
+        i := MonthlyColorBox.ItemIndex ;
+        if (i >= 0) then
+          Result := MonthlyColorBox.ColorNames[i];
+      end;
+  else
+    begin
+      ShowMessage('SetColorName:想定外です');
+    end;
+  end;
 end;
 
 end.
