@@ -198,6 +198,8 @@ var
   GroupIdNum: Integer;
   Ans: Boolean;
   ListItemID, NewString, TempStr, WeekString, ColorName: string;
+const
+  TimeString = '12:00:00';
 begin
   GroupIdNum := PageControl1.ActivePageIndex;
   ListItem := LoopListView1.Items.Add;
@@ -223,7 +225,9 @@ begin
             ListItem.Caption := 'D' + ListItemID;
             ListItem.SubItems.Add(NewString);
             ListItem.SubItems.Add('毎日');
+
             ListItem.SubItems.Add(FormatDateTime('hh:mm', DailyDateTimePicker.DateTime));
+            DailyDateTimePicker.Time := StrToTime(TimeString);
 
             ColorName := SetColorName(GroupIdNum);
             ListItem.SubItems.Add(ColorName);
@@ -236,14 +240,14 @@ begin
             ListItem.SubItems.Add(NewString);
 
             WeekdayCheckedCount(7, 1);
-
             for TempStr in CheckedWeekDay do
             begin
               WeekString := WeekString + TempStr;
             end;
-
             ListItem.SubItems.Add(Weekstring);
+
             ListItem.SubItems.Add(FormatDateTime('hh:mm', WeeklyDateTimePicker.DateTime));
+            WeeklyDateTimePicker.Time := StrToTime(TimeString);
 
             ColorName := SetColorName(GroupIdNum);
             ListItem.SubItems.Add(ColorName);
@@ -259,7 +263,9 @@ begin
             ListItem.Caption := 'M' + ListItemID;
             ListItem.SubItems.Add(NewString);
             ListItem.SubItems.Add(MonthlyLabeledEdit.Text + '日');
+
             ListItem.SubItems.Add(FormatDateTime('hh:mm', MonthlyDateTimePicker.DateTime));
+            MonthlyDateTimePicker.Time := StrToTime(TimeString);
 
             ColorName := SetColorName(GroupIdNum);
             ListItem.SubItems.Add(ColorName);
