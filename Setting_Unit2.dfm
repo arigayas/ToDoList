@@ -166,14 +166,14 @@ object Form2: TForm2
       Top = 23
       Width = 466
       Height = 124
-      ActivePage = DailyTabSheet
+      ActivePage = WeeklyTabSheet
       TabOrder = 3
       OnChange = PageControl1Change
       object DailyTabSheet: TTabSheet
         Caption = #27598#26085
         object DailyTimeLabel: TLabel
           Left = 3
-          Top = 16
+          Top = 9
           Width = 133
           Height = 16
           Caption = #36861#21152#12434#23455#34892#12377#12427#26178#21051#65306
@@ -186,7 +186,7 @@ object Form2: TForm2
         end
         object DailyColorLabel: TLabel
           Left = 4
-          Top = 47
+          Top = 37
           Width = 53
           Height = 16
           Caption = #32972#26223#33394#65306
@@ -199,7 +199,7 @@ object Form2: TForm2
         end
         object DailyDateTimePicker: TDateTimePicker
           Left = 142
-          Top = 11
+          Top = 5
           Width = 65
           Height = 24
           Date = 43669.000000000000000000
@@ -217,7 +217,7 @@ object Form2: TForm2
         end
         object DailyColorBox: TColorBox
           Left = 96
-          Top = 45
+          Top = 35
           Width = 111
           Height = 22
           DefaultColorColor = clWhite
@@ -258,10 +258,11 @@ object Form2: TForm2
         end
         object WeekdayCheckListBox: TCheckListBox
           Left = 3
-          Top = 3
+          Top = 8
           Width = 281
           Height = 22
           OnClickCheck = WeekdayCheckListBoxClickCheck
+          BorderStyle = bsNone
           Columns = 7
           ItemHeight = 13
           Items.Strings = (
