@@ -54,6 +54,7 @@ type
     procedure UpdateData(Sender: TObject; Flag:Integer; NewString: string);
     procedure WMQueryEndSession(var Msg: TWMQueryEndSession);
       message WM_QUERYENDSESSION;
+    procedure WMSysCommand(var Message: TWMSysCommand); message WM_SYSCOMMAND;
 
     { Private 宣言 }
   public
@@ -63,10 +64,17 @@ type
 const
   AppName = 'ToDoList';
 
+// 追加のシステムメニューのID値
+// 値は任意の整数値
+  MyMenu1 = 101;
+  MyMenu2 = 102;
+  MyMenu3 = 103;
+
 var
   Form1: TForm1;
 
 implementation
+
 
 {$R *.dfm}
 
@@ -77,6 +85,7 @@ var
   LInput: TFileStream;
   PrevItemIndex: Integer; // D&D 用の変数
   // ItemsCount: Integer;
+  MyMenu1Text, MyMenu2Text: PWideChar;
 
 procedure LockFile;
 begin
@@ -423,13 +432,44 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
+  hSysmenu : hMenu;   // 追加のシステムメニュー
+  AItemCnt : Integer; // 追加のシステムメニュー
   FStream: TStringList;
   I: Integer;
   // WRect: TRect;
   // SettingsIniFile : TIniFile;
   SettingsIniFile: TMemIniFile;
   SettingsIniFileName: string;
+
 begin
+  MyMenu1Text := 'リストの文字を大きくする';
+  MyMenu2Text := '常に手前で表示する';
+
+  //フォームのシステムメニューのハンドルを取得
+  hSysmenu := GetSystemMenu(Handle, False);
+
+  //現在の項目数を取得
+  AItemCnt := GetMenuItemCount(hSysmenu);
+
+  //現在のメニュー一番下に区切り線(第4,5引数を0にする)を追加
+  InsertMenu(hSysmenu, AItemCnt, MF_BYPOSITION, 0, nil);
+  //現在のメニューの一番下にメニューを追加
+  InsertMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION or MF_CHECKED, MyMenu1, MyMenu1Text);
+  //現在のメニューの一番下にメニューを追加
+//  InsertMenu(hSysmenu, AItemCnt + 2, MF_BYPOSITION, MyMenu2, '常に手前で表示する');
+
+
+  InsertMenu(hSysmenu, AItemCnt + 2, MF_BYPOSITION, MyMenu2, MyMenu2Text);
+
+{
+    //[移動]メニュー(SC_MOVE)の前に[追加メニュー]を追加
+    //操作不可にして淡色表示に
+    InsertMenu(hSysmenu, SC_MOVE, MF_BYCOMMAND or
+                                  MF_DISABLED  or
+                                  MF_GRAYED, MyMenu3, '追加メニュー');
+
+}
+
   Memo1.Visible := false;
   DeleteButton.Enabled := false;
   SettingsIniFileName := AppName + '.ini';
@@ -683,5 +723,23 @@ begin
   FQueryEndSession := True;
   inherited;
 end;
+
+//=============================================================================
+//  メニューを選択した時のメッセージ処理
+//=============================================================================
+procedure TForm1.WMSysCommand(var Message: TWMSysCommand);
+begin
+  case Message.CmdType of
+    MyMenu1 :
+      begin
+        Showmessage('リストの文字を大きくします　');
+        MyMenu1text := 'hoge';
+      end;
+    MyMenu2 : Showmessage('最前面で常に表示する');
+  end;
+
+  inherited;
+end;
+
 
 end.
