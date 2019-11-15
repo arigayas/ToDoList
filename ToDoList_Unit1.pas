@@ -85,8 +85,10 @@ var
   LInput: TFileStream;
   PrevItemIndex: Integer; // D&D 用の変数
   // ItemsCount: Integer;
+  hSysmenu : hMenu;   // 追加のシステムメニュー
+  AItemCnt : Integer; // 追加のシステムメニュー
   MyMenu1Text, MyMenu2Text: PWideChar;
-
+  textIsBig: Boolean;
 procedure LockFile;
 begin
   if FileExists(FileName) then
@@ -432,8 +434,6 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
-  hSysmenu : hMenu;   // 追加のシステムメニュー
-  AItemCnt : Integer; // 追加のシステムメニュー
   FStream: TStringList;
   I: Integer;
   // WRect: TRect;
@@ -444,7 +444,7 @@ var
 begin
   MyMenu1Text := 'リストの文字を大きくする';
   MyMenu2Text := '常に手前で表示する';
-
+  textIsBig   := False;
   //フォームのシステムメニューのハンドルを取得
   hSysmenu := GetSystemMenu(Handle, False);
 
@@ -730,10 +730,30 @@ end;
 procedure TForm1.WMSysCommand(var Message: TWMSysCommand);
 begin
   case Message.CmdType of
-    MyMenu1 :
+    MyMenu1 : // 文字の大きさを変える処理
       begin
-        Showmessage('リストの文字を大きくします　');
-        MyMenu1text := 'hoge';
+        if textIsBig then
+        begin
+          CheckListBox1.ItemHeight := 19;
+          CheckListBox1.Font.Size := 12;
+          CheckListBox1.Font.Height := -16;
+
+          MyMenu1text := 'リストの文字を大きくします';
+          DeleteMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION or MF_CHECKED);
+          InsertMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION, MyMenu1, MyMenu1Text);
+          textIsBig   := False;
+        end
+        else
+        begin
+          CheckListBox1.ItemHeight := 38;
+          CheckListBox1.Font.Size := 24;
+          CheckListBox1.Font.Height := -32;
+
+          MyMenu1text := 'リストの文字を小さくします';
+          DeleteMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION or MF_CHECKED);
+          InsertMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION, MyMenu1, MyMenu1Text);
+          textIsBig   := True;
+        end;
       end;
     MyMenu2 : Showmessage('最前面で常に表示する');
   end;
