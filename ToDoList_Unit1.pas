@@ -88,7 +88,7 @@ var
   hSysmenu : hMenu;   // 追加のシステムメニュー
   AItemCnt : Integer; // 追加のシステムメニュー
   MyMenu1Text, MyMenu2Text: PWideChar;
-  textIsBig: Boolean;
+  textIsBig, IsAlwaysOnTop: Boolean;
 procedure LockFile;
 begin
   if FileExists(FileName) then
@@ -445,6 +445,8 @@ begin
   MyMenu1Text := 'リストの文字を大きくする';
   MyMenu2Text := '常に手前で表示する';
   textIsBig   := False;
+  IsAlwaysOnTop := False;
+
   //フォームのシステムメニューのハンドルを取得
   hSysmenu := GetSystemMenu(Handle, False);
 
@@ -743,7 +745,33 @@ begin
           textIsBig   := True;
         end;
       end;
-    MyMenu2 : Showmessage('最前面で常に表示する');
+
+    MyMenu2 : // 最前面に表示する処理
+      // 参照したサイト
+      // http://kwikwi.cocolog-nifty.com/blog/2005/12/delphi_90fd.html
+      // https://oshiete.goo.ne.jp/qa/8745468.html
+      begin
+        if IsAlwaysOnTop then
+        begin
+          // 普通に戻す
+          // SetWindowPos(Handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE);
+          SetWindowPos(Form1.Handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE);
+          DeleteMenu(hSysmenu, AItemCnt + 2, MF_BYPOSITION or MF_CHECKED);
+          InsertMenu(hSysmenu, AItemCnt + 2, MF_BYPOSITION, MyMenu2, MyMenu2Text);
+          IsAlwaysOnTop := False;
+        end
+        else
+        begin
+          // 最前面に表示する
+          // SetWindowPos(Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE)
+          SetWindowPos(Form1.Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE or SWP_NOMOVE or
+          SWP_NOSIZE or SWP_NOSENDCHANGING or SWP_SHOWWINDOW);
+          DeleteMenu(hSysmenu, AItemCnt + 2, MF_BYPOSITION);
+          InsertMenu(hSysmenu, AItemCnt + 2, MF_BYPOSITION or MF_CHECKED, MyMenu2, MyMenu2Text);
+          IsAlwaysOnTop := True;
+        end;
+      end;
+
   end;
 
   inherited;
