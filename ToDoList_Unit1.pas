@@ -454,21 +454,9 @@ begin
   //現在のメニュー一番下に区切り線(第4,5引数を0にする)を追加
   InsertMenu(hSysmenu, AItemCnt, MF_BYPOSITION, 0, nil);
   //現在のメニューの一番下にメニューを追加
-  InsertMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION or MF_CHECKED, MyMenu1, MyMenu1Text);
-  //現在のメニューの一番下にメニューを追加
-//  InsertMenu(hSysmenu, AItemCnt + 2, MF_BYPOSITION, MyMenu2, '常に手前で表示する');
-
-
+  InsertMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION, MyMenu1, MyMenu1Text);
   InsertMenu(hSysmenu, AItemCnt + 2, MF_BYPOSITION, MyMenu2, MyMenu2Text);
 
-{
-    //[移動]メニュー(SC_MOVE)の前に[追加メニュー]を追加
-    //操作不可にして淡色表示に
-    InsertMenu(hSysmenu, SC_MOVE, MF_BYCOMMAND or
-                                  MF_DISABLED  or
-                                  MF_GRAYED, MyMenu3, '追加メニュー');
-
-}
 
   Memo1.Visible := false;
   DeleteButton.Enabled := false;
@@ -738,7 +726,7 @@ begin
           CheckListBox1.Font.Size := 12;
           CheckListBox1.Font.Height := -16;
 
-          MyMenu1text := 'リストの文字を大きくします';
+          MyMenu1text := 'リストの文字を大きくする';
           DeleteMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION or MF_CHECKED);
           InsertMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION, MyMenu1, MyMenu1Text);
           textIsBig   := False;
@@ -749,9 +737,9 @@ begin
           CheckListBox1.Font.Size := 24;
           CheckListBox1.Font.Height := -32;
 
-          MyMenu1text := 'リストの文字を小さくします';
-          DeleteMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION or MF_CHECKED);
-          InsertMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION, MyMenu1, MyMenu1Text);
+          MyMenu1text := 'リストの文字を小さくする';
+          DeleteMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION);
+          InsertMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION or MF_CHECKED, MyMenu1, MyMenu1Text);
           textIsBig   := True;
         end;
       end;
