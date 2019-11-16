@@ -56,6 +56,7 @@ type
       message WM_QUERYENDSESSION;
     procedure WMSysCommand(var Message: TWMSysCommand); message WM_SYSCOMMAND;
     function textResize(textIsBig: Boolean): Boolean;
+    function AlwaysOnTop(IsAlwaysOnTop: Boolean): Boolean;
 
     { Private 宣言 }
   public
@@ -716,38 +717,42 @@ procedure TForm1.WMSysCommand(var Message: TWMSysCommand);
 begin
   case Message.CmdType of
     MyMenu1 : textIsBig:= textResize(textIsBig);// 文字の大きさを変える処理
-
-    MyMenu2 : // 最前面に表示する処理
-      // 参照したサイト
-      // http://kwikwi.cocolog-nifty.com/blog/2005/12/delphi_90fd.html
-      // https://oshiete.goo.ne.jp/qa/8745468.html
-      begin
-        if IsAlwaysOnTop then
-        begin
-          // 普通に戻す
-          // SetWindowPos(Handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE);
-          SetWindowPos(Form1.Handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE);
-          DeleteMenu(hSysmenu, AItemCnt + 2, MF_BYPOSITION or MF_CHECKED);
-          InsertMenu(hSysmenu, AItemCnt + 2, MF_BYPOSITION, MyMenu2, MyMenu2Text);
-          IsAlwaysOnTop := False;
-        end
-        else
-        begin
-          // 最前面に表示する
-          // SetWindowPos(Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE)
-          SetWindowPos(Form1.Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE or SWP_NOMOVE or
-          SWP_NOSIZE or SWP_NOSENDCHANGING or SWP_SHOWWINDOW);
-          DeleteMenu(hSysmenu, AItemCnt + 2, MF_BYPOSITION);
-          InsertMenu(hSysmenu, AItemCnt + 2, MF_BYPOSITION or MF_CHECKED, MyMenu2, MyMenu2Text);
-          IsAlwaysOnTop := True;
-        end;
-      end;
-
+    MyMenu2 : IsAlwaysOnTop := AlwaysOnTop(IsAlwaysOnTop);// 最前面に表示する処理
     MyMenu3 : // 折り返し表示の処理
        Showmessage('ごめんなさい。未実装です。');
   end;
 
   inherited;
+end;
+
+function TForm1.AlwaysOnTop(IsAlwaysOnTop: Boolean): Boolean;
+begin
+ if IsAlwaysOnTop then
+  // 参照したサイト
+  // http://kwikwi.cocolog-nifty.com/blog/2005/12/delphi_90fd.html
+  // https://oshiete.goo.ne.jp/qa/8745468.html
+  begin
+    // 普通に戻す
+    // SetWindowPos(Handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE);
+    SetWindowPos(Form1.Handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE);
+
+    // システムメニューの操作
+    DeleteMenu(hSysmenu, AItemCnt + 2, MF_BYPOSITION or MF_CHECKED);
+    InsertMenu(hSysmenu, AItemCnt + 2, MF_BYPOSITION, MyMenu2, MyMenu2Text);
+    Result := False;
+  end
+  else
+  begin
+    // 最前面に表示する
+    // SetWindowPos(Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE)
+    SetWindowPos(Form1.Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE or SWP_NOMOVE or
+    SWP_NOSIZE or SWP_NOSENDCHANGING or SWP_SHOWWINDOW);
+
+    // システムメニューの操作(チェックマークを付ける)
+    DeleteMenu(hSysmenu, AItemCnt + 2, MF_BYPOSITION);
+    InsertMenu(hSysmenu, AItemCnt + 2, MF_BYPOSITION or MF_CHECKED, MyMenu2, MyMenu2Text);
+    Result := True;
+  end;
 end;
 
 function TForm1.textResize(textIsBig: Boolean): Boolean;
