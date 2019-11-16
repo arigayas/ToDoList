@@ -11,14 +11,10 @@ uses
 
 type
   TForm2 = class(TForm)
-    BR_CheckBox1: TCheckBox;
     ColorGroupBox: TGroupBox;
     LoopAddButton: TButton;
     LoopDeleteButton: TButton;
-    SettingCheckBoxGroup: TGroupBox;
-    fontBiggerCheckBox: TCheckBox;
     LoopListView1: TListView;
-    frontmostCheckBox: TCheckBox;
     OKButton: TButton;
     WeeklyDateTimePicker: TDateTimePicker;
     PageControl1: TPageControl;
@@ -38,21 +34,18 @@ type
     WeeklyColorLabel: TLabel;
     MonthlyColorBox: TColorBox;
     MonthlyColorLabel: TLabel;
-    procedure BR_CheckBox1Click(Sender: TObject);
     procedure LoopAddButtonClick(Sender: TObject);
     procedure ColorListBox1Click(Sender: TObject);
-    procedure fontBiggerCheckBoxClick(Sender: TObject);
-    procedure frontmostCheckBoxClick(Sender: TObject);
     procedure OKButtonClick(Sender: TObject);
     procedure LoopDeleteButtonClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure LoopListView1SelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
     procedure PageControl1Change(Sender: TObject);
     procedure WeekdayCheckListBoxClickCheck(Sender: TObject);
-    function WeekdayCheckedCount(ItemsCount: Integer; WeekdayFlag:Integer): Integer;
+    function WeekdayCheckedCount(ItemsCount: Integer; WeekdayFlag: Integer): Integer;
     procedure MonthlyLabeledEditChange(Sender: TObject);
   private
-    function SetColorName(GroupIdNum: Integer ): String;
+    function SetColorName(GroupIdNum: Integer): String;
     { Private 宣言 }
   public
     { Public 宣言 }
@@ -68,28 +61,6 @@ implementation
 
 uses ToDoList_Unit1;
 
-procedure TForm2.BR_CheckBox1Click(Sender: TObject);
-begin
-  Form2.Caption := Form1.Top.ToString;
-end;
-
-procedure TForm2.fontBiggerCheckBoxClick(Sender: TObject); // フォントサイズを倍化
-begin
-  Form1.Repaint;
-  if fontBiggerCheckBox.Checked then
-  begin
-    Form1.CheckListBox1.ItemHeight := 38;
-    Form1.CheckListBox1.Font.Size := 24;
-    Form1.CheckListBox1.Font.Height := -32;
-  end
-  else
-  begin
-    Form1.CheckListBox1.ItemHeight := 19;
-    Form1.CheckListBox1.Font.Size := 12;
-    Form1.CheckListBox1.Font.Height := -16;
-  end;
-end;
-
 procedure TForm2.FormCreate(Sender: TObject);
 begin
   LoopListView1.ViewStyle := vsIcon; // 起動時に1つ目のグループのヘッダー(毎日)が
@@ -98,32 +69,12 @@ begin
   PageControl1.ActivePageIndex := 0;
   LoopAddButton.Enabled := True;
 
-  DailyColorBox.Style  :=[cbStandardColors, cbPrettyNames];
-  WeeklyColorBox.Style :=[cbStandardColors, cbPrettyNames];
-  MonthlyColorBox.Style:=[cbStandardColors, cbPrettyNames];
+  DailyColorBox.Style := [cbStandardColors, cbPrettyNames];
+  WeeklyColorBox.Style := [cbStandardColors, cbPrettyNames];
+  MonthlyColorBox.Style := [cbStandardColors, cbPrettyNames];
 end;
 
-procedure TForm2.frontmostCheckBoxClick(Sender: TObject); // 最前面にする
-// 参照したサイト
-// http://kwikwi.cocolog-nifty.com/blog/2005/12/delphi_90fd.html
-// https://oshiete.goo.ne.jp/qa/8745468.html
-begin
-  if frontmostCheckBox.Checked then
-  begin
-    // 最前面に表示する
-    // SetWindowPos(Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE)
-    SetWindowPos(Form1.Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE or SWP_NOMOVE or
-      SWP_NOSIZE or SWP_NOSENDCHANGING or SWP_SHOWWINDOW);
-  end
-  else
-  begin
-    // 普通に戻す
-    // SetWindowPos(Handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE);
-    SetWindowPos(Form1.Handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE);
-  end;
-end;
-
-function TForm2.WeekdayCheckedCount(ItemsCount: Integer; WeekdayFlag:Integer): Integer;
+function TForm2.WeekdayCheckedCount(ItemsCount: Integer; WeekdayFlag: Integer): Integer;
 // WeekdayFlag -> 0; 数えるだけ
 // WeekdayFlag -> 1; チェックした項目のテキスト取得
 var
@@ -135,12 +86,13 @@ begin
     if WeekdayCheckListBox.Checked[I] = True then
     begin
       case WeekdayFlag of
-      0:Inc(ItemsChecked);
-      1:
-      begin
-        CheckedWeekDay[ItemsChecked] := WeekdayCheckListBox.Items[I];
-        Inc(ItemsChecked);
-      end;
+        0:
+          Inc(ItemsChecked);
+        1:
+          begin
+            CheckedWeekDay[ItemsChecked] := WeekdayCheckListBox.Items[I];
+            Inc(ItemsChecked);
+          end;
       end;
     end;
   Result := ItemsChecked;
@@ -148,7 +100,7 @@ end;
 
 procedure TForm2.WeekdayCheckListBoxClickCheck(Sender: TObject);
 var
-  WeekdayItems : Int8;
+  WeekdayItems: Int8;
 begin
   WeekdayItems := 7;
   if (WeekdayCheckedCount(WeekdayItems, 0) = 0) or (WeekdayCheckedCount(WeekdayItems, 0) = 7) then
@@ -244,7 +196,7 @@ begin
             begin
               WeekString := WeekString + TempStr;
             end;
-            ListItem.SubItems.Add(Weekstring);
+            ListItem.SubItems.Add(WeekString);
 
             ListItem.SubItems.Add(FormatDateTime('hh:mm', WeeklyDateTimePicker.DateTime));
             WeeklyDateTimePicker.Time := StrToTime(TimeString);
@@ -254,7 +206,7 @@ begin
             WeeklyColorBox.Selected := clWhite;
 
             Finalize(CheckedWeekDay);
-            WeekdayCheckListBox.CheckAll(cbUnchecked ,false,false);
+            WeekdayCheckListBox.CheckAll(cbUnchecked, false, false);
             WeekdayCheckListBoxClickCheck(Sender);
           end;
         2: // 毎月
@@ -337,26 +289,26 @@ end;
 
 function TForm2.SetColorName(GroupIdNum: Integer): String;
 var
-  i: Int8;
+  I: Int8;
 begin
   case GroupIdNum of
     0: // 毎日
       begin
-        i := DailyColorBox.ItemIndex ;
-        if (i >= 0) then
-          Result := DailyColorBox.ColorNames[i];
+        I := DailyColorBox.ItemIndex;
+        if (I >= 0) then
+          Result := DailyColorBox.ColorNames[I];
       end;
     1: // 毎週
       begin
-        i := WeeklyColorBox.ItemIndex ;
-        if (i >= 0) then
-          Result := WeeklyColorBox.ColorNames[i];
+        I := WeeklyColorBox.ItemIndex;
+        if (I >= 0) then
+          Result := WeeklyColorBox.ColorNames[I];
       end;
     2: // 毎月
       begin
-        i := MonthlyColorBox.ItemIndex ;
-        if (i >= 0) then
-          Result := MonthlyColorBox.ColorNames[i];
+        I := MonthlyColorBox.ItemIndex;
+        if (I >= 0) then
+          Result := MonthlyColorBox.ColorNames[I];
       end;
   else
     begin

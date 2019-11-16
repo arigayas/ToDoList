@@ -21,57 +21,20 @@ object Form2: TForm2
     493)
   PixelsPerInch = 96
   TextHeight = 13
-  object SettingCheckBoxGroup: TGroupBox
+  object ColorGroupBox: TGroupBox
     Left = 0
     Top = 0
     Width = 584
-    Height = 113
-    Align = alTop
-    Caption = #35373#23450
-    TabOrder = 0
-    object BR_CheckBox1: TCheckBox
-      Left = 16
-      Top = 24
-      Width = 145
-      Height = 17
-      Caption = #12454#12451#12531#12489#12454#12398#24133#12391#25240#12426#36820#12377
-      Enabled = False
-      TabOrder = 0
-      OnClick = BR_CheckBox1Click
-    end
-    object fontBiggerCheckBox: TCheckBox
-      Left = 16
-      Top = 47
-      Width = 145
-      Height = 17
-      Caption = #12522#12473#12488#12398#25991#23383#12434#22823#12365#12367#12377#12427
-      TabOrder = 1
-      OnClick = fontBiggerCheckBoxClick
-    end
-    object frontmostCheckBox: TCheckBox
-      Left = 16
-      Top = 70
-      Width = 129
-      Height = 17
-      Caption = #26368#21069#38754#12391#24120#12395#34920#31034#12377#12427
-      TabOrder = 2
-      OnClick = frontmostCheckBoxClick
-    end
-  end
-  object ColorGroupBox: TGroupBox
-    Left = 0
-    Top = 113
-    Width = 584
-    Height = 333
+    Height = 450
     Align = alTop
     Anchors = [akLeft, akTop, akRight, akBottom]
     Caption = #21608#26399'Todo'#12522#12473#12488
-    TabOrder = 1
+    TabOrder = 0
     object LoopListView1: TListView
       Left = 2
-      Top = 150
+      Top = 148
       Width = 580
-      Height = 181
+      Height = 300
       Align = alBottom
       Anchors = [akLeft, akTop, akRight, akBottom]
       Columns = <
@@ -139,7 +102,8 @@ object Form2: TForm2
       TabOrder = 0
       ViewStyle = vsReport
       OnSelectItem = LoopListView1SelectItem
-      ExplicitHeight = 127
+      ExplicitTop = 150
+      ExplicitHeight = 183
     end
     object LoopAddButton: TButton
       Left = 493
@@ -392,7 +356,7 @@ object Form2: TForm2
     Height = 29
     Anchors = [akRight, akBottom]
     Caption = 'OK'
-    TabOrder = 2
+    TabOrder = 1
     OnClick = OKButtonClick
   end
 end

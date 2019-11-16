@@ -55,6 +55,7 @@ type
     procedure WMQueryEndSession(var Msg: TWMQueryEndSession);
       message WM_QUERYENDSESSION;
     procedure WMSysCommand(var Message: TWMSysCommand); message WM_SYSCOMMAND;
+    function textResize(textIsBig: Boolean): Boolean;
 
     { Private 宣言 }
   public
@@ -308,16 +309,13 @@ begin
 
   if (Key = VK_ADD) then // テンキーの「+」で文字が大きくなる
   begin
-    Form2.fontBiggerCheckBox.Checked := True;
-
-    Form2.fontBiggerCheckBoxClick(Sender);
+    textIsBig :=  textResize(textIsBig);
   end;
 
   if (Key = vkSubtract) then // テンキーの「-」で文字が小さくなる
   begin
-    Form2.fontBiggerCheckBox.Checked := false;
-    Form2.fontBiggerCheckBoxClick(Sender);
-  end;
+    textIsBig :=  textResize(textIsBig);
+end;
 
 {$IFDEF DEBUG}
   if (Key = VK_INSERT) then
@@ -722,31 +720,7 @@ end;
 procedure TForm1.WMSysCommand(var Message: TWMSysCommand);
 begin
   case Message.CmdType of
-    MyMenu1 : // 文字の大きさを変える処理
-      begin
-        if textIsBig then
-        begin
-          CheckListBox1.ItemHeight := 19;
-          CheckListBox1.Font.Size := 12;
-          CheckListBox1.Font.Height := -16;
-
-          MyMenu1text := 'リストの文字を大きくする';
-          DeleteMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION or MF_CHECKED);
-          InsertMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION, MyMenu1, MyMenu1Text);
-          textIsBig   := False;
-        end
-        else
-        begin
-          CheckListBox1.ItemHeight := 38;
-          CheckListBox1.Font.Size := 24;
-          CheckListBox1.Font.Height := -32;
-
-          MyMenu1text := 'リストの文字を小さくする';
-          DeleteMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION);
-          InsertMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION or MF_CHECKED, MyMenu1, MyMenu1Text);
-          textIsBig   := True;
-        end;
-      end;
+    MyMenu1 : textIsBig:= textResize(textIsBig);// 文字の大きさを変える処理
 
     MyMenu2 : // 最前面に表示する処理
       // 参照したサイト
@@ -773,6 +747,7 @@ begin
           IsAlwaysOnTop := True;
         end;
       end;
+
     MyMenu3 : // 折り返し表示の処理
        Showmessage('ごめんなさい。未実装です。');
   end;
@@ -780,5 +755,32 @@ begin
   inherited;
 end;
 
+function TForm1.textResize(textIsBig: Boolean): Boolean;
+begin
+  if textIsBig = True then
+  begin
+    CheckListBox1.ItemHeight := 19;
+    CheckListBox1.Font.Size := 12;
+    CheckListBox1.Font.Height := -16;
+
+    MyMenu1text := 'リストの文字を大きくする';
+    DeleteMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION);
+    InsertMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION, MyMenu1, MyMenu1Text);
+    Result := False;
+  end
+  else
+  begin
+    CheckListBox1.ItemHeight := 38;
+    CheckListBox1.Font.Size := 24;
+    CheckListBox1.Font.Height := -32;
+
+    MyMenu1text := 'リストの文字を小さくする';
+    DeleteMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION);
+    InsertMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION, MyMenu1, MyMenu1Text);
+    Result := True;
+  end;
+
+  inherited;
+end;
 
 end.
