@@ -307,15 +307,10 @@ begin
   if (Key = 80) then // Pキーでクリップボードにあるテキストを追加ボタンを使用せず追加する
     PasteFromClipboardText(Sender);
 
-  if (Key = VK_ADD) then // テンキーの「+」で文字が大きくなる
-  begin
-    textIsBig :=  textResize(textIsBig);
-  end;
-
-  if (Key = vkSubtract) then // テンキーの「-」で文字が小さくなる
-  begin
-    textIsBig :=  textResize(textIsBig);
-end;
+  if (Key = VK_OEM_PLUS) or (Key = VK_ADD) then
+    begin
+      textIsBig :=  textResize(textIsBig);
+    end;
 
 {$IFDEF DEBUG}
   if (Key = VK_INSERT) then
