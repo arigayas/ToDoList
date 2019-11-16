@@ -87,8 +87,8 @@ var
   // ItemsCount: Integer;
   hSysmenu : hMenu;   // 追加のシステムメニュー
   AItemCnt : Integer; // 追加のシステムメニュー
-  MyMenu1Text, MyMenu2Text: PWideChar;
-  textIsBig, IsAlwaysOnTop: Boolean;
+  MyMenu1Text, MyMenu2Text, MyMenu3Text: PWideChar;
+  textIsBig, IsAlwaysOnTop{, IsWordWrap}: Boolean;
 procedure LockFile;
 begin
   if FileExists(FileName) then
@@ -444,6 +444,7 @@ var
 begin
   MyMenu1Text := 'リストの文字を大きくする';
   MyMenu2Text := '常に手前で表示する';
+  MyMenu3Text := 'ウィンドウの幅で折り返す(未実装)';
   textIsBig   := False;
   IsAlwaysOnTop := False;
 
@@ -458,6 +459,7 @@ begin
   //現在のメニューの一番下にメニューを追加
   InsertMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION, MyMenu1, MyMenu1Text);
   InsertMenu(hSysmenu, AItemCnt + 2, MF_BYPOSITION, MyMenu2, MyMenu2Text);
+  InsertMenu(hSysmenu, AItemCnt + 3, MF_BYPOSITION, MyMenu3, MyMenu3Text);
 
 
   Memo1.Visible := false;
@@ -715,7 +717,7 @@ begin
 end;
 
 //=============================================================================
-//  メニューを選択した時のメッセージ処理
+//  追加したシステムメニューを選択した時のメッセージ処理
 //=============================================================================
 procedure TForm1.WMSysCommand(var Message: TWMSysCommand);
 begin
@@ -771,7 +773,8 @@ begin
           IsAlwaysOnTop := True;
         end;
       end;
-
+    MyMenu3 : // 折り返し表示の処理
+       Showmessage('ごめんなさい。未実装です。');
   end;
 
   inherited;
