@@ -57,7 +57,6 @@ type
     procedure WMSysCommand(var Message: TWMSysCommand); message WM_SYSCOMMAND;
     function textResize(textIsBig: Boolean): Boolean;
     function AlwaysOnTop(IsAlwaysOnTop: Boolean): Boolean;
-
     { Private 宣言 }
   public
     { Public 宣言 }
@@ -619,7 +618,16 @@ end;
 
 procedure TForm1.Setting_N1Click(Sender: TObject);
 begin
-  Form2.ShowModal
+  if IsAlwaysOnTop then
+    begin  // 最前面にする設定時に Form2.ShowModal の表示が終わったらメインフォームを最前面にする。
+      IsAlwaysOnTop := AlwaysOnTop(IsAlwaysOnTop); // 最前面の表示を解除
+      Form2.ShowModal;
+      IsAlwaysOnTop := AlwaysOnTop(IsAlwaysOnTop); // 最前面の表示を実行
+    end
+  else
+    begin
+      Form2.ShowModal;
+    end;
 end;
 
 procedure TForm1.SwitchTaskTrayClick(Sender: TObject);
@@ -719,7 +727,7 @@ begin
     MyMenu1 : textIsBig:= textResize(textIsBig);// 文字の大きさを変える処理
     MyMenu2 : IsAlwaysOnTop := AlwaysOnTop(IsAlwaysOnTop);// 最前面に表示する処理
     MyMenu3 : // 折り返し表示の処理
-       Showmessage('ごめんなさい。未実装です。');
+      Showmessage('ごめんなさい。未実装です。');
   end;
 
   inherited;
