@@ -15,6 +15,7 @@ object Form2: TForm2
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   DesignSize = (
     584
@@ -130,7 +131,7 @@ object Form2: TForm2
       Top = 23
       Width = 466
       Height = 124
-      ActivePage = WeeklyTabSheet
+      ActivePage = MonthlyTabSheet
       TabOrder = 3
       OnChange = PageControl1Change
       object DailyTabSheet: TTabSheet

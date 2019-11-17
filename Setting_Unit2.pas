@@ -44,6 +44,7 @@ type
     procedure WeekdayCheckListBoxClickCheck(Sender: TObject);
     function WeekdayCheckedCount(ItemsCount: Integer; WeekdayFlag: Integer): Integer;
     procedure MonthlyLabeledEditChange(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
   private
     function SetColorName(GroupIdNum: Integer): String;
     { Private 宣言 }
@@ -61,13 +62,27 @@ implementation
 
 uses ToDoList_Unit1;
 
+procedure TForm2.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+begin
+  if CanClose then
+  begin
+    CanClose := true;
+    { 終了処理 }
+    Form2.Close;
+  end
+  else
+    CanClose := false;
+    Form2.Close;
+end;
+
 procedure TForm2.FormCreate(Sender: TObject);
 begin
+
   LoopListView1.ViewStyle := vsIcon; // 起動時に1つ目のグループのヘッダー(毎日)が
   LoopListView1.ViewStyle := vsReport; // 表示されない為の対策の2行。
 
   PageControl1.ActivePageIndex := 0;
-  LoopAddButton.Enabled := True;
+  LoopAddButton.Enabled := true;
 
   DailyColorBox.Style := [cbStandardColors, cbPrettyNames];
   WeeklyColorBox.Style := [cbStandardColors, cbPrettyNames];
@@ -83,7 +98,7 @@ begin
   ItemsChecked := 0;
   // チェックボックスにチェックがある数を調べる
   for I := 0 to ItemsCount - 1 do
-    if WeekdayCheckListBox.Checked[I] = True then
+    if WeekdayCheckListBox.Checked[I] = true then
     begin
       case WeekdayFlag of
         0:
@@ -109,7 +124,7 @@ begin
   end
   else
   begin
-    LoopAddButton.Enabled := True;
+    LoopAddButton.Enabled := true;
   end;
 end;
 
@@ -128,7 +143,7 @@ begin
   end
   else
   begin
-    LoopAddButton.Enabled := True;
+    LoopAddButton.Enabled := true;
     everyMonth := StrToInt(MonthlyLabeledEdit.Text);
 
     (*
@@ -159,7 +174,7 @@ begin
 
   Ans := InputQuery(AppName + ' Input', '追加したい情報を入力してください。', NewString);
 
-  if Ans = True then
+  if Ans = true then
   begin
     if NewString = '' then
     begin
@@ -252,14 +267,17 @@ end;
 procedure TForm2.LoopListView1SelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
 begin
   if Assigned(LoopListView1.Selected) then
-    LoopDeleteButton.Enabled := True
+    LoopDeleteButton.Enabled := true
   else
     LoopDeleteButton.Enabled := false;
 end;
 
 procedure TForm2.OKButtonClick(Sender: TObject);
+var
+  IsSave: Boolean;
 begin
-  Form2.Close;
+  IsSave := true;
+  Form2.FormCloseQuery(Sender, IsSave);
 end;
 
 procedure TForm2.PageControl1Change(Sender: TObject);
@@ -267,7 +285,7 @@ begin
   case PageControl1.ActivePageIndex of
     0: // 毎日
       begin
-        LoopAddButton.Enabled := True;
+        LoopAddButton.Enabled := true;
       end;
     1: // 毎週
       begin
