@@ -437,7 +437,9 @@ var
 begin
   MyMenu1Text := 'リストの文字を大きくする';
   MyMenu2Text := '常に手前で表示する';
+{$IFDEF DEBUG}
   MyMenu3Text := 'ウィンドウの幅で折り返す(未実装)';
+{$ENDIF}
   textIsBig   := False;
   IsAlwaysOnTop := False;
 
@@ -452,8 +454,9 @@ begin
   //現在のメニューの一番下にメニューを追加
   InsertMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION, MyMenu1, MyMenu1Text);
   InsertMenu(hSysmenu, AItemCnt + 2, MF_BYPOSITION, MyMenu2, MyMenu2Text);
+{$IFDEF DEBUG}
   InsertMenu(hSysmenu, AItemCnt + 3, MF_BYPOSITION, MyMenu3, MyMenu3Text);
-
+{$ENDIF}
 
   Memo1.Visible := false;
   DeleteButton.Enabled := false;
@@ -726,8 +729,10 @@ begin
   case Message.CmdType of
     MyMenu1 : textIsBig:= textResize(textIsBig);// 文字の大きさを変える処理
     MyMenu2 : IsAlwaysOnTop := AlwaysOnTop(IsAlwaysOnTop);// 最前面に表示する処理
+{$IFDEF DEBUG}
     MyMenu3 : // 折り返し表示の処理
       Showmessage('ごめんなさい。未実装です。');
+{$ENDIF}
   end;
 
   inherited;
