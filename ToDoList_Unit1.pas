@@ -114,7 +114,7 @@ begin
       IsAlwaysOnTop := AlwaysOnTop(IsAlwaysOnTop); // 最前面の表示を解除
         NewString := '';
         UpdateData(Sender, 0, NewString);
-      IsAlwaysOnTop := AlwaysOnTop(IsAlwaysOnTop); // 最前面の表示を解除
+      IsAlwaysOnTop := AlwaysOnTop(IsAlwaysOnTop); // 最前面の表示を実行
     end
     else
     begin
@@ -157,8 +157,19 @@ begin
           end;
       end;
 
-      for I := 0 to clipbrdStrings.Count - 1 do
-        UpdateData(Sender, 0, clipbrdStrings.Strings[I]);
+      // メインフォームが最前面設定時に 入力ダイアログ の表示中はメインフォームの最前面を解除する。
+      if IsAlwaysOnTop then
+      begin
+        IsAlwaysOnTop := AlwaysOnTop(IsAlwaysOnTop); // 最前面の表示を解除
+          for I := 0 to clipbrdStrings.Count - 1 do
+          UpdateData(Sender, 0, clipbrdStrings.Strings[I]);
+        IsAlwaysOnTop := AlwaysOnTop(IsAlwaysOnTop); // 最前面の表示を実行
+      end
+      else
+      begin
+        for I := 0 to clipbrdStrings.Count - 1 do
+          UpdateData(Sender, 0, clipbrdStrings.Strings[I]);
+      end;
     end
     else
     begin
@@ -209,7 +220,7 @@ begin
       IsAlwaysOnTop := AlwaysOnTop(IsAlwaysOnTop); // 最前面の表示を解除
         NewString :='';
         UpdateData(Sender, 1, NewString);
-      IsAlwaysOnTop := AlwaysOnTop(IsAlwaysOnTop); // 最前面の表示を解除
+      IsAlwaysOnTop := AlwaysOnTop(IsAlwaysOnTop); // 最前面の表示を実行
     end
     else
     begin
