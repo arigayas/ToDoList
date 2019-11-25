@@ -108,8 +108,19 @@ procedure TForm1.AddItemButtonClick(Sender: TObject);
 var
   NewString: string;
 begin
-  NewString := '';
-  UpdateData(Sender, 0, NewString);
+   // メインフォームが最前面設定時に 入力ダイアログ の表示中はメインフォームの最前面を解除する。
+  if IsAlwaysOnTop then
+    begin
+      IsAlwaysOnTop := AlwaysOnTop(IsAlwaysOnTop); // 最前面の表示を解除
+        NewString := '';
+        UpdateData(Sender, 0, NewString);
+      IsAlwaysOnTop := AlwaysOnTop(IsAlwaysOnTop); // 最前面の表示を解除
+    end
+    else
+    begin
+      NewString := '';
+      UpdateData(Sender, 0, NewString);
+    end;
 end;
 
 procedure TForm1.PasteFromClipboardText(Sender: TObject);
