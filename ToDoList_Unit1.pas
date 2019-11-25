@@ -199,12 +199,23 @@ begin
   end;
 end;
 
-procedure TForm1.CheckListBox1DblClick(Sender: TObject);
+procedure TForm1.CheckListBox1DblClick(Sender: TObject); // 項目の編集
 var
   NewString: string;
 begin
-  NewString :='';
-  UpdateData(Sender, 1, NewString);
+   // メインフォームが最前面設定時に 入力ダイアログ の表示中はメインフォームの最前面を解除する。
+  if IsAlwaysOnTop then
+    begin
+      IsAlwaysOnTop := AlwaysOnTop(IsAlwaysOnTop); // 最前面の表示を解除
+        NewString :='';
+        UpdateData(Sender, 1, NewString);
+      IsAlwaysOnTop := AlwaysOnTop(IsAlwaysOnTop); // 最前面の表示を解除
+    end
+    else
+    begin
+      NewString :='';
+      UpdateData(Sender, 1, NewString);
+    end;
 end;
 
 // ドラッグ&ドロップに関しては以下のブログを参考にした。
