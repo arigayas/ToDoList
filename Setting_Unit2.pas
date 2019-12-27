@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls,
   Vcl.CheckLst,
-  Vcl.Grids, Vcl.ValEdit, Vcl.ComCtrls, System.UITypes, VCLTee.TeCanvas;
+  Vcl.Grids, Vcl.ValEdit, Vcl.ComCtrls, System.UITypes{, VCLTee.TeCanvas};
 
 type
   TForm2 = class(TForm)
@@ -61,6 +61,9 @@ implementation
 {$R *.dfm}
 
 uses ToDoList_Unit1;
+
+resourcestring
+  Str_FunctionCalled_an_UnexpectedArgument = '関数で想定していない引数が呼ばれました。';
 
 procedure TForm2.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
@@ -240,7 +243,7 @@ begin
           end;
       else
         begin
-          ShowMessage('LoopAddButtonClick:想定外です');
+          ShowMessage('LoopAddButtonClick' + Str_FunctionCalled_an_UnexpectedArgument);
         end;
       end;
     end;
@@ -299,7 +302,7 @@ begin
       end;
   else
     begin
-      ShowMessage('LoopListView1SelectItem:想定外です');
+      ShowMessage('LoopListView1SelectItem' + Str_FunctionCalled_an_UnexpectedArgument);
     end;
   end;
 
@@ -330,7 +333,7 @@ begin
       end;
   else
     begin
-      ShowMessage('SetColorName:想定外です');
+      ShowMessage('SetColorName' + Str_FunctionCalled_an_UnexpectedArgument);
     end;
   end;
 end;

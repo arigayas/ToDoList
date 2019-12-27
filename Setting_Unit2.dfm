@@ -136,6 +136,10 @@ object Form2: TForm2
       OnChange = PageControl1Change
       object DailyTabSheet: TTabSheet
         Caption = #27598#26085
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object DailyTimeLabel: TLabel
           Left = 3
           Top = 9
