@@ -375,16 +375,14 @@ begin
     Form1.Caption := AppName + '  -  ' + CheckListBox1.Count.ToString + ' Œ’† ' +
       ItemsCount.ToString + ' Œ‘I‘ğ';
 {$IFDEF DEBUG}
-    Form1.Caption := AppName + '  -  ' + CheckListBox1.Count.ToString + ' Œ’† ' +
-      ItemsCount.ToString + ' Œ‘I‘ğ ::DEBUG::';
+    Form1.Caption := Form1.Caption + ' ::DEBUG::';
 {$ENDIF}
   end
   else
   begin
     Form1.Caption := AppName + '  -  ' + CheckListBox1.Count.ToString + ' Œ';
 {$IFDEF DEBUG}
-    Form1.Caption := AppName + '  -  ' + CheckListBox1.Count.ToString +
-      ' Œ ::DEBUG::';
+    Form1.Caption := Form1.Caption + ' ::DEBUG::';
 {$ENDIF}
   end;
 
