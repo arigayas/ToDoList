@@ -81,6 +81,18 @@ implementation
 
 uses Setting_Unit2;
 
+resourcestring
+  Str_LargeFont = 'リストの文字を大きくする';
+  Str_SmallFont = 'リストの文字を小さくする';
+  Str_Nothing_on_the_Clipboard = 'Clipboard にテキストデータがありません';
+  Str_PasteSomethingOtherThanText = 'テキスト以外の物を貼り付けようとしました。';
+  Str_VK_RETURN_Yes = '”はい”を選んだ場合は選択項目を編集します。';
+  Str_VK_RETURN_No = '”いいえ”を選んだ場合は項目を追加します。';
+  Str_GetOut_of_TaskTray = 'タスクトレイから出す';
+  Str_Store_in_TaskTray = 'タスクトレイに格納する';
+  Str_AlwaysShow_in_Front = '常に手前で表示する';
+  Str_FunctionCalled_an_UnexpectedArgument = '関数で想定していない引数が呼ばれました。';
+
 var
   FileName: string;
   LInput: TFileStream;
@@ -133,7 +145,7 @@ begin
 
   if Clipboard.AsText = '' then // Clipboard にデータがあるかチェック
   begin
-    ShowMessage('Clipboard is None');
+    MessageDlg(Str_Nothing_on_the_Clipboard, mtInformation, [mbOk], 0);
   end
   else
   begin
@@ -173,7 +185,7 @@ begin
     end
     else
     begin
-      MessageDlg('テキスト以外の物を貼付けようとしました。', mtInformation, [mbOk], 0);
+      MessageDlg(Str_PasteSomethingOtherThanText, mtInformation, [mbOk], 0);
     end;
   end;
 
@@ -319,8 +331,8 @@ begin
   begin
     if (CheckListBox1.Count > 0) and (CheckListBox1.ItemIndex >= 0) then
     begin
-      if MessageDlg('”はい”を選んだ場合は選択項目を編集します。' + sLineBreak +
-        '”いいえ”を選んだ場合は項目を追加します。', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+      if MessageDlg(Str_VK_RETURN_Yes + sLineBreak + Str_VK_RETURN_No,
+                    mtConfirmation, [mbYes, mbNo], 0) = mrYes then
         CheckListBox1DblClick(Sender)
       else
         AddItemButtonClick(Sender);
@@ -468,8 +480,8 @@ var
   SettingsIniFileName: string;
 
 begin
-  MyMenu1Text := 'リストの文字を大きくする';
-  MyMenu2Text := '常に手前で表示する';
+  MyMenu1Text := PWideChar(Str_LargeFont);
+  MyMenu2Text := PWideChar(Str_AlwaysShow_in_Front);
 {$IFDEF DEBUG}
   MyMenu3Text := 'ウィンドウの幅で折り返す(未実装)';
 {$ENDIF}
@@ -671,13 +683,13 @@ begin
   if TrayIcon1.Visible = false then
   begin
     TrayIcon1.Visible := True;
-    SwitchTaskTray.Caption := 'タスクトレイから出す';
+    SwitchTaskTray.Caption := Str_GetOut_of_TaskTray;
     Screen.Forms[0].Hide;
   end
   else
   begin
     TrayIcon1.Visible := false;
-    SwitchTaskTray.Caption := 'タスクトレイに格納する';
+    SwitchTaskTray.Caption := Str_Store_in_TaskTray;
     Screen.Forms[0].Show;
     // Formを非表示にしてから表示させると
     // PopUpが無効になるのでAutoPopupを有効にする
@@ -688,7 +700,6 @@ end;
 
 procedure TForm1.TrayIcon1Click(Sender: TObject);
 begin
-  // ShowMessage('タスクトレイのアイコンをクリックしたら何をさせようか');
   SwitchTaskTrayClick(Sender);
 end;
 
@@ -711,7 +722,7 @@ begin
       NewString := CheckListBox1.Items[CheckListBox1.ItemIndex];
     end;
     else begin
-      ShowMessage('UpdateData関数で想定していない引数が呼ばれました。');
+      ShowMessage('UpdateData' + Str_FunctionCalled_an_UnexpectedArgument);
     end;
   end;
 
@@ -809,7 +820,7 @@ begin
     CheckListBox1.Font.Size := 12;
     CheckListBox1.Font.Height := -16;
 
-    MyMenu1text := 'リストの文字を大きくする';
+    MyMenu1text := PWideChar(Str_LargeFont);
     DeleteMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION);
     InsertMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION, MyMenu1, MyMenu1Text);
     Result := False;
@@ -820,7 +831,7 @@ begin
     CheckListBox1.Font.Size := 24;
     CheckListBox1.Font.Height := -32;
 
-    MyMenu1text := 'リストの文字を小さくする';
+    MyMenu1text := PWideChar(Str_SmallFont);
     DeleteMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION);
     InsertMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION, MyMenu1, MyMenu1Text);
     Result := True;
