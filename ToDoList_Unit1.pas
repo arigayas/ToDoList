@@ -22,6 +22,8 @@ type
     TrayIcon1: TTrayIcon;
     Setting_N1: TMenuItem;
     PopupPasteFromClipboardText: TMenuItem;
+    N1: TMenuItem;
+    SaveListLog: TMenuItem;
     procedure AddItemButtonClick(Sender: TObject);
     procedure DeleteButtonClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -43,6 +45,7 @@ type
     procedure Setting_N1Click(Sender: TObject);
     // procedure Button1Click(Sender: TObject);
     procedure PasteFromClipboardText(Sender: TObject);
+    procedure SaveListLogClick(Sender: TObject);
   private
     FQueryEndSession: Boolean; // Windows終了時(シャットダウン)の処理に使用
     procedure CheckListBox1StartDrag(Sender: TObject;
@@ -92,6 +95,7 @@ resourcestring
   Str_Store_in_TaskTray = 'タスクトレイに格納する';
   Str_AlwaysShow_in_Front = '常に手前で表示する';
   Str_FunctionCalled_an_UnexpectedArgument = '関数で想定していない引数が呼ばれました。';
+  Str_Saved = ' を保存しました。';
 
 var
   FileName: string;
@@ -657,6 +661,24 @@ begin
     begin
       LockFile;
     end;
+  finally
+    SL.Free;
+  end;
+end;
+
+procedure TForm1.SaveListLogClick(Sender: TObject);
+var
+  SaveTimeFileName: String;
+  SL: TStringList;
+begin
+  SaveTimeFileName := AppName + '_' + FormatDateTime('yyyy-mmdd-hhnn', Now) + '.log';
+
+  SL := TStringList.Create;
+  try
+    SL.AddStrings(CheckListBox1.Items);
+    SL.SaveToFile(SaveTimeFileName, TEncoding.UTF8);
+
+    MessageDlg(SaveTimeFileName + Str_Saved, mtInformation, [mbOk], 0);
   finally
     SL.Free;
   end;

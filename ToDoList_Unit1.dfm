@@ -131,6 +131,14 @@ object Form1: TForm1
       Caption = #12479#12473#12463#12488#12524#12452#12395#26684#32013#12377#12427
       OnClick = SwitchTaskTrayClick
     end
+    object SaveListLog: TMenuItem
+      Caption = #29694#22312#12398#12522#12473#12488#12434#12486#12461#12473#12488#12395#20445#23384#12377#12427
+      ShortCut = 16467
+      OnClick = SaveListLogClick
+    end
+    object N1: TMenuItem
+      Caption = '-'
+    end
     object Setting_N1: TMenuItem
       Caption = #35373#23450#12454#12451#12531#12489#12454
       OnClick = Setting_N1Click
