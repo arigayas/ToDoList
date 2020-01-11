@@ -558,7 +558,6 @@ var
   SettingsIniFile: TMemIniFile;
   SettingsIniFileName: string;
 begin
-
   SettingsIniFileName := ExtractFilePath(Application.ExeName) + AppName
     + '.ini';
   SettingsIniFile := TMemIniFile.Create(SettingsIniFileName, TEncoding.UTF8);
@@ -572,6 +571,7 @@ begin
     SettingsIniFile.WriteInteger('Form', 'WindowHeight', Height);
     SettingsIniFile.UpdateFile;
   finally
+    Sleep(2000); // DropBox ‚ª‘‚«‚ñ‚Å‰ğ•ú‚·‚é‚Ì‚ğ2•b‘Ò‚Â
     SettingsIniFile.Free;
     Savefile(Sender, True);
   end;
