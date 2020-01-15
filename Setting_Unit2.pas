@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls,
   Vcl.CheckLst,
-  Vcl.Grids, Vcl.ValEdit, Vcl.ComCtrls, System.UITypes{, VCLTee.TeCanvas};
+  Vcl.Grids, Vcl.ValEdit, Vcl.ComCtrls, System.UITypes, System.IniFiles;
 
 type
   TForm2 = class(TForm)
@@ -45,8 +45,10 @@ type
     function WeekdayCheckedCount(ItemsCount: Integer; WeekdayFlag: Integer): Integer;
     procedure MonthlyLabeledEditChange(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+
   private
     function SetColorName(GroupIdNum: Integer): String;
+    procedure SaveLoopSettings(Sender: TObject);
     { Private 宣言 }
   public
     { Public 宣言 }
@@ -75,7 +77,7 @@ begin
   end
   else
     CanClose := false;
-    Form2.Close;
+  Form2.Close;
 end;
 
 procedure TForm2.FormCreate(Sender: TObject);
@@ -280,6 +282,7 @@ var
   IsSave: Boolean;
 begin
   IsSave := true;
+  SaveLoopSettings(Sender);
   Form2.FormCloseQuery(Sender, IsSave);
 end;
 
@@ -307,6 +310,44 @@ begin
   end;
 
 end;
+
+procedure TForm2.SaveLoopSettings(Sender: TObject); // 2020年1月15日追加
+var
+  SettingsIniFileName, LoopID: string;
+  SettingsIniFile: TMemIniFile;
+  I: Integer;
+begin
+  if LoopListView1.Items.Count > 0 then
+  begin
+    SettingsIniFileName := ExtractFilePath(Application.ExeName) + AppName + '.ini';
+    SettingsIniFile := TMemIniFile.Create(SettingsIniFileName, TEncoding.UTF8);
+
+    try
+      for I := 0 to LoopListView1.Items.Count - 1 do
+      begin
+        LoopID := LoopListView1.Items[I].Caption;
+        SettingsIniFile.WriteString(LoopID, 'GroupID', LoopListView1.Items[I].GroupID.ToString);
+        if LoopListView1.Items[I].SubItems.Count > 0 then  // 項目
+          SettingsIniFile.WriteString(LoopID, 'Item', LoopListView1.Items[I].SubItems.Strings[0]);
+        if LoopListView1.Items[I].SubItems.Count > 1 then  // 実行日
+          SettingsIniFile.WriteString(LoopID, 'Day', LoopListView1.Items[I].SubItems.Strings[1]);
+        if LoopListView1.Items[I].SubItems.Count > 2 then // 追加時刻
+        begin
+          SettingsIniFile.WriteString(LoopID, 'Time', LoopListView1.Items[I].SubItems.Strings[2]);
+          if LoopListView1.Items[I].SubItems.Count > 3 then // 背景色
+          begin
+            SettingsIniFile.WriteString(LoopID, 'BackgroundColor',LoopListView1.Items[I].SubItems.Strings[3]);
+          end;
+        end;
+      end;
+      SettingsIniFile.UpdateFile;
+    finally
+      SettingsIniFile.Free;
+    end;
+
+  end;
+end;
+
 
 function TForm2.SetColorName(GroupIdNum: Integer): String;
 var
