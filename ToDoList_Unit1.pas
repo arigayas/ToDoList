@@ -827,6 +827,7 @@ begin
 
     // システムメニューの操作(チェックマークを付ける)
     DeleteMenu(hSysmenu, AItemCnt + 2, MF_BYPOSITION);
+    MyMenu2Text := PWideChar(Str_AlwaysShow_in_Front);
     InsertMenu(hSysmenu, AItemCnt + 2, MF_BYPOSITION or MF_CHECKED, MyMenu2, MyMenu2Text);
     Result := True;
   end;
