@@ -804,7 +804,8 @@ end;
 
 function TForm1.AlwaysOnTop(IsAlwaysOnTop: Boolean): Boolean;
 begin
- if IsAlwaysOnTop then
+  MyMenu2Text := PWideChar(Str_AlwaysShow_in_Front);
+  if IsAlwaysOnTop then
   // 参照したサイト
   // http://kwikwi.cocolog-nifty.com/blog/2005/12/delphi_90fd.html
   // https://oshiete.goo.ne.jp/qa/8745468.html
@@ -827,7 +828,6 @@ begin
 
     // システムメニューの操作(チェックマークを付ける)
     DeleteMenu(hSysmenu, AItemCnt + 2, MF_BYPOSITION);
-    MyMenu2Text := PWideChar(Str_AlwaysShow_in_Front);
     InsertMenu(hSysmenu, AItemCnt + 2, MF_BYPOSITION or MF_CHECKED, MyMenu2, MyMenu2Text);
     Result := True;
   end;
