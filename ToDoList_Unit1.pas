@@ -571,7 +571,8 @@ begin
     SettingsIniFile.WriteInteger('Form', 'WindowHeight', Height);
     SettingsIniFile.UpdateFile;
   finally
-    Sleep(2000); // DropBox ‚ª‘‚«‚ñ‚Å‰ğ•ú‚·‚é‚Ì‚ğ2•b‘Ò‚Â
+    Form1.Caption := AppName + '  -  ' + 'I—¹‚µ‚Ä‚¢‚Ü‚·B';
+    Sleep(1500); // DropBox ‚ª‘‚«‚ñ‚Å‰ğ•ú‚·‚é‚Ì‚ğ2•b‘Ò‚Â
     SettingsIniFile.Free;
     Savefile(Sender, True);
   end;
