@@ -572,7 +572,7 @@ begin
     SettingsIniFile.UpdateFile;
   finally
     Form1.Caption := AppName + '  -  ' + 'I—¹‚µ‚Ä‚¢‚Ü‚·B';
-    Sleep(1500); // DropBox ‚ª‘‚«‚ñ‚Å‰ğ•ú‚·‚é‚Ì‚ğ2•b‘Ò‚Â
+    Sleep(1500); // DropBox ‚ª‘‚«‚ñ‚Å‰ğ•ú‚·‚é‚Ì‚ğ‘Ò‚Â
     SettingsIniFile.Free;
     Savefile(Sender, True);
   end;
