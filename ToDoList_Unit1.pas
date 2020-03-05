@@ -453,6 +453,14 @@ begin
     DeleteButton.Enabled := false;
     DeleteAllChecked.Enabled := false;
     CheckListCounterFormCaption(Sender, ItemsCheckedCount(CheckListBox1.Count));
+    if CheckListBox1.Count > 0 then
+    begin
+      CheckListBox1.SetFocus;
+    end
+    else
+    begin
+      AddItemButton.SetFocus;
+    end;
   end;
 end;
 
