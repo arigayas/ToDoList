@@ -46,6 +46,7 @@ type
     // procedure Button1Click(Sender: TObject);
     procedure PasteFromClipboardText(Sender: TObject);
     procedure SaveListLogClick(Sender: TObject);
+    procedure CheckListBox1MouseEnter(Sender: TObject);
   private
     FQueryEndSession: Boolean; // Windows終了時(シャットダウン)の処理に使用
     procedure CheckListBox1StartDrag(Sender: TObject;
@@ -369,6 +370,21 @@ begin
     ShowMessage(CheckListBox1.Items[CheckListBox1.ItemIndex]);
   end;
 {$ENDIF}
+end;
+
+procedure TForm1.CheckListBox1MouseEnter(Sender: TObject);
+var
+  n : Integer;
+  str : string;
+begin
+  if CheckListBox1.ItemIndex >= 0 then
+  begin
+    n := CheckListBox1.ItemIndex;
+    str := CheckListBox1.Items.Strings[n];
+
+    CheckListBox1.ShowHint := True;
+    CheckListBox1.Hint := str;
+  end;
 end;
 
 procedure TForm1.CheckListCounterFormCaption(Sender: TObject;

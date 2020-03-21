@@ -85,6 +85,7 @@ object Form1: TForm1
     OnDragOver = CheckListBox1DragOver
     OnDrawItem = CheckListBox1DrawItem
     OnKeyDown = CheckListBox1KeyDown
+    OnMouseEnter = CheckListBox1MouseEnter
   end
   object Memo1: TMemo
     Left = 96
