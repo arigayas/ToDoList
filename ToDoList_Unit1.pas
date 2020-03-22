@@ -61,6 +61,7 @@ type
     procedure WMSysCommand(var Message: TWMSysCommand); message WM_SYSCOMMAND;
     function textResize(textIsBig: Boolean): Boolean;
     function AlwaysOnTop(IsAlwaysOnTop: Boolean): Boolean;
+    function CheckDuplication(NewString: string; IsCheckDuplication: Boolean): Boolean;
     { Private 宣言 }
   public
     { Public 宣言 }
@@ -106,7 +107,7 @@ var
   hSysmenu : hMenu;   // 追加のシステムメニュー
   AItemCnt : Integer; // 追加のシステムメニュー
   MyMenu1Text, MyMenu2Text, MyMenu3Text: PWideChar;
-  textIsBig, IsAlwaysOnTop{, IsWordWrap}: Boolean;
+  textIsBig, IsAlwaysOnTop, IsCheckDuplication: Boolean;
 procedure LockFile;
 begin
   if FileExists(FileName) then
@@ -196,6 +197,42 @@ begin
 
   clipbrdStrings.Free;
 end;
+
+
+function TForm1.CheckDuplication(NewString: string; IsCheckDuplication: Boolean): Boolean;
+var
+  I: Integer;
+// IsDuplication -> True 重複を確認する設定ON
+// IsDuplication -> false 重複を確認しない設定
+// Result := True; -> 重複があったよ
+begin
+  if IsCheckDuplication then
+  begin
+    //
+    if CheckListBox1.Count = 0 then
+    begin
+      Result := false;
+    end
+    else
+    begin
+      for I := 0 to CheckListBox1.Count - 1 do
+      begin
+        if CompareText(NewString, CheckListBox1.Items[i]) = 0 then
+        begin
+          Result := True;
+          break;
+        end
+        else
+          Result := false;
+      end;
+    end;
+  end
+  else
+  begin
+    Result := false;
+  end;
+end;
+
 
 // チェックマークの数でボタンのON/OFFを行う
 procedure TForm1.CheckListBox1ClickCheck(Sender: TObject);
@@ -509,7 +546,7 @@ begin
   MyMenu1Text := PWideChar(Str_LargeFont);
   MyMenu2Text := PWideChar(Str_AlwaysShow_in_Front);
 {$IFDEF DEBUG}
-  MyMenu3Text := 'ウィンドウの幅で折り返す(未実装)';
+  MyMenu3Text := '重複をチェックする';
 {$ENDIF}
   textIsBig   := False;
   IsAlwaysOnTop := False;
@@ -755,6 +792,7 @@ procedure TForm1.UpdateData(Sender: TObject; Flag:Integer; NewString: string);
 var
   Ans: Boolean;
   StrArray: array[0..3] of string;
+  ret: Integer;
 begin
   case Flag of
     0:begin
@@ -788,7 +826,17 @@ begin
       NewString := NewString.Trim; // 文字列の前後の空白を除去
       case Flag of
       0:begin
-        CheckListBox1.Items.Add(NewString);
+        if CheckDuplication(NewString, True) then
+        begin
+          ret :=MessageDlg('重複項目がありますが追加しますか？', mtConfirmation, mbOKCancel, 0);
+          if ret = mrOk  then
+            CheckListBox1.Items.Add(NewString);
+        end
+        else
+        begin
+          CheckListBox1.Items.Add(NewString);
+        end;
+
       end;
       1:begin
         CheckListBox1.Items[CheckListBox1.ItemIndex] := NewString;
@@ -814,13 +862,21 @@ end;
 //  追加したシステムメニューを選択した時のメッセージ処理
 //=============================================================================
 procedure TForm1.WMSysCommand(var Message: TWMSysCommand);
+var
+  a: Boolean;
+  str:string;
+
 begin
   case Message.CmdType of
     MyMenu1 : textIsBig:= textResize(textIsBig);// 文字の大きさを変える処理
     MyMenu2 : IsAlwaysOnTop := AlwaysOnTop(IsAlwaysOnTop);// 最前面に表示する処理
 {$IFDEF DEBUG}
-    MyMenu3 : // 折り返し表示の処理
-      Showmessage('ごめんなさい。未実装です。');
+    MyMenu3 :
+    begin  // --------------------------------------------------------------
+      a := CheckDuplication('aaa', True); // 重複チェック
+      str:= BoolToStr(a);
+      ShowMessage(str);
+    end;   // --------------------------------------------------------------
 {$ENDIF}
   end;
 
