@@ -62,6 +62,7 @@ type
     function textResize(textIsBig: Boolean): Boolean;
     function AlwaysOnTop(IsAlwaysOnTop: Boolean): Boolean;
     function CheckDuplication(NewString: string; IsCheckDuplication: Boolean): Boolean;
+    function FlagCheckDuplication(IsCheckDuplication: Boolean): Boolean;
     { Private 宣言 }
   public
     { Public 宣言 }
@@ -98,6 +99,7 @@ resourcestring
   Str_AlwaysShow_in_Front = '常に手前で表示する';
   Str_FunctionCalled_an_UnexpectedArgument = '関数で想定していない引数が呼ばれました。';
   Str_Saved = ' を保存しました。';
+  Str_CheckDuplication = '重複をチェックする';
 
 var
   FileName: string;
@@ -200,11 +202,11 @@ end;
 
 
 function TForm1.CheckDuplication(NewString: string; IsCheckDuplication: Boolean): Boolean;
-var
-  I: Integer;
 // IsDuplication -> True 重複を確認する設定ON
 // IsDuplication -> false 重複を確認しない設定
 // Result := True; -> 重複があったよ
+var
+  I: Integer;
 begin
   if IsCheckDuplication then
   begin
@@ -545,11 +547,10 @@ var
 begin
   MyMenu1Text := PWideChar(Str_LargeFont);
   MyMenu2Text := PWideChar(Str_AlwaysShow_in_Front);
-{$IFDEF DEBUG}
-  MyMenu3Text := '重複をチェックする';
-{$ENDIF}
+  MyMenu3Text := PWideChar(Str_CheckDuplication);
   textIsBig   := False;
   IsAlwaysOnTop := False;
+  IsCheckDuplication := False; // TODO: 設定に保存したデータから読み込むようにする
 
   //フォームのシステムメニューのハンドルを取得
   hSysmenu := GetSystemMenu(Handle, False);
@@ -562,9 +563,7 @@ begin
   //現在のメニューの一番下にメニューを追加
   InsertMenu(hSysmenu, AItemCnt + 1, MF_BYPOSITION, MyMenu1, MyMenu1Text);
   InsertMenu(hSysmenu, AItemCnt + 2, MF_BYPOSITION, MyMenu2, MyMenu2Text);
-{$IFDEF DEBUG}
   InsertMenu(hSysmenu, AItemCnt + 3, MF_BYPOSITION, MyMenu3, MyMenu3Text);
-{$ENDIF}
 
   Memo1.Visible := false;
   DeleteButton.Enabled := false;
@@ -826,7 +825,7 @@ begin
       NewString := NewString.Trim; // 文字列の前後の空白を除去
       case Flag of
       0:begin
-        if CheckDuplication(NewString, True) then
+        if CheckDuplication(NewString, IsCheckDuplication) then
         begin
           ret :=MessageDlg('重複項目がありますが追加しますか？', mtConfirmation, mbOKCancel, 0);
           if ret = mrOk  then
@@ -862,26 +861,49 @@ end;
 //  追加したシステムメニューを選択した時のメッセージ処理
 //=============================================================================
 procedure TForm1.WMSysCommand(var Message: TWMSysCommand);
-var
-  a: Boolean;
-  str:string;
-
+{
+  var
+    a: Boolean;
+    str:string;
+}
 begin
   case Message.CmdType of
     MyMenu1 : textIsBig:= textResize(textIsBig);// 文字の大きさを変える処理
     MyMenu2 : IsAlwaysOnTop := AlwaysOnTop(IsAlwaysOnTop);// 最前面に表示する処理
 {$IFDEF DEBUG}
-    MyMenu3 :
-    begin  // --------------------------------------------------------------
-      a := CheckDuplication('aaa', True); // 重複チェック
-      str:= BoolToStr(a);
-      ShowMessage(str);
-    end;   // --------------------------------------------------------------
+    MyMenu3 : IsCheckDuplication := FlagCheckDuplication(IsCheckDuplication); // 重複チェック
+{
+      begin  // --------------------------------------------------------------
+        a := CheckDuplication('aaa', True);
+        str:= BoolToStr(a);
+        ShowMessage(str);
+      end;   // --------------------------------------------------------------
+}
 {$ENDIF}
   end;
 
   inherited;
 end;
+
+function TForm1.FlagCheckDuplication(IsCheckDuplication: Boolean): Boolean;
+begin
+  MyMenu3Text := PWideChar(Str_CheckDuplication);
+  if IsCheckDuplication then
+  begin
+    // システムメニューの操作
+    DeleteMenu(hSysmenu, AItemCnt + 3, MF_BYPOSITION or MF_CHECKED);
+    InsertMenu(hSysmenu, AItemCnt + 3, MF_BYPOSITION, MyMenu3, MyMenu3Text);
+    Result := False;
+  end
+  else
+  begin
+    // システムメニューの操作(チェックマークを付ける)
+    DeleteMenu(hSysmenu, AItemCnt + 3, MF_BYPOSITION);
+    InsertMenu(hSysmenu, AItemCnt + 3, MF_BYPOSITION or MF_CHECKED, MyMenu3, MyMenu3Text);
+    Result := True;
+  end;
+end;
+
 
 function TForm1.AlwaysOnTop(IsAlwaysOnTop: Boolean): Boolean;
 begin
