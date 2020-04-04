@@ -134,7 +134,7 @@ object Form2: TForm2
       Top = 23
       Width = 466
       Height = 124
-      ActivePage = DailyTabSheet
+      ActivePage = WeeklyTabSheet
       TabOrder = 3
       OnChange = PageControl1Change
       object DailyTabSheet: TTabSheet
@@ -142,9 +142,9 @@ object Form2: TForm2
         object DailyTimeLabel: TLabel
           Left = 3
           Top = 9
-          Width = 133
+          Width = 218
           Height = 16
-          Caption = #36861#21152#12434#23455#34892#12377#12427#26178#21051#65306
+          Caption = 'ToDo'#12522#12473#12488#12395#38917#30446#12398#36861#21152#12434#34892#12358#26178#21051#65306
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -13
@@ -166,8 +166,8 @@ object Form2: TForm2
           ParentFont = False
         end
         object DailyDateTimePicker: TDateTimePicker
-          Left = 142
-          Top = 5
+          Left = 227
+          Top = 3
           Width = 65
           Height = 24
           Date = 43669.000000000000000000
@@ -184,9 +184,9 @@ object Form2: TForm2
           TabOrder = 0
         end
         object DailyColorBox: TColorBox
-          Left = 96
-          Top = 35
-          Width = 111
+          Left = 63
+          Top = 34
+          Width = 66
           Height = 22
           DefaultColorColor = clWhite
           NoneColorColor = clWhite
@@ -196,14 +196,14 @@ object Form2: TForm2
         end
       end
       object WeeklyTabSheet: TTabSheet
-        Caption = #26332#26085
+        Caption = #27598#36913
         ImageIndex = 1
         object WeeklyTimeLabel: TLabel
           Left = 3
           Top = 35
-          Width = 133
+          Width = 218
           Height = 16
-          Caption = #36861#21152#12434#23455#34892#12377#12427#26178#21051#65306
+          Caption = 'ToDo'#12522#12473#12488#12395#38917#30446#12398#36861#21152#12434#34892#12358#26178#21051#65306
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -13
@@ -242,10 +242,12 @@ object Form2: TForm2
             #37329
             #22303)
           TabOrder = 0
+          OnClick = WeekdayCheckListBoxDblClick
+          OnDblClick = WeekdayCheckListBoxDblClick
         end
         object WeeklyDateTimePicker: TDateTimePicker
-          Left = 142
-          Top = 31
+          Left = 224
+          Top = 30
           Width = 65
           Height = 24
           Date = 43669.000000000000000000
@@ -262,9 +264,9 @@ object Form2: TForm2
           TabOrder = 1
         end
         object WeeklyColorBox: TColorBox
-          Left = 96
+          Left = 62
           Top = 60
-          Width = 111
+          Width = 73
           Height = 22
           DefaultColorColor = clWhite
           NoneColorColor = clWhite
@@ -273,14 +275,14 @@ object Form2: TForm2
         end
       end
       object MonthlyTabSheet: TTabSheet
-        Caption = #25351#23450#26085
+        Caption = #27598#26376
         ImageIndex = 2
         object MonthlyTimeLabel: TLabel
           Left = 3
           Top = 35
-          Width = 133
+          Width = 218
           Height = 16
-          Caption = #36861#21152#12434#23455#34892#12377#12427#26178#21051#65306
+          Caption = 'ToDo'#12522#12473#12488#12395#38917#30446#12398#36861#21152#12434#34892#12358#26178#21051#65306
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -13
@@ -302,9 +304,9 @@ object Form2: TForm2
           ParentFont = False
         end
         object MonthlyLabeledEdit: TLabeledEdit
-          Left = 126
-          Top = 3
-          Width = 121
+          Left = 124
+          Top = 8
+          Width = 29
           Height = 21
           EditLabel.Width = 118
           EditLabel.Height = 16
@@ -323,7 +325,7 @@ object Form2: TForm2
           OnChange = MonthlyLabeledEditChange
         end
         object MonthlyDateTimePicker: TDateTimePicker
-          Left = 142
+          Left = 230
           Top = 30
           Width = 65
           Height = 24
@@ -343,7 +345,7 @@ object Form2: TForm2
         object MonthlyColorBox: TColorBox
           Left = 96
           Top = 60
-          Width = 111
+          Width = 81
           Height = 22
           DefaultColorColor = clWhite
           NoneColorColor = clWhite
@@ -354,13 +356,23 @@ object Form2: TForm2
     end
   end
   object OKButton: TButton
+    Left = 420
+    Top = 456
+    Width = 75
+    Height = 29
+    Anchors = [akRight, akBottom]
+    Caption = #20445#23384#12377#12427
+    TabOrder = 1
+    OnClick = OKButtonClick
+  end
+  object CancelButton: TButton
     Left = 501
     Top = 456
     Width = 75
     Height = 29
     Anchors = [akRight, akBottom]
-    Caption = 'OK'
-    TabOrder = 1
-    OnClick = OKButtonClick
+    Caption = #20445#23384#12375#12394#12356
+    TabOrder = 2
+    OnClick = CancelButtonClick
   end
 end

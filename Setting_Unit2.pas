@@ -34,8 +34,10 @@ type
     WeeklyColorLabel: TLabel;
     MonthlyColorBox: TColorBox;
     MonthlyColorLabel: TLabel;
+    CancelButton: TButton;
     procedure LoopAddButtonClick(Sender: TObject);
     procedure ColorListBox1Click(Sender: TObject);
+    procedure CancelButtonClick(Sender: TObject);
     procedure OKButtonClick(Sender: TObject);
     procedure LoopDeleteButtonClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -45,10 +47,12 @@ type
     function WeekdayCheckedCount(ItemsCount: Integer; WeekdayFlag: Integer): Integer;
     procedure MonthlyLabeledEditChange(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure WeekdayCheckListBoxDblClick(Sender: TObject);
 
   private
     function SetColorName(GroupIdNum: Integer): String;
     procedure SaveLoopSettings(Sender: TObject);
+    procedure LoadLoopSettings(Sender: TObject);
     { Private 宣言 }
   public
     { Public 宣言 }
@@ -83,7 +87,7 @@ end;
 procedure TForm2.FormCreate(Sender: TObject);
 begin
 
-  LoopListView1.ViewStyle := vsIcon; // 起動時に1つ目のグループのヘッダー(毎日)が
+  LoopListView1.ViewStyle := vsIcon;   // 起動時に1つ目のグループのヘッダー(毎日)が
   LoopListView1.ViewStyle := vsReport; // 表示されない為の対策の2行。
 
   PageControl1.ActivePageIndex := 0;
@@ -131,6 +135,22 @@ begin
   begin
     LoopAddButton.Enabled := true;
   end;
+end;
+
+procedure TForm2.WeekdayCheckListBoxDblClick(Sender: TObject);
+var
+  IndexNum: Integer;
+begin
+  // チェックマークのオンオフを文字列部分でも行う
+  IndexNum := WeekdayCheckListBox.ItemIndex;
+  WeekdayCheckListBox.Checked[IndexNum] := not WeekdayCheckListBox.Checked[IndexNum];
+
+  WeekdayCheckListBoxClickCheck(Sender);
+end;
+
+procedure TForm2.CancelButtonClick(Sender: TObject);
+begin
+  LoadLoopSettings(Sender);
 end;
 
 procedure TForm2.ColorListBox1Click(Sender: TObject);
@@ -311,6 +331,24 @@ begin
 
 end;
 
+procedure TForm2.LoadLoopSettings(Sender: TObject); // 2020年1月15日作業開始
+var
+  SettingsIniFileName, LoopID: string;
+  SettingsIniFile: TMemIniFile;
+begin
+  SettingsIniFileName := ExtractFilePath(Application.ExeName) + AppName + '.ini';
+
+  if FileExists(SettingsIniFileName) then // SettingsIniFile が存在チェックする
+  begin
+    SettingsIniFile := TMemIniFile.Create(SettingsIniFileName, TEncoding.UTF8);
+
+    ShowMessage('IniFile はあります');
+//    ShowMessage(SettingsIniFile.GetStrings());
+  end
+  else
+    ShowMessage('IniFile is no');
+end;
+
 procedure TForm2.SaveLoopSettings(Sender: TObject); // 2020年1月15日追加
 var
   SettingsIniFileName, LoopID: string;
@@ -331,7 +369,7 @@ begin
           SettingsIniFile.WriteString(LoopID, 'Item', LoopListView1.Items[I].SubItems.Strings[0]);
         if LoopListView1.Items[I].SubItems.Count > 1 then  // 実行日
           SettingsIniFile.WriteString(LoopID, 'Day', LoopListView1.Items[I].SubItems.Strings[1]);
-        if LoopListView1.Items[I].SubItems.Count > 2 then // 追加時刻
+        if LoopListView1.Items[I].SubItems.Count > 2 then  // 追加時刻
         begin
           SettingsIniFile.WriteString(LoopID, 'Time', LoopListView1.Items[I].SubItems.Strings[2]);
           if LoopListView1.Items[I].SubItems.Count > 3 then // 背景色
