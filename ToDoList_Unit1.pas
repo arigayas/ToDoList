@@ -508,6 +508,12 @@ begin
     DeleteButton.Enabled := false;
     DeleteAllChecked.Enabled := false;
     CheckListCounterFormCaption(Sender, ItemsCheckedCount(CheckListBox1.Count));
+
+    if CheckListBox1.Hint <> '' then
+    begin
+      CheckListBox1.Hint := '';
+    end;
+
     if CheckListBox1.Count > 0 then
     begin
       CheckListBox1.SetFocus;
