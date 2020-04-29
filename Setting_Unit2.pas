@@ -35,6 +35,11 @@ type
     MonthlyColorBox: TColorBox;
     MonthlyColorLabel: TLabel;
     CancelButton: TButton;
+    DailyLabeledEdit: TLabeledEdit;
+    GroupBox1: TGroupBox;
+    CheckBox1: TCheckBox;
+    LabeledEdit1: TLabeledEdit;
+    LabeledEdit2: TLabeledEdit;
     procedure LoopAddButtonClick(Sender: TObject);
     procedure ColorListBox1Click(Sender: TObject);
     procedure CancelButtonClick(Sender: TObject);
