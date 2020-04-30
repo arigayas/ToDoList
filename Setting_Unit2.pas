@@ -53,6 +53,7 @@ type
     procedure MonthlyLabeledEditChange(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure WeekdayCheckListBoxDblClick(Sender: TObject);
+    procedure LoopListView1Click(Sender: TObject);
 
   private
     function SetColorName(GroupIdNum: Integer): String;
@@ -291,6 +292,23 @@ begin
       LoopListView1.Selected.Delete;
       LoopDeleteButton.Enabled := false;
     end;
+  end;
+end;
+
+procedure TForm2.LoopListView1Click(Sender: TObject);
+var
+  LoopListViewIndex  : Integer;
+  ItemText, ItemDaysText, ItemBC : string ;
+  ItemTime: TDateTime;
+//  ItemBC  : COLORREF;
+begin // 2つ条件無いと削除した後にLoopListView1の下の方をクリックするとエラーメッセージが出る
+  if (LoopListView1.Items.Count > 0 ) and (LoopListView1.ItemIndex >= 0)then
+  begin
+  // データ取得部
+    LoopListViewIndex := LoopListView1.ItemIndex;
+    ItemText := LoopListView1.Items[LoopListViewIndex].SubItems[0];
+    ItemDaysText := LoopListView1.Items[LoopListViewIndex].SubItems[1];
+    ItemTime:= LoopListView1.Items[LoopListViewIndex].SubItems[2];
   end;
 end;
 

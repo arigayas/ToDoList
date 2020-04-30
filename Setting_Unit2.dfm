@@ -2,7 +2,7 @@ object Form2: TForm2
   Left = 0
   Top = 0
   Caption = #35373#23450
-  ClientHeight = 449
+  ClientHeight = 450
   ClientWidth = 584
   Color = clBtnFace
   Constraints.MaxHeight = 750
@@ -19,7 +19,7 @@ object Form2: TForm2
   OnCreate = FormCreate
   DesignSize = (
     584
-    449)
+    450)
   PixelsPerInch = 96
   TextHeight = 13
   object ColorGroupBox: TGroupBox
@@ -30,7 +30,6 @@ object Form2: TForm2
     Align = alTop
     Caption = 'Todo'#36861#21152#12522#12473#12488' :: '#32232#38598
     TabOrder = 0
-    ExplicitHeight = 202
     object LoopAddButton: TButton
       Left = 493
       Top = 23
@@ -379,31 +378,31 @@ object Form2: TForm2
   end
   object OKButton: TButton
     Left = 420
-    Top = 412
+    Top = 413
     Width = 75
     Height = 29
     Anchors = [akRight, akBottom]
     Caption = #20445#23384#12377#12427
     TabOrder = 1
     OnClick = OKButtonClick
-    ExplicitTop = 488
+    ExplicitTop = 412
   end
   object CancelButton: TButton
     Left = 501
-    Top = 412
+    Top = 413
     Width = 75
     Height = 29
     Anchors = [akRight, akBottom]
     Caption = #20445#23384#12375#12394#12356
     TabOrder = 2
     OnClick = CancelButtonClick
-    ExplicitTop = 488
+    ExplicitTop = 412
   end
   object GroupBox1: TGroupBox
     Left = 0
     Top = 193
     Width = 584
-    Height = 215
+    Height = 216
     Align = alTop
     Anchors = [akLeft, akTop, akRight, akBottom]
     Caption = 'ToDo'#36861#21152#12522#12473#12488' :: '#19968#35239
@@ -414,13 +413,12 @@ object Form2: TForm2
     Font.Style = []
     ParentFont = False
     TabOrder = 3
-    ExplicitTop = 202
-    ExplicitHeight = 242
+    ExplicitHeight = 215
     object LoopListView1: TListView
       Left = 2
       Top = 15
       Width = 580
-      Height = 198
+      Height = 199
       Align = alClient
       Columns = <
         item
@@ -504,6 +502,7 @@ object Form2: TForm2
       RowSelect = True
       TabOrder = 0
       ViewStyle = vsReport
+      OnClick = LoopListView1Click
       OnSelectItem = LoopListView1SelectItem
       ExplicitHeight = 225
     end
