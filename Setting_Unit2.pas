@@ -40,6 +40,7 @@ type
     CheckBox1: TCheckBox;
     LabeledEdit1: TLabeledEdit;
     LabeledEdit2: TLabeledEdit;
+    LoopEditButton: TButton;
     procedure LoopAddButtonClick(Sender: TObject);
     procedure ColorListBox1Click(Sender: TObject);
     procedure CancelButtonClick(Sender: TObject);
@@ -297,9 +298,9 @@ end;
 
 procedure TForm2.LoopListView1Click(Sender: TObject);
 var
-  LoopListViewIndex  : Integer;
-  ItemText, ItemDaysText, ItemBC : string ;
-  ItemTime: TDateTime;
+  LoopListViewIndex  : Integer;  // 1行分のデータをレコード型で持つことにする？
+  ItemText, ItemDaysText, ItemTime, ItemBC : string ;
+//  ItemTime: TDateTime;
 //  ItemBC  : COLORREF;
 begin // 2つ条件無いと削除した後にLoopListView1の下の方をクリックするとエラーメッセージが出る
   if (LoopListView1.Items.Count > 0 ) and (LoopListView1.ItemIndex >= 0)then
@@ -315,9 +316,15 @@ end;
 procedure TForm2.LoopListView1SelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
 begin
   if Assigned(LoopListView1.Selected) then
-    LoopDeleteButton.Enabled := true
+    begin
+      LoopDeleteButton.Enabled := true;
+      LoopEditButton.Enabled := true;
+    end
   else
-    LoopDeleteButton.Enabled := false;
+    begin
+      LoopDeleteButton.Enabled := false;
+      LoopEditButton.Enabled := false;
+    end
 end;
 
 procedure TForm2.OKButtonClick(Sender: TObject);

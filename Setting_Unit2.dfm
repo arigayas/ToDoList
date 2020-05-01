@@ -32,7 +32,7 @@ object Form2: TForm2
     TabOrder = 0
     object LoopAddButton: TButton
       Left = 493
-      Top = 23
+      Top = 47
       Width = 75
       Height = 25
       Caption = #36861#21152
@@ -42,7 +42,7 @@ object Form2: TForm2
     end
     object LoopDeleteButton: TButton
       Left = 493
-      Top = 62
+      Top = 112
       Width = 75
       Height = 25
       Caption = #21066#38500
@@ -375,6 +375,15 @@ object Form2: TForm2
         end
       end
     end
+    object LoopEditButton: TButton
+      Left = 493
+      Top = 81
+      Width = 75
+      Height = 25
+      Caption = #19978#26360#12365#20445#23384
+      Enabled = False
+      TabOrder = 3
+    end
   end
   object OKButton: TButton
     Left = 420
@@ -385,7 +394,6 @@ object Form2: TForm2
     Caption = #20445#23384#12377#12427
     TabOrder = 1
     OnClick = OKButtonClick
-    ExplicitTop = 412
   end
   object CancelButton: TButton
     Left = 501
@@ -396,7 +404,6 @@ object Form2: TForm2
     Caption = #20445#23384#12375#12394#12356
     TabOrder = 2
     OnClick = CancelButtonClick
-    ExplicitTop = 412
   end
   object GroupBox1: TGroupBox
     Left = 0
@@ -413,7 +420,6 @@ object Form2: TForm2
     Font.Style = []
     ParentFont = False
     TabOrder = 3
-    ExplicitHeight = 215
     object LoopListView1: TListView
       Left = 2
       Top = 15
@@ -446,16 +452,16 @@ object Form2: TForm2
           MinWidth = 50
         end
         item
-          Caption = #26377#21177'/'#28961#21177
-          MaxWidth = 70
-          MinWidth = 70
-          Width = 70
-        end
-        item
           Caption = #27425#22238#36861#21152#20104#23450#26085
           MaxWidth = 100
           MinWidth = 100
           Width = 100
+        end
+        item
+          Caption = #26377#21177'/'#28961#21177
+          MaxWidth = 70
+          MinWidth = 70
+          Width = 70
         end>
       Constraints.MinHeight = 50
       GridLines = True
