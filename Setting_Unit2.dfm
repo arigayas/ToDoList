@@ -55,7 +55,7 @@ object Form2: TForm2
       Top = 23
       Width = 484
       Height = 162
-      ActivePage = DailyTabSheet
+      ActivePage = MonthlyTabSheet
       TabOrder = 2
       OnChange = PageControl1Change
       object DailyTabSheet: TTabSheet
@@ -110,7 +110,7 @@ object Form2: TForm2
         object DailyColorBox: TColorBox
           Left = 63
           Top = 67
-          Width = 66
+          Width = 80
           Height = 22
           DefaultColorColor = clWhite
           NoneColorColor = clWhite
@@ -143,10 +143,10 @@ object Form2: TForm2
           ParentFont = False
           TabOrder = 2
         end
-        object CheckBox1: TCheckBox
-          Left = 195
+        object DailyCheckBox: TCheckBox
+          Left = 227
           Top = 66
-          Width = 97
+          Width = 54
           Height = 23
           Caption = #26377#21177
           Checked = True
@@ -241,7 +241,7 @@ object Form2: TForm2
           Selected = clWhite
           TabOrder = 2
         end
-        object LabeledEdit1: TLabeledEdit
+        object WeeklyLabeledEdit: TLabeledEdit
           Left = 181
           Top = 14
           Width = 289
@@ -265,6 +265,22 @@ object Form2: TForm2
           LabelSpacing = 10
           ParentFont = False
           TabOrder = 3
+        end
+        object WeeklyCheckBox: TCheckBox
+          Left = 235
+          Top = 105
+          Width = 54
+          Height = 23
+          Caption = #26377#21177
+          Checked = True
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          State = cbChecked
+          TabOrder = 4
         end
       end
       object MonthlyTabSheet: TTabSheet
@@ -299,29 +315,21 @@ object Form2: TForm2
           Font.Style = []
           ParentFont = False
         end
-        object MonthlyLabeledEdit: TLabeledEdit
-          Left = 124
-          Top = 52
-          Width = 29
-          Height = 21
-          EditLabel.Width = 118
-          EditLabel.Height = 16
-          EditLabel.Caption = #36861#21152#12434#23455#34892#12377#12427#26085#65306
-          EditLabel.Font.Charset = DEFAULT_CHARSET
-          EditLabel.Font.Color = clWindowText
-          EditLabel.Font.Height = -13
-          EditLabel.Font.Name = 'Tahoma'
-          EditLabel.Font.Style = []
-          EditLabel.ParentFont = False
-          ImeMode = imAlpha
-          LabelPosition = lpLeft
-          MaxLength = 2
-          NumbersOnly = True
-          TabOrder = 0
-          OnChange = MonthlyLabeledEditChange
+        object MonthlyLabel: TLabel
+          Left = 3
+          Top = 50
+          Width = 203
+          Height = 16
+          Caption = 'ToDo'#12522#12473#12488#12395#38917#30446#12398#36861#21152#12434#34892#12358#26085#65306
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
         end
         object MonthlyDateTimePicker: TDateTimePicker
-          Left = 230
+          Left = 227
           Top = 74
           Width = 65
           Height = 24
@@ -336,7 +344,7 @@ object Form2: TForm2
           Font.Style = []
           Kind = dtkTime
           ParentFont = False
-          TabOrder = 1
+          TabOrder = 0
         end
         object MonthlyColorBox: TColorBox
           Left = 96
@@ -346,9 +354,9 @@ object Form2: TForm2
           DefaultColorColor = clWhite
           NoneColorColor = clWhite
           Selected = clWhite
-          TabOrder = 2
+          TabOrder = 1
         end
-        object LabeledEdit2: TLabeledEdit
+        object MonthlyLabeledEdit: TLabeledEdit
           Left = 185
           Top = 14
           Width = 289
@@ -371,7 +379,64 @@ object Form2: TForm2
           LabelPosition = lpLeft
           LabelSpacing = 10
           ParentFont = False
+          TabOrder = 2
+        end
+        object MonthlyCheckBox: TCheckBox
+          Left = 241
+          Top = 104
+          Width = 54
+          Height = 23
+          Caption = #26377#21177
+          Checked = True
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          State = cbChecked
           TabOrder = 3
+        end
+        object MonthlyComboBoxDay: TComboBox
+          Left = 227
+          Top = 47
+          Width = 75
+          Height = 21
+          Style = csDropDownList
+          TabOrder = 4
+          Items.Strings = (
+            '1'#9
+            '2'#9
+            '3'#9
+            '4'#9
+            '5'#9
+            '6'#9
+            '7'#9
+            '8'#9
+            '9'#9
+            '10'#9
+            '11'#9
+            '12'#9
+            '13'#9
+            '14'#9
+            '15'#9
+            '16'#9
+            '17'#9
+            '18'#9
+            '19'#9
+            '20'#9
+            '21'#9
+            '22'#9
+            '23'#9
+            '24'#9
+            '25'#9
+            '26'#9
+            '27'#9
+            '28'#9
+            '29'#9
+            '30'#9
+            '31'#9
+            #26376#26411'('#23455#35013#20104#23450')')
         end
       end
     end
@@ -491,18 +556,18 @@ object Form2: TForm2
           TitleImage = -1
         end>
       Items.ItemData = {
-        0571010000040000000000000000000000FFFFFFFF0600000000000000000000
-        000330003000310007AC726E30A830B5306E3042669395A8E0EF1102CE6BE565
-        70E0EF1105310032001AFF3000300028DDEF1103720065006400B8DCEF110A32
-        003000320030002F00300034002F0030003100509FFC18024F004E0010C4E711
-        0000000001000000FFFFFFFF0300000001000000000000000330003000320007
-        AC726E306365696B6E3042669395F0DCEF11030867346CD19108DEEF11053100
-        38001AFF3000300080E3EF110000000002000000FFFFFFFF0400000002000000
-        000000000330003000330003E930B830AA30D0DDEF1101E56570E00607053100
-        35001AFF3000300038E0060700C8DCE71100000000FFFFFFFFFFFFFFFF040000
-        000100000000000000033000300034000331900A528C8A00DDE71100D8C3E711
-        05310033003A003000300080C4E7110048C4E711FFFFFFFFFFFFFFFFFFFFFFFF
-        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+        0577010000040000000000000000000000FFFFFFFF0600000000000000000000
+        000330003000310007AC726E30A830B5306E3042669395C84E343202CE6BE565
+        8850343205310032003A0030003000D09234320563006C00520065006400388E
+        34320A32003000320030002F00300034002F0030003100F8423432024F004E00
+        D03734320000000001000000FFFFFFFF03000000010000000000000003300030
+        00320007AC726E306365696B6E304266939508A13432030867346CD191206334
+        3205310038001AFF30003000184234320000000002000000FFFFFFFF04000000
+        02000000000000000330003000330003E930B830AA3068433432023100E56590
+        4E343205310035001AFF30003000C057343200708E343200000000FFFFFFFFFF
+        FFFFFF040000000100000000000000033000300034000331900A528C8A286134
+        320058A9343205310033003A00300030006874343200A03C3432FFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
       GroupView = True
       ReadOnly = True
       RowSelect = True

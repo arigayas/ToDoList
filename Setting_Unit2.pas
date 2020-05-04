@@ -22,7 +22,6 @@ type
     WeeklyTabSheet: TTabSheet;
     MonthlyTabSheet: TTabSheet;
     WeekdayCheckListBox: TCheckListBox;
-    MonthlyLabeledEdit: TLabeledEdit;
     DailyDateTimePicker: TDateTimePicker;
     DailyTimeLabel: TLabel;
     WeeklyTimeLabel: TLabel;
@@ -37,10 +36,14 @@ type
     CancelButton: TButton;
     DailyLabeledEdit: TLabeledEdit;
     GroupBox1: TGroupBox;
-    CheckBox1: TCheckBox;
-    LabeledEdit1: TLabeledEdit;
-    LabeledEdit2: TLabeledEdit;
+    DailyCheckBox: TCheckBox;
+    WeeklyLabeledEdit: TLabeledEdit;
+    MonthlyLabeledEdit: TLabeledEdit;
     LoopEditButton: TButton;
+    WeeklyCheckBox: TCheckBox;
+    MonthlyCheckBox: TCheckBox;
+    MonthlyComboBoxDay: TComboBox;
+    MonthlyLabel: TLabel;
     procedure LoopAddButtonClick(Sender: TObject);
     procedure ColorListBox1Click(Sender: TObject);
     procedure CancelButtonClick(Sender: TObject);
@@ -51,7 +54,7 @@ type
     procedure PageControl1Change(Sender: TObject);
     procedure WeekdayCheckListBoxClickCheck(Sender: TObject);
     function WeekdayCheckedCount(ItemsCount: Integer; WeekdayFlag: Integer): Integer;
-    procedure MonthlyLabeledEditChange(Sender: TObject);
+    procedure MonthlyLabeledEdit22Change(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure WeekdayCheckListBoxDblClick(Sender: TObject);
     procedure LoopListView1Click(Sender: TObject);
@@ -60,6 +63,7 @@ type
     function SetColorName(GroupIdNum: Integer): String;
     procedure SaveLoopSettings(Sender: TObject);
     procedure LoadLoopSettings(Sender: TObject);
+    function ToHankaku(text: String): String;
     { Private 宣言 }
   public
     { Public 宣言 }
@@ -165,7 +169,7 @@ begin
   // ShowMessage( ColorListBox1.ColorNames[ColorListBox1.Selected] ); // 試しにダブルクリックした色を表示する。
 end;
 
-procedure TForm2.MonthlyLabeledEditChange(Sender: TObject);
+procedure TForm2.MonthlyLabeledEdit22Change(Sender: TObject);
 var
   everyMonth: Int8;
 begin
@@ -297,19 +301,102 @@ begin
 end;
 
 procedure TForm2.LoopListView1Click(Sender: TObject);
+type LoopListViewItem = record
+  Index: Integer;
+  GroupIdNum   : Int16;
+  IDnum: string;
+  Text : string;
+  Days : string;  // 毎日か曜日か日付か
+  Time : string;
+  BackColor    : string;
+  ExpectedDate : Tdate ;
+  Run  : string;  // 実行の有効/無効
+  end;
 var
-  LoopListViewIndex  : Integer;  // 1行分のデータをレコード型で持つことにする？
-  ItemText, ItemDaysText, ItemTime, ItemBC : string ;
-//  ItemTime: TDateTime;
-//  ItemBC  : COLORREF;
+  Items: LoopListViewItem;
+  tmpOn: string;
 begin // 2つ条件無いと削除した後にLoopListView1の下の方をクリックするとエラーメッセージが出る
   if (LoopListView1.Items.Count > 0 ) and (LoopListView1.ItemIndex >= 0)then
   begin
-  // データ取得部
-    LoopListViewIndex := LoopListView1.ItemIndex;
-    ItemText := LoopListView1.Items[LoopListViewIndex].SubItems[0];
-    ItemDaysText := LoopListView1.Items[LoopListViewIndex].SubItems[1];
-    ItemTime:= LoopListView1.Items[LoopListViewIndex].SubItems[2];
+  // データ取得部  ---------------------------------------------------------
+    Items.Index := LoopListView1.ItemIndex;
+    Items.GroupIdNum := LoopListView1.Items[Items.Index].GroupID;
+    Items.IDnum := LoopListView1.Items[Items.Index].Caption;
+    Items.Text  := LoopListView1.Items[Items.Index].SubItems[0];
+    if LoopListView1.Items[Items.Index].SubItems.Count > 1 then
+      Items.Days  := LoopListView1.Items[Items.Index].SubItems[1];
+    if LoopListView1.Items[Items.Index].SubItems.Count > 2 then
+    begin
+      Items.Time  := LoopListView1.Items[Items.Index].SubItems[2] + ':00'; // 「 + ':00'」は後に削除
+      Items.Time := ToHankaku(Items.Time);
+    end;
+    if LoopListView1.Items[Items.Index].SubItems.Count > 3 then
+      Items.BackColor    := LoopListView1.Items[Items.Index].SubItems[3];
+//    Items.ExpectedDate := LoopListView1.Items[Items.Index].SubItems[4];
+    if LoopListView1.Items[Items.Index].SubItems.Count > 5 then
+    begin
+      if LoopListView1.Items[Items.Index].SubItems[5].isEmpty then
+        Items.Run := 'True'
+      else
+      begin
+        tmpOn := LoopListView1.Items[Items.Index].SubItems[5].ToUpper;
+        if tmpon = 'OFF' then
+          Items.Run := 'False'
+        else
+          Items.Run := 'True';
+      end;
+    end
+    else
+    begin
+      Items.Run := 'True';
+    end;
+
+  // null対策 = 初期値？代入 -----------------------------------------------
+  if Items.BackColor = '' then
+    Items.BackColor := 'clWhite';
+  if Items.Run = '' then
+    Items.Run := 'True';
+
+  // クリックでデータを切り替えて読み込み ------------------------------------
+    PageControl1.ActivePageIndex := Items.GroupIdNum;
+    case Items.GroupIdNum of
+      0:
+      begin
+        DailyLabeledEdit.Text    := Items.Text;
+        DailyDateTimePicker.Time := strToTime(Items.Time);
+        DailyColorBox.Selected   := StringToColor(Items.BackColor);
+        DailyCheckBox.Checked    := Items.Run.ToBoolean;
+      end;
+      1:
+      begin
+        WeeklyLabeledEdit.Text    := Items.Text;
+        WeeklyDateTimePicker.Time := strToTime(Items.Time);
+        WeeklyColorBox.Selected   := StringToColor(Items.BackColor);
+        WeeklyCheckBox.Checked    := Items.Run.ToBoolean;
+      end;
+      2:
+      begin
+        MonthlyLabeledEdit.Text := Items.Text;
+
+        if Items.Days = '月末(実装予定)' then
+        begin
+          Items.Days := '32'
+        end
+        else
+        begin
+          Items.Days := Items.Days.Replace('日', '')
+        end;
+        MonthlyComboBoxDay.ItemIndex := Items.Days.ToInteger -1;
+        MonthlyDateTimePicker.Time := strToTime(Items.Time);
+        MonthlyColorBox.Selected   := StringToColor(Items.BackColor);
+        MonthlyCheckBox.Checked    := Items.Run.ToBoolean;
+      end;
+    else
+      begin
+        ShowMessage('LoopListView1Click' + Str_FunctionCalled_an_UnexpectedArgument);
+      end;
+    end;
+
   end;
 end;
 
@@ -351,7 +438,7 @@ begin
     2: // 毎月
       begin
         // LoopAddButton.Enabled := false;
-        MonthlyLabeledEditChange(Sender);
+        MonthlyLabeledEdit22Change(Sender);
       end;
   else
     begin
@@ -414,6 +501,28 @@ begin
     end;
 
   end;
+end;
+
+function TForm2.ToHankaku(text: String): String;
+const
+  Dis = $FEE0;
+var
+  Str   : String;
+  i     : Integer;
+  AChar : Cardinal;
+begin
+  Str := '';
+
+  for i := 1 to Length(Text) do begin
+    AChar := Ord(Text[i]);
+    if (AChar >= $FF10) and (AChar <= $FF5A) then begin
+      Str := Str + Chr(AChar - Dis);
+    end else begin
+      Str := Str + Text[i];
+    end;
+  end;
+
+  result := Str;
 end;
 
 
