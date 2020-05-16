@@ -36,7 +36,6 @@ object Form2: TForm2
       Width = 75
       Height = 25
       Caption = #36861#21152
-      Enabled = False
       TabOrder = 0
       OnClick = LoopAddButtonClick
     end
@@ -55,7 +54,7 @@ object Form2: TForm2
       Top = 23
       Width = 484
       Height = 162
-      ActivePage = MonthlyTabSheet
+      ActivePage = WeeklyTabSheet
       TabOrder = 2
       OnChange = PageControl1Change
       object DailyTabSheet: TTabSheet
@@ -105,7 +104,7 @@ object Form2: TForm2
           Font.Style = []
           Kind = dtkTime
           ParentFont = False
-          TabOrder = 0
+          TabOrder = 1
         end
         object DailyColorBox: TColorBox
           Left = 63
@@ -116,7 +115,7 @@ object Form2: TForm2
           NoneColorColor = clWhite
           Selected = clWhite
           Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbPrettyNames]
-          TabOrder = 1
+          TabOrder = 2
         end
         object DailyLabeledEdit: TLabeledEdit
           Left = 184
@@ -141,7 +140,8 @@ object Form2: TForm2
           LabelPosition = lpLeft
           LabelSpacing = 10
           ParentFont = False
-          TabOrder = 2
+          TabOrder = 0
+          OnChange = DailyLabeledEditChange
         end
         object DailyCheckBox: TCheckBox
           Left = 227
@@ -197,7 +197,7 @@ object Form2: TForm2
           Top = 53
           Width = 281
           Height = 22
-          OnClickCheck = WeekdayCheckListBoxClickCheck
+          OnClickCheck = WeekdayCheckListBoxClick
           BorderStyle = bsNone
           Columns = 7
           ItemHeight = 13
@@ -209,9 +209,8 @@ object Form2: TForm2
             #26408
             #37329
             #22303)
-          TabOrder = 0
-          OnClick = WeekdayCheckListBoxDblClick
-          OnDblClick = WeekdayCheckListBoxDblClick
+          TabOrder = 1
+          OnClick = WeekdayCheckListBoxClick
         end
         object WeeklyDateTimePicker: TDateTimePicker
           Left = 224
@@ -229,7 +228,7 @@ object Form2: TForm2
           Font.Style = []
           Kind = dtkTime
           ParentFont = False
-          TabOrder = 1
+          TabOrder = 2
         end
         object WeeklyColorBox: TColorBox
           Left = 62
@@ -239,7 +238,7 @@ object Form2: TForm2
           DefaultColorColor = clWhite
           NoneColorColor = clWhite
           Selected = clWhite
-          TabOrder = 2
+          TabOrder = 3
         end
         object WeeklyLabeledEdit: TLabeledEdit
           Left = 181
@@ -264,7 +263,8 @@ object Form2: TForm2
           LabelPosition = lpLeft
           LabelSpacing = 10
           ParentFont = False
-          TabOrder = 3
+          TabOrder = 0
+          OnChange = WeeklyLabeledEditChange
         end
         object WeeklyCheckBox: TCheckBox
           Left = 235
@@ -344,7 +344,7 @@ object Form2: TForm2
           Font.Style = []
           Kind = dtkTime
           ParentFont = False
-          TabOrder = 0
+          TabOrder = 2
         end
         object MonthlyColorBox: TColorBox
           Left = 96
@@ -354,7 +354,7 @@ object Form2: TForm2
           DefaultColorColor = clWhite
           NoneColorColor = clWhite
           Selected = clWhite
-          TabOrder = 1
+          TabOrder = 3
         end
         object MonthlyLabeledEdit: TLabeledEdit
           Left = 185
@@ -379,7 +379,8 @@ object Form2: TForm2
           LabelPosition = lpLeft
           LabelSpacing = 10
           ParentFont = False
-          TabOrder = 2
+          TabOrder = 0
+          OnChange = MonthlyLabeledEditChange
         end
         object MonthlyCheckBox: TCheckBox
           Left = 241
@@ -395,7 +396,7 @@ object Form2: TForm2
           Font.Style = []
           ParentFont = False
           State = cbChecked
-          TabOrder = 3
+          TabOrder = 4
         end
         object MonthlyComboBoxDay: TComboBox
           Left = 227
@@ -403,7 +404,7 @@ object Form2: TForm2
           Width = 75
           Height = 21
           Style = csDropDownList
-          TabOrder = 4
+          TabOrder = 1
           Items.Strings = (
             '1'#9
             '2'#9

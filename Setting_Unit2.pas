@@ -52,12 +52,17 @@ type
     procedure FormCreate(Sender: TObject);
     procedure LoopListView1SelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
     procedure PageControl1Change(Sender: TObject);
-    procedure WeekdayCheckListBoxClickCheck(Sender: TObject);
+    function WeekdayCheckListBoxClickCheck(Sender: TObject): Boolean;
     function WeekdayCheckedCount(ItemsCount: Integer; WeekdayFlag: Integer): Integer;
     procedure MonthlyLabeledEdit22Change(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
-    procedure WeekdayCheckListBoxDblClick(Sender: TObject);
     procedure LoopListView1Click(Sender: TObject);
+    function LabelEditTextChange(TextLength: Integer): Boolean;
+    procedure DailyLabeledEditChange(Sender: TObject);
+    procedure MonthlyLabeledEditChange(Sender: TObject);
+    procedure WeeklyLabeledEditChange(Sender: TObject);
+    procedure WeekdayCheckListBoxClick(Sender: TObject);
+    procedure WeeklyTabSheetLoopAddButtonEnable(Sender: TObject);
 
   private
     function SetColorName(GroupIdNum: Integer): String;
@@ -102,7 +107,7 @@ begin
   LoopListView1.ViewStyle := vsReport; // 表示されない為の対策の2行。
 
   PageControl1.ActivePageIndex := 0;
-  LoopAddButton.Enabled := true;
+  LoopAddButton.Enabled := false;
 
   DailyColorBox.Style := [cbStandardColors, cbPrettyNames];
   WeeklyColorBox.Style := [cbStandardColors, cbPrettyNames];
@@ -133,22 +138,7 @@ begin
   Result := ItemsChecked;
 end;
 
-procedure TForm2.WeekdayCheckListBoxClickCheck(Sender: TObject);
-var
-  WeekdayItems: Int8;
-begin
-  WeekdayItems := 7;
-  if (WeekdayCheckedCount(WeekdayItems, 0) = 0) or (WeekdayCheckedCount(WeekdayItems, 0) = 7) then
-  begin
-    LoopAddButton.Enabled := false;
-  end
-  else
-  begin
-    LoopAddButton.Enabled := true;
-  end;
-end;
-
-procedure TForm2.WeekdayCheckListBoxDblClick(Sender: TObject);
+procedure TForm2.WeekdayCheckListBoxClick(Sender: TObject);
 var
   IndexNum: Integer;
 begin
@@ -156,7 +146,35 @@ begin
   IndexNum := WeekdayCheckListBox.ItemIndex;
   WeekdayCheckListBox.Checked[IndexNum] := not WeekdayCheckListBox.Checked[IndexNum];
 
-  WeekdayCheckListBoxClickCheck(Sender);
+  WeeklyTabSheetLoopAddButtonEnable(Sender);
+end;
+
+function TForm2.WeekdayCheckListBoxClickCheck(Sender: TObject): Boolean;
+var
+  WeekdayItems: Int8;
+begin
+  WeekdayItems := 7;
+  if (WeekdayCheckedCount(WeekdayItems, 0) = 0) or (WeekdayCheckedCount(WeekdayItems, 0) = 7) then
+  begin
+    Result := False;
+  end
+  else
+  begin
+    Result := True;
+  end;
+end;
+
+procedure TForm2.WeeklyLabeledEditChange(Sender: TObject);
+begin
+  WeeklyTabSheetLoopAddButtonEnable(Sender);
+end;
+
+procedure TForm2.WeeklyTabSheetLoopAddButtonEnable(Sender: TObject);
+begin
+  if LabelEditTextChange(WeeklyLabeledEdit.GetTextLen) and WeekdayCheckListBoxClickCheck(Sender) then
+    LoopAddButton.Enabled := True
+  else
+    LoopAddButton.Enabled := False;
 end;
 
 procedure TForm2.CancelButtonClick(Sender: TObject);
@@ -167,6 +185,11 @@ end;
 procedure TForm2.ColorListBox1Click(Sender: TObject);
 begin
   // ShowMessage( ColorListBox1.ColorNames[ColorListBox1.Selected] ); // 試しにダブルクリックした色を表示する。
+end;
+
+procedure TForm2.DailyLabeledEditChange(Sender: TObject);
+begin
+  LoopAddButton.Enabled := LabelEditTextChange(DailyLabeledEdit.GetTextLen);
 end;
 
 procedure TForm2.MonthlyLabeledEdit22Change(Sender: TObject);
@@ -193,6 +216,11 @@ begin
       end;
     *)
   end;
+end;
+
+procedure TForm2.MonthlyLabeledEditChange(Sender: TObject);
+begin
+  LoopAddButton.Enabled := LabelEditTextChange(MonthlyLabeledEdit.GetTextLen);
 end;
 
 procedure TForm2.LoopAddButtonClick(Sender: TObject);
@@ -428,17 +456,16 @@ begin
   case PageControl1.ActivePageIndex of
     0: // 毎日
       begin
-        LoopAddButton.Enabled := true;
+        DailyLabeledEditChange(Sender);
       end;
     1: // 毎週
       begin
-        // LoopAddButton.Enabled := false;
-        WeekdayCheckListBoxClickCheck(Sender);
+        WeeklyLabeledEditChange(Sender);
       end;
     2: // 毎月
       begin
-        // LoopAddButton.Enabled := false;
-        MonthlyLabeledEdit22Change(Sender);
+        MonthlyLabeledEditChange(Sender);
+//        MonthlyLabeledEdit22Change(Sender);
       end;
   else
     begin
@@ -446,6 +473,14 @@ begin
     end;
   end;
 
+end;
+
+function TForm2.LabelEditTextChange(TextLength: Integer): Boolean;
+begin
+  if TextLength > 0 then
+    Result := True
+  else
+    Result := False;
 end;
 
 procedure TForm2.LoadLoopSettings(Sender: TObject); // 2020年1月15日作業開始
