@@ -54,7 +54,6 @@ type
     procedure PageControl1Change(Sender: TObject);
     function WeekdayCheckListBoxClickCheck(Sender: TObject): Boolean;
     function WeekdayCheckedCount(ItemsCount: Integer; WeekdayFlag: Integer): Integer;
-    procedure MonthlyLabeledEdit22Change(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure LoopListView1Click(Sender: TObject);
     function LabelEditTextChange(TextLength: Integer): Boolean;
@@ -197,32 +196,6 @@ end;
 procedure TForm2.MonthlyComboBoxDayChange(Sender: TObject);
 begin
   MonthlyTabSheetLoopAddButtonEnable(Sender);
-end;
-
-procedure TForm2.MonthlyLabeledEdit22Change(Sender: TObject);
-var
-  everyMonth: Int8;
-begin
-  if MonthlyLabeledEdit.Text = '' then
-  begin
-    LoopAddButton.Enabled := false;
-  end
-  else
-  begin
-    LoopAddButton.Enabled := true;
-    everyMonth := StrToInt(MonthlyLabeledEdit.Text);
-
-    (*
-      if (everyMonth > 0) or (everyMonth < 32) then
-      begin
-      ShowMessage('1以上');
-      end
-      else
-      begin
-      ShowMessage('0');
-      end;
-    *)
-  end;
 end;
 
 procedure TForm2.MonthlyLabeledEditChange(Sender: TObject);
@@ -480,7 +453,6 @@ begin
     2: // 毎月
       begin
         MonthlyLabeledEditChange(Sender);
-//        MonthlyLabeledEdit22Change(Sender);
       end;
   else
     begin
