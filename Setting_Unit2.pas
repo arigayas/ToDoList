@@ -63,8 +63,10 @@ type
     procedure WeeklyLabeledEditChange(Sender: TObject);
     procedure WeekdayCheckListBoxClick(Sender: TObject);
     procedure WeeklyTabSheetLoopAddButtonEnable(Sender: TObject);
+    procedure MonthlyComboBoxDayChange(Sender: TObject);
 
   private
+    procedure MonthlyTabSheetLoopAddButtonEnable(Sender: TObject);
     function SetColorName(GroupIdNum: Integer): String;
     procedure SaveLoopSettings(Sender: TObject);
     procedure LoadLoopSettings(Sender: TObject);
@@ -192,6 +194,11 @@ begin
   LoopAddButton.Enabled := LabelEditTextChange(DailyLabeledEdit.GetTextLen);
 end;
 
+procedure TForm2.MonthlyComboBoxDayChange(Sender: TObject);
+begin
+  MonthlyTabSheetLoopAddButtonEnable(Sender);
+end;
+
 procedure TForm2.MonthlyLabeledEdit22Change(Sender: TObject);
 var
   everyMonth: Int8;
@@ -220,7 +227,15 @@ end;
 
 procedure TForm2.MonthlyLabeledEditChange(Sender: TObject);
 begin
-  LoopAddButton.Enabled := LabelEditTextChange(MonthlyLabeledEdit.GetTextLen);
+  MonthlyTabSheetLoopAddButtonEnable(Sender);
+end;
+
+procedure TForm2.MonthlyTabSheetLoopAddButtonEnable(Sender: TObject);
+begin
+  if LabelEditTextChange(MonthlyLabeledEdit.GetTextLen) and (MonthlyComboBoxDay.ItemIndex <> -1) then
+    LoopAddButton.Enabled := True
+  else
+    LoopAddButton.Enabled := False;
 end;
 
 procedure TForm2.LoopAddButtonClick(Sender: TObject);
