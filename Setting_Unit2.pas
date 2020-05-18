@@ -64,6 +64,7 @@ type
     procedure WeekdayCheckListBoxClick(Sender: TObject);
     procedure WeeklyTabSheetLoopAddButtonEnable(Sender: TObject);
     procedure MonthlyComboBoxDayChange(Sender: TObject);
+    function GetString_OnOff(CheckBoxFlag:Boolean): string;
 
   private
     procedure MonthlyTabSheetLoopAddButtonEnable(Sender: TObject);
@@ -126,6 +127,14 @@ begin
   DailyColorBox.Style := [cbStandardColors, cbPrettyNames];
   WeeklyColorBox.Style := [cbStandardColors, cbPrettyNames];
   MonthlyColorBox.Style := [cbStandardColors, cbPrettyNames];
+end;
+
+function TForm2.GetString_OnOff(CheckBoxFlag:Boolean): string;
+begin
+ if CheckBoxFlag then
+   Result := 'ON'
+ else
+   Result := 'OFF';
 end;
 
 function TForm2.WeekdayCheckedCount(ItemsCount: Integer; WeekdayFlag: Integer): Integer;
@@ -230,7 +239,7 @@ var
 //  GroupIdNum: Integer;
 //  Ans: Boolean;
 //  ListItemID, NewString, TempStr, WeekString, ColorName: string;
-
+  TempStr: string;
   Items: LoopListViewItem;
 const
   DefaultTimeString = '12:00:00';
@@ -246,11 +255,7 @@ begin
       // 前処理 ---------------------------------------------------------
       Items.Text := Trim(DailyLabeledEdit.Text);
       DailyDateTimePicker.Date := System.DateUtils.Today;
-
-      if DailyCheckBox.Checked then
-        Items.Run := 'ON'
-      else
-        Items.Run := 'OFF';
+      Items.Run := GetString_OnOff(DailyCheckBox.Checked);
 
       // LoopListView1 への追加処理 -------------------------------------
       ListItem.GroupID := Items.GroupIdNum;
@@ -275,94 +280,86 @@ begin
     end;
     1: // 毎週
     begin
-      ShowMessage('毎週');
+      // 前処理 ---------------------------------------------------------
+      Items.Text := Trim(WeeklyLabeledEdit.Text);
+      WeeklyDateTimePicker.Date := System.DateUtils.Today;
+
+      WeekdayCheckedCount(7, 1);
+      for TempStr in CheckedWeekDay do
+      begin
+        Items.Days := Items.Days + TempStr;
+      end;
+      Items.Run := GetString_OnOff(WeeklyCheckBox.Checked);
+
+      // LoopListView1 への追加処理 -------------------------------------
+      ListItem.GroupID := Items.GroupIdNum;
+      ListItem.Caption := 'W' + Items.Index.ToString;
+      ListItem.SubItems.Add(Items.Text);
+      ListItem.SubItems.Add(Items.Days);
+
+      ListItem.SubItems.Add(FormatDateTime('hh:mm', WeeklyDateTimePicker.DateTime));
+      Items.BackColor := SetColorName(Items.GroupIdNum);
+      ListItem.SubItems.Add(Items.BackColor);
+
+      // 次回追加予定日は とりあえず明日の日付
+      ListItem.SubItems.Add(FormatDateTime('yyyy/mm/dd',System.DateUtils.Tomorrow));
+      ListItem.SubItems.Add(Items.Run);
+
+
+      // 初期化 ---------------------------------------------------------
+      WeeklyDateTimePicker.Time := StrToTime(DefaultTimeString);
+      WeeklyColorBox.Selected := clWhite;
+      Finalize(CheckedWeekDay);
+      WeekdayCheckListBox.CheckAll(cbUnchecked, false, false);
+      WeekdayCheckListBoxClickCheck(Sender);
     end;
     2: // 毎月
     begin
-       ShowMessage('毎月');
+      // 前処理 ---------------------------------------------------------
+      Items.Text := Trim(MonthlyLabeledEdit.Text);
+      Items.Run := GetString_OnOff(MonthlyCheckBox.Checked);
+      Items.ExpectedDate := Now;
+      MonthlyDateTimePicker.Date := System.DateUtils.Today;
+//      MonthlyDateTimePicker.Date := System.DateUtils.MonthOf(Items.ExpectedDate);
+//      MonthlyDateTimePicker.Date := MonthlyComboBoxDay.Text;
+
+      ShowMessage( FormatDateTime('yyyy/mm/dd hh:mm', MonthlyDateTimePicker.Date));
+
+
+      // LoopListView1 への追加処理 -------------------------------------
+      ListItem.GroupID := Items.GroupIdNum;
+      ListItem.Caption := 'M' + Items.Index.ToString;
+      ListItem.SubItems.Add(Items.Text);
+      ListItem.SubItems.Add(MonthlyComboBoxDay.Text + '日');
+
+      ListItem.SubItems.Add(FormatDateTime('hh:mm', MonthlyDateTimePicker.DateTime));
+      Items.BackColor := SetColorName(Items.GroupIdNum);
+      ListItem.SubItems.Add(Items.BackColor);
+      // 次回追加予定日は とりあえず明日の日付
+//      ListItem.SubItems.Add(FormatDateTime('yyyy/mm/dd',System.DateUtils.Tomorrow));
+
+
+      // 次回追加予定日の処理
+      if CompareDateTime(MonthlyDateTimePicker.DateTime, Now) = 1 then
+        ListItem.SubItems.Add(FormatDateTime('yyyy/mm/dd',System.DateUtils.Today))
+      else
+        ListItem.SubItems.Add(FormatDateTime('yyyy/mm/dd',System.DateUtils.Tomorrow));
+
+
+
+
+
+      ListItem.SubItems.Add(Items.Run);
+
+      // 初期化 ---------------------------------------------------------
+      MonthlyDateTimePicker.Time := StrToTime(DefaultTimeString);
+      MonthlyColorBox.Selected := clWhite;
     end;
     else
       begin
         ShowMessage('LoopAddButtonClick' + Str_FunctionCalled_an_UnexpectedArgument);
       end;
   end;
-(*
-
-    Ans := InputQuery(AppName + ' Input', '追加したい情報を入力してください。', NewString);
-
-    if Ans = true then
-    begin
-      if NewString = '' then
-      begin
-        MessageDlg('何か入力してください', mtInformation, [mbOk], 0);
-        LoopAddButtonClick(Sender);
-      end
-      else
-      begin
-        NewString := Trim(NewString); // 文字列の前後の空白を除去
-
-        case GroupIdNum of
-          0: // 毎日
-            begin
-              ListItem.GroupID := GroupIdNum;
-              ListItem.Caption := 'D' + ListItemID;
-              ListItem.SubItems.Add(NewString);
-              ListItem.SubItems.Add('毎日');
-
-              ListItem.SubItems.Add(FormatDateTime('hh:mm', DailyDateTimePicker.DateTime));
-              DailyDateTimePicker.Time := StrToTime(TimeString);
-
-              ColorName := SetColorName(GroupIdNum);
-              ListItem.SubItems.Add(ColorName);
-              DailyColorBox.Selected := clWhite;
-            end;
-          1: // 毎週
-            begin
-              ListItem.GroupID := GroupIdNum;
-              ListItem.Caption := 'W' + ListItemID;
-              ListItem.SubItems.Add(NewString);
-
-              WeekdayCheckedCount(7, 1);
-              for TempStr in CheckedWeekDay do
-              begin
-                WeekString := WeekString + TempStr;
-              end;
-              ListItem.SubItems.Add(WeekString);
-
-              ListItem.SubItems.Add(FormatDateTime('hh:mm', WeeklyDateTimePicker.DateTime));
-              WeeklyDateTimePicker.Time := StrToTime(TimeString);
-
-              ColorName := SetColorName(GroupIdNum);
-              ListItem.SubItems.Add(ColorName);
-              WeeklyColorBox.Selected := clWhite;
-
-              Finalize(CheckedWeekDay);
-              WeekdayCheckListBox.CheckAll(cbUnchecked, false, false);
-              WeekdayCheckListBoxClickCheck(Sender);
-            end;
-          2: // 毎月
-            begin
-              ListItem.GroupID := GroupIdNum;
-              ListItem.Caption := 'M' + ListItemID;
-              ListItem.SubItems.Add(NewString);
-              ListItem.SubItems.Add(MonthlyLabeledEdit.Text + '日');
-
-              ListItem.SubItems.Add(FormatDateTime('hh:mm', MonthlyDateTimePicker.DateTime));
-              MonthlyDateTimePicker.Time := StrToTime(TimeString);
-
-              ColorName := SetColorName(GroupIdNum);
-              ListItem.SubItems.Add(ColorName);
-              MonthlyColorBox.Selected := clWhite;
-            end;
-        else
-          begin
-            ShowMessage('LoopAddButtonClick' + Str_FunctionCalled_an_UnexpectedArgument);
-          end;
-        end;
-      end;
-    end;
-
-*)
 end;
 
 procedure TForm2.LoopDeleteButtonClick(Sender: TObject);
