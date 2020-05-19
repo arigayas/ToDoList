@@ -54,7 +54,7 @@ object Form2: TForm2
       Top = 23
       Width = 484
       Height = 162
-      ActivePage = DailyTabSheet
+      ActivePage = MonthlyTabSheet
       TabOrder = 2
       OnChange = PageControl1Change
       object DailyTabSheet: TTabSheet
@@ -407,38 +407,38 @@ object Form2: TForm2
           TabOrder = 1
           OnChange = MonthlyComboBoxDayChange
           Items.Strings = (
-            '1'#9
-            '2'#9
-            '3'#9
-            '4'#9
-            '5'#9
-            '6'#9
-            '7'#9
-            '8'#9
-            '9'#9
-            '10'#9
-            '11'#9
-            '12'#9
-            '13'#9
-            '14'#9
-            '15'#9
-            '16'#9
-            '17'#9
-            '18'#9
-            '19'#9
-            '20'#9
-            '21'#9
-            '22'#9
-            '23'#9
-            '24'#9
-            '25'#9
-            '26'#9
-            '27'#9
-            '28'#9
-            '29'#9
-            '30'#9
-            '31'#9
-            #26376#26411'('#23455#35013#20104#23450')')
+            '1'
+            '2'
+            '3'
+            '4'
+            '5'
+            '6'
+            '7'
+            '8'
+            '9'
+            '10'
+            '11'
+            '12'
+            '13'
+            '14'
+            '15'
+            '16'
+            '17'
+            '18'
+            '19'
+            '20'
+            '21'
+            '22'
+            '23'
+            '24'
+            '25'
+            '26'
+            '27'
+            '28'
+            '29'
+            '30'
+            '31'
+            #26376#26411)
         end
       end
     end

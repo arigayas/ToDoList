@@ -319,33 +319,78 @@ begin
       Items.Text := Trim(MonthlyLabeledEdit.Text);
       Items.Run := GetString_OnOff(MonthlyCheckBox.Checked);
       Items.ExpectedDate := Now;
-      MonthlyDateTimePicker.Date := System.DateUtils.Today;
-//      MonthlyDateTimePicker.Date := System.DateUtils.MonthOf(Items.ExpectedDate);
-//      MonthlyDateTimePicker.Date := MonthlyComboBoxDay.Text;
 
-      ShowMessage( FormatDateTime('yyyy/mm/dd hh:mm', MonthlyDateTimePicker.Date));
-
+      if MonthlyComboBoxDay.ItemIndex = 31 then // 月末か判定
+      begin
+        // 月末の日にちを代入
+        TempStr := System.DateUtils.DaysInAMonth(System.DateUtils.YearOf(Items.ExpectedDate),
+                                                 System.DateUtils.MonthOf(Items.ExpectedDate)).ToString;
+      end
+      else
+      begin
+        TempStr := MonthlyComboBoxDay.Text;
+      end;
+      TempStr := TempStr.Trim; // 念のため
+      MonthlyDateTimePicker.Date := EncodeDate(System.DateUtils.YearOf(Items.ExpectedDate),
+                                               System.DateUtils.MonthOf(Items.ExpectedDate),
+                                               TempStr.ToInteger);
 
       // LoopListView1 への追加処理 -------------------------------------
       ListItem.GroupID := Items.GroupIdNum;
       ListItem.Caption := 'M' + Items.Index.ToString;
       ListItem.SubItems.Add(Items.Text);
-      ListItem.SubItems.Add(MonthlyComboBoxDay.Text + '日');
+
+      if MonthlyComboBoxDay.ItemIndex = 31 then // 月末か判定
+      begin
+        ListItem.SubItems.Add(MonthlyComboBoxDay.Text);
+      end
+      else
+        ListItem.SubItems.Add(MonthlyComboBoxDay.Text + '日');
 
       ListItem.SubItems.Add(FormatDateTime('hh:mm', MonthlyDateTimePicker.DateTime));
       Items.BackColor := SetColorName(Items.GroupIdNum);
       ListItem.SubItems.Add(Items.BackColor);
-      // 次回追加予定日は とりあえず明日の日付
-//      ListItem.SubItems.Add(FormatDateTime('yyyy/mm/dd',System.DateUtils.Tomorrow));
 
-
+      // 今月中に次回追加予定日があるか判定する -------------------------
       // 次回追加予定日の処理
       if CompareDateTime(MonthlyDateTimePicker.DateTime, Now) = 1 then
-        ListItem.SubItems.Add(FormatDateTime('yyyy/mm/dd',System.DateUtils.Today))
+        // 実行時の年月日時分を過ぎていなければそのまま追加
+        ListItem.SubItems.Add(FormatDateTime('yyyy/mm/dd',MonthlyDateTimePicker.Date))
       else
-        ListItem.SubItems.Add(FormatDateTime('yyyy/mm/dd',System.DateUtils.Tomorrow));
+        // 実行時の年月日時分を過ぎていれば来月の日付を追加
+        begin
+          if TempStr.ToInteger < 29 then // 1-28日まで
+            begin
+              if System.DateUtils.MonthOf(Items.ExpectedDate) = 12 then // 実行時が12月だったら
+              begin
+                MonthlyDateTimePicker.Date := EncodeDate(System.DateUtils.YearOf(Items.ExpectedDate)+1,
+                                                         1, TempStr.ToInteger);
+                ListItem.SubItems.Add(FormatDateTime('yyyy/mm/dd', MonthlyDateTimePicker.Date));
+              end
+              else
+              begin
+                MonthlyDateTimePicker.Date := EncodeDate(System.DateUtils.YearOf(Items.ExpectedDate),
+                                                         System.DateUtils.MonthOf(Items.ExpectedDate)+1,
+                                                         TempStr.ToInteger);
+                ListItem.SubItems.Add(FormatDateTime('yyyy/mm/dd', MonthlyDateTimePicker.Date));
+              end;
+            end
+        else
+        begin
+          ListItem.SubItems.Add('yyyy/mm/dd');
+        end;
+
+//        29日は翌月が2月の場合考慮すべし
+//        30-31日は翌月にあるか確認必須
+
+//        ListItem.SubItems.Add(FormatDateTime('yyyy/mm/dd',System.DateUtils.Tomorrow));
+//      ShowMessage( FormatDateTime('yyyy/mm/dd', MonthlyDateTimePicker.Date) + #13#10 +
+//                   FormatDateTime('hh:mm', MonthlyDateTimePicker.DateTime)
+//      );
 
 
+
+        end;
 
 
 
