@@ -3,7 +3,7 @@
 
 ## 開発環境
 * [Delphi 10.3 Community](https://www.embarcadero.com/jp/products/delphi/starter)
-* Windows 10 Pro (1803) 
+* Windows 10 Pro (1803 以降) 
 
 ## 実行ファイルの配布サイト
 http://arisan.sakura.ne.jp/Soft/
