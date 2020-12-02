@@ -95,7 +95,7 @@ type
     text: string;
     Days: string; // 毎日か曜日か日付か
     Time: string;
-    BackColor: string;
+    BackgroundColor: string;
     ExpectedDate: TDateTime;
     Run: string; // 実行の有効/無効
   end;
@@ -309,8 +309,8 @@ begin
         ListItem.SubItems.Add(Items.text);
         ListItem.SubItems.Add('毎日');
         ListItem.SubItems.Add(FormatDateTime('hh:mm', DailyDateTimePicker.DateTime));
-        Items.BackColor := SetColorName(Items.GroupIdNum);
-        ListItem.SubItems.Add(Items.BackColor);
+        Items.BackgroundColor := SetColorName(Items.GroupIdNum);
+        ListItem.SubItems.Add(Items.BackgroundColor);
 
         // 次回追加予定日の処理  年月日時分秒 で判定
         if CompareDateTime(DailyDateTimePicker.DateTime, Now) = 1 then
@@ -344,8 +344,8 @@ begin
         ListItem.SubItems.Add(Items.Days);
 
         ListItem.SubItems.Add(FormatDateTime('hh:mm', WeeklyDateTimePicker.DateTime));
-        Items.BackColor := SetColorName(Items.GroupIdNum);
-        ListItem.SubItems.Add(Items.BackColor);
+        Items.BackgroundColor := SetColorName(Items.GroupIdNum);
+        ListItem.SubItems.Add(Items.BackgroundColor);
 
         // 次回追加予定日は とりあえず明日の日付
         ListItem.SubItems.Add(FormatDateTime('yyyy/mm/dd', System.DateUtils.Tomorrow));
@@ -387,8 +387,8 @@ begin
         end;
 
         ListItem.SubItems.Add(FormatDateTime('hh:mm', MonthlyDateTimePicker.DateTime));
-        Items.BackColor := SetColorName(Items.GroupIdNum);
-        ListItem.SubItems.Add(Items.BackColor);
+        Items.BackgroundColor := SetColorName(Items.GroupIdNum);
+        ListItem.SubItems.Add(Items.BackgroundColor);
 
         if System.DateUtils.IsValidDate(YearOf(Items.ExpectedDate), MonthOf(Items.ExpectedDate),
           TempStr.ToInteger) then
@@ -469,7 +469,7 @@ begin // 2つ条件無いと削除した後にLoopListView1の下の方をクリ
       Items.Time := ToHankaku(Items.Time);
     end;
     if LoopListView1.Items[Items.Index].SubItems.Count > 3 then
-      Items.BackColor := GetColorName(LoopListView1.Items[Items.Index].SubItems[3]);
+      Items.BackgroundColor := GetColorName(LoopListView1.Items[Items.Index].SubItems[3]);
     // Items.ExpectedDate := LoopListView1.Items[Items.Index].SubItems[4];
     if LoopListView1.Items[Items.Index].SubItems.Count > 5 then
     begin
@@ -490,8 +490,8 @@ begin // 2つ条件無いと削除した後にLoopListView1の下の方をクリ
     end;
 
     // null対策 = 初期値？代入 -----------------------------------------------
-    if Items.BackColor = '' then
-      Items.BackColor := 'clWhite';
+    if Items.BackgroundColor = '' then
+      Items.BackgroundColor := 'clWhite';
     if Items.Run = '' then
       Items.Run := 'True';
 
@@ -502,14 +502,14 @@ begin // 2つ条件無いと削除した後にLoopListView1の下の方をクリ
         begin
           DailyLabeledEdit.text := Items.text;
           DailyDateTimePicker.Time := StrToTime(Items.Time);
-          DailyColorBox.Selected := StringToColor(Items.BackColor);
+          DailyColorBox.Selected := StringToColor(Items.BackgroundColor);
           DailyCheckBox.Checked := Items.Run.ToBoolean;
         end;
       1:
         begin
           WeeklyLabeledEdit.text := Items.text;
           WeeklyDateTimePicker.Time := StrToTime(Items.Time);
-          WeeklyColorBox.Selected := StringToColor(Items.BackColor);
+          WeeklyColorBox.Selected := StringToColor(Items.BackgroundColor);
           WeeklyCheckBox.Checked := Items.Run.ToBoolean;
         end;
       2:
@@ -526,7 +526,7 @@ begin // 2つ条件無いと削除した後にLoopListView1の下の方をクリ
           end;
           MonthlyComboBoxDay.ItemIndex := Items.Days.ToInteger - 1;
           MonthlyDateTimePicker.Time := StrToTime(Items.Time);
-          MonthlyColorBox.Selected := StringToColor(Items.BackColor);
+          MonthlyColorBox.Selected := StringToColor(Items.BackgroundColor);
           MonthlyCheckBox.Checked := Items.Run.ToBoolean;
         end;
     else
