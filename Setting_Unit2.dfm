@@ -54,7 +54,7 @@ object Form2: TForm2
       Top = 23
       Width = 484
       Height = 162
-      ActivePage = WeeklyTabSheet
+      ActivePage = DailyTabSheet
       TabOrder = 2
       OnChange = PageControl1Change
       object DailyTabSheet: TTabSheet
@@ -109,7 +109,7 @@ object Form2: TForm2
         object DailyColorBox: TColorBox
           Left = 60
           Top = 75
-          Width = 80
+          Width = 120
           Height = 22
           DefaultColorColor = clWhite
           NoneColorColor = clWhite
@@ -233,7 +233,7 @@ object Form2: TForm2
         object WeeklyColorBox: TColorBox
           Left = 60
           Top = 105
-          Width = 80
+          Width = 120
           Height = 22
           DefaultColorColor = clWhite
           NoneColorColor = clWhite
@@ -349,7 +349,7 @@ object Form2: TForm2
         object MonthlyColorBox: TColorBox
           Left = 60
           Top = 105
-          Width = 80
+          Width = 120
           Height = 22
           DefaultColorColor = clWhite
           NoneColorColor = clWhite
