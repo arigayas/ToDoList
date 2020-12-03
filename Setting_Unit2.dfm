@@ -54,7 +54,7 @@ object Form2: TForm2
       Top = 23
       Width = 484
       Height = 162
-      ActivePage = DailyTabSheet
+      ActivePage = MonthlyTabSheet
       TabOrder = 2
       OnChange = PageControl1Change
       object DailyTabSheet: TTabSheet

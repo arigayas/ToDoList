@@ -73,6 +73,7 @@ type
     procedure LoadLoopSettings(Sender: TObject);
     function ToHankaku(text: String): String;
     function GetColorName(PrettyColorName: string): String;
+    procedure ResetData(SetNumber: Int8);
     { Private 宣言 }
   public
   { Public 宣言 }
@@ -118,11 +119,13 @@ begin
   if CanClose then
   begin
     CanClose := true;
+    Finalize(CheckedWeekDay);
     { 終了処理 }
     Form2.Close;
   end
   else
     CanClose := false;
+    Finalize(CheckedWeekDay);
   Form2.Close;
 end;
 
@@ -321,8 +324,7 @@ begin
         ListItem.SubItems.Add(Items.Run);
 
         // 初期化 ---------------------------------------------------------
-        DailyDateTimePicker.Time := StrToTime(DefaultTimeString);
-        DailyColorBox.Selected := clWhite;
+        ResetData(Items.GroupIdNum);
       end;
     1: // 毎週
       begin
@@ -422,8 +424,7 @@ begin
         ListItem.SubItems.Add(Items.Run);
 
         // 初期化 ---------------------------------------------------------
-        MonthlyDateTimePicker.Time := StrToTime(DefaultTimeString);
-        MonthlyColorBox.Selected := clWhite;
+        ResetData(Items.GroupIdNum);
       end;
   else
     begin
@@ -445,6 +446,9 @@ begin
     begin
       LoopListView1.Selected.Delete;
       LoopDeleteButton.Enabled := false;
+
+      // 全てのタブの設定値を初期化
+      ResetData(3);
     end;
   end;
 end;
@@ -582,6 +586,47 @@ begin
     end;
   end;
 
+end;
+
+procedure TForm2.ResetData(SetNumber: Int8);
+const
+  DefaultTimeString = '12:00:00';
+begin
+  case SetNumber of
+    0: // 毎日
+    begin
+      DailyLabeledEdit.Text    := '';
+      DailyDateTimePicker.Time := StrToTime(DefaultTimeString);
+        DailyColorBox.Selected := clWhite;
+        DailyCheckBox.Checked  := True;
+    end;
+    1: // 毎週
+    begin
+        WeeklyLabeledEdit.Text    := '';
+        WeeklyDateTimePicker.Time := StrToTime(DefaultTimeString);
+        WeeklyColorBox.Selected   := clWhite;
+        WeekdayCheckListBox.CheckAll(cbUnchecked, false, false);
+        WeeklyCheckBox.Checked    := True;
+    end;
+    2: // 毎月
+    begin
+        MonthlyLabeledEdit.Text    := '';
+        MonthlyComboBoxDay.ClearSelection;
+        MonthlyDateTimePicker.Time := StrToTime(DefaultTimeString);
+        MonthlyColorBox.Selected   := clWhite;
+        MonthlyCheckBox.Checked    := True;
+    end;
+    3: // ALL Reset
+    begin
+      ResetData(0);
+      ResetData(1);
+      ResetData(2);
+    end;
+    else
+    begin
+      ShowMessage('ResetDatas' + Str_FunctionCalled_an_UnexpectedArgument);
+    end;
+  end;
 end;
 
 function TForm2.LabelEditTextChange(TextLength: Integer): Boolean;
