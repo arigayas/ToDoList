@@ -124,9 +124,11 @@ begin
     Form2.Close;
   end
   else
+  begin
     CanClose := false;
     Finalize(CheckedWeekDay);
-  Form2.Close;
+    Form2.Close;
+  end;
 end;
 
 procedure TForm2.FormCreate(Sender: TObject);
@@ -141,6 +143,12 @@ begin
   DailyColorBox.Style   := [cbStandardColors, cbExtendedColors, cbPrettyNames];
   WeeklyColorBox.Style  := [cbStandardColors, cbExtendedColors, cbPrettyNames];
   MonthlyColorBox.Style := [cbStandardColors, cbExtendedColors, cbPrettyNames];
+
+  MonthlyColorLabel.Top    := WeeklyColorLabel.Top;
+  MonthlyColorBox.Top := WeeklyColorBox.Top;
+  MonthlyCheckBox.Top := WeeklyCheckBox.Top;
+
+  ResetData(3);
 end;
 
 function TForm2.GetString_OnOff(CheckBoxFlag: Boolean): string;
@@ -291,8 +299,6 @@ var
   TempStr: string;
   Items: LoopListViewItem;
   D: fDate;
-const
-  DefaultTimeString = '12:00:00';
 begin
   Items.GroupIdNum := PageControl1.ActivePageIndex;
   ListItem := LoopListView1.Items.Add;
@@ -354,10 +360,7 @@ begin
         ListItem.SubItems.Add(Items.Run);
 
         // 初期化 ---------------------------------------------------------
-        WeeklyDateTimePicker.Time := StrToTime(DefaultTimeString);
-        WeeklyColorBox.Selected := clWhite;
-        Finalize(CheckedWeekDay);
-        WeekdayCheckListBox.CheckAll(cbUnchecked, false, false);
+        ResetData(Items.GroupIdNum);
         WeekdayCheckListBoxClickCheck(Sender);
       end;
     2: // 毎月
