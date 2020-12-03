@@ -438,6 +438,7 @@ end;
 
 procedure TForm2.LoopDeleteButtonClick(Sender: TObject);
 var
+  tempnum: Int8;
   ComfirmString: string;
 begin
   if Assigned(LoopListView1.Selected) then
@@ -447,11 +448,12 @@ begin
 
     if MessageDlg(ComfirmString, mtConfirmation, [mbYes, mbNo], 0) = mrYes then
     begin
+      tempnum := LoopListView1.Items[LoopListView1.Selected.Index].GroupID;
+      PageControl1.ActivePageIndex := tempnum;
+      ResetData(tempnum); // 選択タブの設定値を初期化
+
       LoopListView1.Selected.Delete;
       LoopDeleteButton.Enabled := false;
-
-      // 全てのタブの設定値を初期化
-      ResetData(3);
     end;
   end;
 end;
@@ -523,7 +525,7 @@ begin // 2つ条件無いと削除した後にLoopListView1の下の方をクリ
         begin
           MonthlyLabeledEdit.text := Items.text;
 
-          if Items.Days = '月末(実装予定)' then
+          if Items.Days = '月末' then
           begin
             Items.Days := '32'
           end
