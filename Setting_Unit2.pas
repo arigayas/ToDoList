@@ -499,8 +499,6 @@ begin // 2つ条件無いと削除した後にLoopListView1の下の方をクリ
     end;
 
     // null対策 = 初期値？代入 -----------------------------------------------
-    if Items.BackgroundColor = '' then
-      Items.BackgroundColor := 'clWhite';
     if Items.Run = '' then
       Items.Run := 'True';
 
