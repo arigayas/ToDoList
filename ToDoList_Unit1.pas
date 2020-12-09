@@ -90,7 +90,7 @@ uses Setting_Unit2;
 resourcestring
   Str_LargeFont = 'リストの文字を大きくする';
   Str_SmallFont = 'リストの文字を小さくする';
-  Str_Nothing_on_the_Clipboard = 'Clipboard にテキストデータがありません';
+  Str_Nothing_on_the_Clipboard = 'Clipboard に適切なテキストデータがありません';
   Str_PasteSomethingOtherThanText = 'テキスト以外の物を貼り付けようとしました。';
   Str_VK_RETURN_Yes = '”はい”を選んだ場合は選択項目を編集します。';
   Str_VK_RETURN_No = '”いいえ”を選んだ場合は項目を追加します。';
@@ -177,18 +177,23 @@ begin
           end;
       end;
 
-      // メインフォームが最前面設定時に 入力ダイアログ の表示中はメインフォームの最前面を解除する。
-      if IsAlwaysOnTop then
-      begin
-        IsAlwaysOnTop := AlwaysOnTop(IsAlwaysOnTop); // 最前面の表示を解除
-          for I := 0 to clipbrdStrings.Count - 1 do
-          UpdateData(Sender, 0, clipbrdStrings.Strings[I]);
-        IsAlwaysOnTop := AlwaysOnTop(IsAlwaysOnTop); // 最前面の表示を実行
-      end
+      if clipbrdStrings.Count = 0 then // Trimした結果 追加すべきテキストが消えたと表示
+        MessageDlg(Str_Nothing_on_the_Clipboard, mtInformation, [mbOk], 0)
       else
-      begin
-        for I := 0 to clipbrdStrings.Count - 1 do
-          UpdateData(Sender, 0, clipbrdStrings.Strings[I]);
+        begin
+        // メインフォームが最前面設定時に 入力ダイアログ の表示中はメインフォームの最前面を解除する。
+        if IsAlwaysOnTop then
+        begin
+          IsAlwaysOnTop := AlwaysOnTop(IsAlwaysOnTop); // 最前面の表示を解除
+            for I := 0 to clipbrdStrings.Count - 1 do
+            UpdateData(Sender, 0, clipbrdStrings.Strings[I]);
+          IsAlwaysOnTop := AlwaysOnTop(IsAlwaysOnTop); // 最前面の表示を実行
+        end
+        else
+        begin
+          for I := 0 to clipbrdStrings.Count - 1 do
+            UpdateData(Sender, 0, clipbrdStrings.Strings[I]);
+        end;
       end;
     end
     else
