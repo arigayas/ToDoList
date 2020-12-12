@@ -164,8 +164,7 @@ begin
 
       for I := 0 to clipbrdStrings.Count - 1 do // Clipboard にあるデータから各行の空白文字除去
       begin
-        tempstr := clipbrdStrings.Strings[I].Trim;
-        tempstr := tempstr.Replace('　', ' ');  // 全角空白を半角空白に置換
+        tempstr := clipbrdStrings.Strings[I].Replace('　', ' '); // 全角空白を半角空白に置換
         clipbrdStrings.Strings[I] := tempstr.Trim; // 全角空白だったの空白文字をtrim
       end;
 
