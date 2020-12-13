@@ -238,8 +238,11 @@ begin
       begin
         if CompareText(NewString, CheckListBox1.Items[i]) = 0 then
         begin
-          Result := True;
-          break;
+          if i <> CheckListBox1.ItemIndex then
+            begin
+              Result := True;
+              break;
+            end;
         end
         else
           Result := false;
@@ -816,15 +819,36 @@ var
   Ans: Boolean;
   StrArray: array[0..3] of string;
   ret: Integer;
+  procedure SaveFlag;
+  begin
+    Memo1.Lines := CheckListBox1.Items;
+    case Flag of
+    0:begin
+      CheckListBox1.Items.Add(NewString);
+      CheckListCounterFormCaption(Sender, ItemsCheckedCount(CheckListBox1.Count));
+      Form1.Savefile(Sender, false);
+      end;
+    1:begin
+      CheckListBox1.Items[CheckListBox1.ItemIndex] := NewString;
+      Form1.Savefile(Sender, false);
+      end;
+    2:begin
+      CheckListBox1.Items.Add(NewString);
+      CheckListCounterFormCaption(Sender, ItemsCheckedCount(CheckListBox1.Count));
+      end;
+    end;
+  end;
 begin
   case Flag of
     0,2:begin
       StrArray[0] := '追加したい情報を入力してください。';
       StrArray[1] := '何か入力してください';
+      StrArray[2] := '入力した文字列はすでにありますが追加しますか？';
     end;
     1:begin
       StrArray[0] := '編集したい情報を入力してください。';
       StrArray[1] := '何か入力するか、削除ボタンを押してください';
+      StrArray[2] := '入力した文字列はすでにありますが変更しますか？';
       NewString := CheckListBox1.Items[CheckListBox1.ItemIndex];
     end;
     else begin
@@ -844,30 +868,17 @@ begin
     else
     begin
       NewString := NewString.Trim; // 文字列の前後の空白を除去
-      case Flag of
-      0:begin
-        if CheckDuplication(NewString, IsCheckDuplication) then
-        begin
-          ret :=MessageDlg('重複項目がありますが追加しますか？', mtConfirmation, mbOKCancel, 0);
-          if ret = mrOk  then
-            CheckListBox1.Items.Add(NewString);
-        end
-        else
-        begin
-          CheckListBox1.Items.Add(NewString);
-        end;
 
+      if CheckDuplication(NewString, IsCheckDuplication) then
+      begin
+        ret :=MessageDlg(StrArray[2], mtConfirmation, mbOKCancel, 0);
+        if ret = mrOk  then
+          SaveFlag;
+      end
+      else
+      begin
+        SaveFlag;
       end;
-      1:begin
-        CheckListBox1.Items[CheckListBox1.ItemIndex] := NewString;
-      end;
-      end;
-      Memo1.Lines := CheckListBox1.Items;
-
-      Form1.Savefile(Sender, false);
-      if Flag = 0 then
-        CheckListCounterFormCaption(Sender,
-          ItemsCheckedCount(CheckListBox1.Count));
     end;
   end;
 end;
