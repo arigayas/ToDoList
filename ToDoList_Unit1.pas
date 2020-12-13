@@ -147,9 +147,10 @@ procedure TForm1.PasteFromClipboardText(Sender: TObject);
 var
   clipbrdStrings: TStringList;
   tempstr: string;
-  I: Integer;
+  I,clbLines: Integer;
 begin
   clipbrdStrings := TStringList.Create;
+  clbLines := CheckListBox1.Count;
 
   if Clipboard.AsText = '' then // Clipboard にデータがあるかチェック
   begin
@@ -191,7 +192,19 @@ begin
         else
         begin
           for I := 0 to clipbrdStrings.Count - 1 do
-            UpdateData(Sender, 0, clipbrdStrings.Strings[I]);
+          if clipbrdStrings.Count - 1 = i then
+            begin
+              UpdateData(Sender, 0, clipbrdStrings.Strings[I]);
+              // もしクリップボードからの貼り付けでチェックリストボックの行数が増えていたら保存する
+              if clbLines < CheckListBox1.Count then
+              begin
+                ShowMessage('saved');
+              end;
+            end
+            else
+            begin
+              UpdateData(Sender, 0, clipbrdStrings.Strings[I]);
+            end;
         end;
       end;
     end
@@ -795,8 +808,9 @@ begin
 end;
 
 procedure TForm1.UpdateData(Sender: TObject; Flag:Integer; NewString: string);
-// 追加Flag -> 0
+// 追加&保存Flag -> 0
 // 編集Flag -> 1
+// 追加のみFlag -> 2
 // NewString はクリップボードのテキストが入る
 var
   Ans: Boolean;
@@ -804,7 +818,7 @@ var
   ret: Integer;
 begin
   case Flag of
-    0:begin
+    0,2:begin
       StrArray[0] := '追加したい情報を入力してください。';
       StrArray[1] := '何か入力してください';
     end;
@@ -825,10 +839,7 @@ begin
     if NewString = '' then
       begin
         MessageDlg(StrArray[1], mtInformation, [mbOk], 0);
-        if Flag = 0 then
-        begin
-          UpdateData(Sender, Flag, NewString);
-        end
+        UpdateData(Sender, Flag, NewString);
       end
     else
     begin
