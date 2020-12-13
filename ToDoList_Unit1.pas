@@ -194,16 +194,17 @@ begin
           for I := 0 to clipbrdStrings.Count - 1 do
           if clipbrdStrings.Count - 1 = i then
             begin
-              UpdateData(Sender, 0, clipbrdStrings.Strings[I]);
+              UpdateData(Sender, 2, clipbrdStrings.Strings[I]);
               // もしクリップボードからの貼り付けでチェックリストボックの行数が増えていたら保存する
               if clbLines < CheckListBox1.Count then
               begin
+                Form1.Savefile(Sender, false);
                 ShowMessage('saved');
               end;
             end
             else
             begin
-              UpdateData(Sender, 0, clipbrdStrings.Strings[I]);
+              UpdateData(Sender, 2, clipbrdStrings.Strings[I]);
             end;
         end;
       end;
