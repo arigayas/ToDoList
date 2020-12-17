@@ -8,6 +8,9 @@
 ## 実行ファイルの配布サイト
 http://arisan.sakura.ne.jp/Soft/
 
+## スクリーンショット
+![スクリーンショット](https://github.com/arigayas/ToDoList/blob/master/ScreenShot/ToDoList_ScreenShot_01.png)
+
 ## 著作者
 
 著作者は、arigayasです。
